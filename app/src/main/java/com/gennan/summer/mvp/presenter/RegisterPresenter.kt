@@ -16,6 +16,7 @@ class RegisterPresenter : IRegisterPresenter {
     }
 
     override fun register(username: String, password: String) {
+
         val user = AVUser()
         user.username = username
         user.setPassword(password)
@@ -36,8 +37,9 @@ class RegisterPresenter : IRegisterPresenter {
                 }
             }
         })
-
     }
+
+
 
     override fun attachViewCallback(t: IRegisterViewCallback) {
         callbacks.add(t)

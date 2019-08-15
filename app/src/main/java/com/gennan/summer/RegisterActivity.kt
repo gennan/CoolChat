@@ -1,26 +1,34 @@
 package com.gennan.summer
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import com.avos.avoscloud.AVException
 import com.gennan.summer.base.BaseMvpActivity
 import com.gennan.summer.mvp.contract.IRegisterViewCallback
 import com.gennan.summer.mvp.presenter.RegisterPresenter
+import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : BaseMvpActivity(), IRegisterViewCallback {
-    //todo:获取数据的位置好像不对
-//    val username: String = et_register_username.text.toString()
-//    val password: String = et_register_password.text.toString()
+    lateinit var username: String
+    lateinit var password: String
     val registerPresenter: RegisterPresenter = RegisterPresenter.instance
+    lateinit var progressDialog: ProgressDialog
 
 
     override fun onRegisterSucceeded() {
-
+        progressDialog.dismiss()
+        btn_register_sign_up.isEnabled = true
+        LogUtil.d("RegisterActivity", "账号注册成功---->1")
     }
 
     override fun onRegisterFailed(e: AVException) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        progressDialog.dismiss()
+        btn_register_sign_up.isEnabled = true
+        Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
+        //todo:把异常最后转换成能看的懂得文字
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +38,7 @@ class RegisterActivity : BaseMvpActivity(), IRegisterViewCallback {
         initEvent()
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
         registerPresenter.unAttachViewCallback(this)
@@ -38,8 +47,22 @@ class RegisterActivity : BaseMvpActivity(), IRegisterViewCallback {
     private fun initEvent() {
         //注册
         btn_register_sign_up.setOnClickListener {
-            //            btn_register_sign_up.isEnabled = false//todo 设置为无法点击了 失败或成功后都应该恢复
-//            registerPresenter.register()
+            username = et_register_username.text.toString()
+            password = et_register_password.text.toString()
+
+            if (username.isEmpty() || username.length > 10 || username.length < 3) {
+                LogUtil.d("RegisterActivity", "username.length ---->${username.length}")
+                Toast.makeText(this, "用户名的长度应为3~10个字符", Toast.LENGTH_SHORT).show()
+            } else if (password.isEmpty() || password.length > 16 || password.length < 6) {
+                Toast.makeText(this, "密码的长度应为6~16个字符", Toast.LENGTH_SHORT).show()
+            } else {
+                btn_register_sign_up.isEnabled = false
+                progressDialog = ProgressDialog(this, R.style.AppTheme_Dark_Dialog)
+                progressDialog.isIndeterminate = true
+                progressDialog.setMessage("加载中...")
+                progressDialog.show()
+                registerPresenter.register(username, password)
+            }
         }
         //从注册界面跳转到登录界面
         tv_register_link_to_login.setOnClickListener {
