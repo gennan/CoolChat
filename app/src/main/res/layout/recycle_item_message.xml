@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/rounded_image_view_recycle_item_message"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="17dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/place_holder_user_icon"
+            app:riv_oval="true"/>
+
+    <LinearLayout
+            android:layout_toRightOf="@id/rounded_image_view_recycle_item_message"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="17dp"
+            android:layout_marginLeft="15dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="聊天对象"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="聊天内容"/>
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="17dp"
+            android:layout_marginRight="10dp"
+            android:text="消息发送距离现在的时间"/>
+</RelativeLayout>
