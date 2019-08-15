@@ -5,6 +5,7 @@ import com.avos.avoscloud.AVUser
 import com.avos.avoscloud.SignUpCallback
 import com.gennan.summer.mvp.contract.IRegisterPresenter
 import com.gennan.summer.mvp.contract.IRegisterViewCallback
+import com.gennan.summer.util.Constants.Companion.DEFAULT_ICON
 import com.gennan.summer.util.LogUtil
 
 
@@ -20,7 +21,7 @@ class RegisterPresenter : IRegisterPresenter {
         val user = AVUser()
         user.username = username
         user.setPassword(password)
-
+        user.put("iconUrl", DEFAULT_ICON)//默认给创建的用户设置一个头像
         user.signUpInBackground(object : SignUpCallback() {
             override fun done(e: AVException?) {
                 if (e == null) {
@@ -38,7 +39,6 @@ class RegisterPresenter : IRegisterPresenter {
             }
         })
     }
-
 
 
     override fun attachViewCallback(t: IRegisterViewCallback) {

@@ -34,6 +34,7 @@
                     android:visibility="visible"/>
 
             <ImageView
+                    android:id="@+id/iv_add_friend"
                     android:src="@drawable/message_add"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
@@ -48,14 +49,32 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <!--用来显示当前列表没有消息-->
-    <ImageView
+    <RelativeLayout
+            android:id="@+id/rl_news_is_empty_message"
             android:layout_below="@id/app_bar_layout_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"/>
+            android:visibility="gone">
+
+        <ImageView
+                android:id="@+id/iv_empty_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/message_empty"/>
+
+        <TextView
+                android:layout_below="@id/iv_empty_img"
+                android:layout_centerHorizontal="true"
+                android:text="暂时没有新消息"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </RelativeLayout>
 
     <!--用来显示消息列表-->
     <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_news_message"
             android:layout_below="@id/app_bar_layout_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

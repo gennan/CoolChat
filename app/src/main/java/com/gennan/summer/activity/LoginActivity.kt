@@ -10,9 +10,8 @@ import android.widget.Toast
 import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVUser
 import com.gennan.summer.R
-import com.gennan.summer.base.BaseApplication
+import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseMvpActivity
-import com.gennan.summer.event.AVUserEvent
 import com.gennan.summer.mvp.contract.ILoginViewCallback
 import com.gennan.summer.mvp.presenter.LoginPresenter
 import com.gennan.summer.util.LogUtil
@@ -87,10 +86,10 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
             loginSPEditor.clear()
         }
         loginSPEditor.commit()
+        CoolChatApp.avUser = avUser//通过这里使avUser全局可获得
         //跳转到新的界面
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        BaseApplication.getAppEventBus().postSticky(AVUserEvent(avUser))
         finish()
     }
 

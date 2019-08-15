@@ -9,5 +9,7 @@ class Constants {
         const val MESSAGE_FRAGMENT = 0
         const val USER_FRAGMENT = 1
         const val SETTING_FRAGMENT = 2
+        //默认头像 注册默认先给一个
+        const val DEFAULT_ICON = "https://github.com/iRGboy/photoWarehouse/blob/master/place_holder_user_icon.png"
     }
 }

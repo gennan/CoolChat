@@ -1,19 +1,22 @@
-package com.gennan.summer.base
+package com.gennan.summer.app
 
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.os.Handler
 import com.avos.avoscloud.AVOSCloud
+import com.avos.avoscloud.AVUser
 import com.gennan.summer.util.LogUtil
 import org.greenrobot.eventbus.EventBus
 
-class BaseApplication : Application() {
+class CoolChatApp : Application() {
 
     companion object {
         private var sHandler: Handler? = null
         @SuppressLint("StaticFieldLeak")
         private var sContext: Context? = null
+
+        var avUser: AVUser? = null
 
         fun getAppContext(): Context? {
             return sContext

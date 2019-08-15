@@ -2,20 +2,15 @@ package com.gennan.summer.activity
 
 import android.os.Bundle
 import com.gennan.summer.R
-import com.gennan.summer.base.BaseApplication
 import com.gennan.summer.base.BaseFragment
 import com.gennan.summer.base.BaseMvpActivity
-import com.gennan.summer.event.AVUserEvent
 import com.gennan.summer.fragment.MessageFragment
 import com.gennan.summer.fragment.SettingFragment
 import com.gennan.summer.fragment.UserFragment
 import com.gennan.summer.util.Constants.Companion.MESSAGE_FRAGMENT
 import com.gennan.summer.util.Constants.Companion.SETTING_FRAGMENT
 import com.gennan.summer.util.Constants.Companion.USER_FRAGMENT
-import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_main.*
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 
 class MainActivity : BaseMvpActivity() {
@@ -25,11 +20,14 @@ class MainActivity : BaseMvpActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        BaseApplication.getAppEventBus().register(this)
         initView()
     }
 
+    /**
+     * 创建碎片 然后让碎片和底部的Navigation联动
+     */
     private fun initView() {
+        //创建一些碎片 在这里才创建的Fragment 因此在LoginActivity设置的avUser不会为空
         val messageFragment = MessageFragment()
         val userFragment = UserFragment()
         val settingFragment = SettingFragment()
@@ -37,6 +35,7 @@ class MainActivity : BaseMvpActivity() {
         fragments.add(userFragment)
         fragments.add(settingFragment)
         lastFragment = MESSAGE_FRAGMENT
+        //先默认进入的界面
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, messageFragment).commit()
         combineFragmentWithBottomNavigation()
     }
@@ -75,11 +74,6 @@ class MainActivity : BaseMvpActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        BaseApplication.getAppEventBus().unregister(this)
-    }
-
     /**
      * 简单的通过fragment的隐藏和显示来达到切换fragment的效果
      */
@@ -90,14 +84,5 @@ class MainActivity : BaseMvpActivity() {
             transaction.add(R.id.frame_layout_main, fragments[index])
         }
         transaction.show(fragments[index]).commitAllowingStateLoss()
-    }
-
-    /**
-     * 登录成功后获取登录的AVUser 通过EventBus来进行通信
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun handleAVUserEvent(avUserEvent: AVUserEvent) {
-        LogUtil.d("MainActivity", "avUser.username---->${avUserEvent.avUser.username}")
-        //todo:数据传过来了之后怎么用
     }
 }
