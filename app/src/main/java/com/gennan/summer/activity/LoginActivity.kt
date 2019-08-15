@@ -1,44 +1,49 @@
-package com.gennan.summer
+package com.gennan.summer.activity
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.widget.Toast
 import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVUser
+import com.gennan.summer.R
+import com.gennan.summer.base.BaseApplication
 import com.gennan.summer.base.BaseMvpActivity
+import com.gennan.summer.event.AVUserEvent
 import com.gennan.summer.mvp.contract.ILoginViewCallback
 import com.gennan.summer.mvp.presenter.LoginPresenter
 import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
-    override fun onLoginSucceeded(avUser: AVUser) {
-        progressDialog.dismiss()
-        btn_login_sign_in.isEnabled = true
-        LogUtil.d("LoginActivity", "登录成功---->1")
-        //todo:跳转到新的界面 然后还要添加记住密码功能
-    }
-
-    override fun onLoginFailed(e: AVException) {
-        progressDialog.dismiss()
-        btn_login_sign_in.isEnabled = true
-        LogUtil.d("LoginActivity", "登录失败---->0")
-        Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
-        //todo:和注册界面一样要转换
-    }
-
     lateinit var username: String
     lateinit var password: String
-    val loginPresenter = LoginPresenter.instance
+    private val loginPresenter = LoginPresenter.instance
     lateinit var progressDialog: ProgressDialog
+    lateinit var loginSharedPreferences: SharedPreferences
+    lateinit var loginSPEditor: SharedPreferences.Editor
+    private var isRemembered: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        initData()
         loginPresenter.attachViewCallback(this)
         initEvent()
+    }
+
+    private fun initData() {
+        loginSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        isRemembered = loginSharedPreferences.getBoolean("rememberPassword", false)
+        if (isRemembered) {
+            et_login_username.setText(loginSharedPreferences.getString("user", ""))
+            et_login_password.setText(loginSharedPreferences.getString("password", ""))
+            checkbox_login.isChecked = isRemembered
+        }
     }
 
     private fun initEvent() {
@@ -66,6 +71,35 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
             startActivity(intent)
             finish()
         }
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    override fun onLoginSucceeded(avUser: AVUser, username: String, password: String) {
+        progressDialog.dismiss()
+        btn_login_sign_in.isEnabled = true
+        LogUtil.d("LoginActivity", "登录成功---->1")
+        loginSPEditor = loginSharedPreferences.edit()
+        if (checkbox_login.isChecked) {
+            loginSPEditor.putString("user", username)
+            loginSPEditor.putString("password", password)
+            loginSPEditor.putBoolean("rememberPassword", true)
+        } else {
+            loginSPEditor.clear()
+        }
+        loginSPEditor.commit()
+        //跳转到新的界面
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        BaseApplication.getAppEventBus().postSticky(AVUserEvent(avUser))
+        finish()
+    }
+
+    override fun onLoginFailed(e: AVException) {
+        progressDialog.dismiss()
+        btn_login_sign_in.isEnabled = true
+        LogUtil.d("LoginActivity", "登录失败---->0")
+        Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
+        //todo:和注册界面一样要转换成看得懂的文字
     }
 
     override fun onDestroy() {

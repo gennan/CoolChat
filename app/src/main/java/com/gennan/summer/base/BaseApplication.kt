@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Handler
 import com.avos.avoscloud.AVOSCloud
 import com.gennan.summer.util.LogUtil
+import org.greenrobot.eventbus.EventBus
 
 class BaseApplication : Application() {
 
@@ -18,8 +19,12 @@ class BaseApplication : Application() {
             return sContext
         }
 
-        fun getHandler(): Handler? {
+        fun getAppHandler(): Handler? {
             return sHandler
+        }
+
+        fun getAppEventBus(): EventBus {
+            return EventBus.getDefault()
         }
     }
 

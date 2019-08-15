@@ -33,6 +33,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.0.0'
+
     // LeanCloud 基础包==================================================================================
     implementation('cn.leancloud.android:avoscloud-sdk:4.7.15')
     // 推送与即时通讯需要的包
@@ -44,4 +45,7 @@ dependencies {
     // LeanCloud 应用内搜索包
     implementation('cn.leancloud.android:avoscloud-search:4.7.15@aar')
     //==================================================================================================
+
+    //EventBus
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }

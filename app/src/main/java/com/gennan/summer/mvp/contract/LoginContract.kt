@@ -9,6 +9,6 @@ interface ILoginPresenter : IBasePresenter<ILoginViewCallback> {
 }
 
 interface ILoginViewCallback {
-    fun onLoginSucceeded(avUser: AVUser)
+    fun onLoginSucceeded(avUser: AVUser, username: String, password: String)
     fun onLoginFailed(e: AVException)
 }

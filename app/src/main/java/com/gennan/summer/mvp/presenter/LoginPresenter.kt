@@ -5,7 +5,6 @@ import com.avos.avoscloud.AVUser
 import com.avos.avoscloud.LogInCallback
 import com.gennan.summer.mvp.contract.ILoginPresenter
 import com.gennan.summer.mvp.contract.ILoginViewCallback
-import com.gennan.summer.util.LogUtil
 
 
 class LoginPresenter : ILoginPresenter {
@@ -20,7 +19,7 @@ class LoginPresenter : ILoginPresenter {
             override fun done(avUser: AVUser?, e: AVException?) {
                 if (e == null) {
                     for (callback in callbacks) {
-                        callback.onLoginSucceeded(avUser!!)
+                        callback.onLoginSucceeded(avUser!!, username, password)
                     }
                 } else {
                     for (callback in callbacks) {
