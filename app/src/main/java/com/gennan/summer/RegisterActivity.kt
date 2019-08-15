@@ -22,11 +22,16 @@ class RegisterActivity : BaseMvpActivity(), IRegisterViewCallback {
         progressDialog.dismiss()
         btn_register_sign_up.isEnabled = true
         LogUtil.d("RegisterActivity", "账号注册成功---->1")
+        Toast.makeText(this, "账号注册成功", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onRegisterFailed(e: AVException) {
         progressDialog.dismiss()
         btn_register_sign_up.isEnabled = true
+        LogUtil.d("RegisterActivity", "账号注册失败---->0")
         Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
         //todo:把异常最后转换成能看的懂得文字
     }
@@ -68,6 +73,7 @@ class RegisterActivity : BaseMvpActivity(), IRegisterViewCallback {
         tv_register_link_to_login.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }

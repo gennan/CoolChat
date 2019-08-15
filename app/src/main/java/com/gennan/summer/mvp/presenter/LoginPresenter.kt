@@ -1,7 +1,12 @@
 package com.gennan.summer.mvp.presenter
 
+import com.avos.avoscloud.AVException
+import com.avos.avoscloud.AVUser
+import com.avos.avoscloud.LogInCallback
 import com.gennan.summer.mvp.contract.ILoginPresenter
 import com.gennan.summer.mvp.contract.ILoginViewCallback
+import com.gennan.summer.util.LogUtil
+
 
 class LoginPresenter : ILoginPresenter {
     val callbacks = mutableListOf<ILoginViewCallback>()
@@ -11,7 +16,19 @@ class LoginPresenter : ILoginPresenter {
     }
 
     override fun login(username: String, password: String) {
-
+        AVUser.logInInBackground(username, password, object : LogInCallback<AVUser>() {
+            override fun done(avUser: AVUser?, e: AVException?) {
+                if (e == null) {
+                    for (callback in callbacks) {
+                        callback.onLoginSucceeded(avUser!!)
+                    }
+                } else {
+                    for (callback in callbacks) {
+                        callback.onLoginFailed(e)
+                    }
+                }
+            }
+        })
     }
 
     override fun attachViewCallback(t: ILoginViewCallback) {
