@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Handler
 import com.avos.avoscloud.AVOSCloud
 import com.avos.avoscloud.AVUser
+import com.avos.avoscloud.im.v2.AVIMClient
 import com.gennan.summer.util.LogUtil
 import org.greenrobot.eventbus.EventBus
 
@@ -17,6 +18,7 @@ class CoolChatApp : Application() {
         private var sContext: Context? = null
 
         var avUser: AVUser? = null
+        var avImClient: AVIMClient? = null
 
         fun getAppContext(): Context? {
             return sContext

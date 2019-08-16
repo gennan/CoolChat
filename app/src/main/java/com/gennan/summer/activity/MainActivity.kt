@@ -1,7 +1,11 @@
 package com.gennan.summer.activity
 
 import android.os.Bundle
+import com.avos.avoscloud.im.v2.AVIMConversation
+import com.avos.avoscloud.im.v2.AVIMException
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback
 import com.gennan.summer.R
+import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseFragment
 import com.gennan.summer.base.BaseMvpActivity
 import com.gennan.summer.fragment.MessageFragment
@@ -10,6 +14,7 @@ import com.gennan.summer.fragment.UserFragment
 import com.gennan.summer.util.Constants.Companion.MESSAGE_FRAGMENT
 import com.gennan.summer.util.Constants.Companion.SETTING_FRAGMENT
 import com.gennan.summer.util.Constants.Companion.USER_FRAGMENT
+import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -20,7 +25,22 @@ class MainActivity : BaseMvpActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        clientOpen()
         initView()
+    }
+
+    private fun clientOpen() {
+
+        CoolChatApp.avImClient?.createConversation(
+            listOf("xiaohu"),
+            "zz",
+            null,
+            false,
+            true, object : AVIMConversationCreatedCallback() {
+                override fun done(conversation: AVIMConversation?, e: AVIMException?) {
+                    LogUtil.d("MainActivity", "创建对话成功！")
+                }
+            })
     }
 
     /**

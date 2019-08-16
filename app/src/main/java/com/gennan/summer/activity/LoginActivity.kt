@@ -9,6 +9,7 @@ import android.preference.PreferenceManager
 import android.widget.Toast
 import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVUser
+import com.avos.avoscloud.im.v2.AVIMClient
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseMvpActivity
@@ -30,9 +31,25 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+//        judgeUserWhetherNeedToLogin()
         initData()
         loginPresenter.attachViewCallback(this)
         initEvent()
+    }
+
+    /**
+     * 判断用户是否需要登录 就是登录一次以后就不用再输入账号密码进行登录了
+     */
+    private fun judgeUserWhetherNeedToLogin() {
+        val currentUser = AVUser.getCurrentUser()
+        if (currentUser != null) {
+            //在再次登录的时候再往CoolChat里添加一份
+            CoolChatApp.avUser = currentUser
+            CoolChatApp.avImClient = AVIMClient.getInstance(currentUser)
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun initData() {
@@ -86,7 +103,9 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
             loginSPEditor.clear()
         }
         loginSPEditor.commit()
-        CoolChatApp.avUser = avUser//通过这里使avUser全局可获得
+        CoolChatApp.avUser = avUser//通过这里使AVUser全局可获得
+        CoolChatApp.avImClient = AVIMClient.getInstance(avUser)//获取AVIMClient里并保存为全局可得的变量
+        LogUtil.d("LoginActivity", "avImClient ----> ${CoolChatApp.avImClient}")
         //跳转到新的界面
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
