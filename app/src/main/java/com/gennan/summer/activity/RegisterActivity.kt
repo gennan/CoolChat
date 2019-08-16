@@ -19,6 +19,17 @@ class RegisterActivity : BaseMvpActivity(), IRegisterViewCallback {
     private lateinit var progressDialog: ProgressDialog
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_register)
+        registerPresenter.attachViewCallback(this)
+        initEvent()
+    }
+
+
+    /**
+     * 注册成功的回调
+     */
     override fun onRegisterSucceeded() {
         progressDialog.dismiss()
         btn_register_sign_up.isEnabled = true
@@ -29,19 +40,15 @@ class RegisterActivity : BaseMvpActivity(), IRegisterViewCallback {
         finish()
     }
 
+    /**
+     * 注册失败的回调
+     */
     override fun onRegisterFailed(e: AVException) {
         progressDialog.dismiss()
         btn_register_sign_up.isEnabled = true
         LogUtil.d("RegisterActivity", "账号注册失败---->0")
         Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
-        //todo:把异常最后转换成能看的懂得文字
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
-        registerPresenter.attachViewCallback(this)
-        initEvent()
+        //todo: 2 把异常最后转换成能看的懂得文字
     }
 
 
@@ -50,6 +57,9 @@ class RegisterActivity : BaseMvpActivity(), IRegisterViewCallback {
         registerPresenter.unAttachViewCallback(this)
     }
 
+    /**
+     * 事件的处理
+     */
     private fun initEvent() {
         //注册
         btn_register_sign_up.setOnClickListener {

@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
     lateinit var username: String
-    lateinit var password: String
+    private lateinit var password: String
     private val loginPresenter = LoginPresenter.instance
     lateinit var progressDialog: ProgressDialog
     lateinit var loginSharedPreferences: SharedPreferences
@@ -31,6 +31,7 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+//todo：1 在上线了之后或者是添加了退出当前账号的功能之后把这里的自动登录功能加上
 //        judgeUserWhetherNeedToLogin()
         initData()
         loginPresenter.attachViewCallback(this)
@@ -52,6 +53,9 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
         }
     }
 
+    /**
+     * 获取SP以及EditText的文字
+     */
     private fun initData() {
         loginSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         isRemembered = loginSharedPreferences.getBoolean("rememberPassword", false)
@@ -62,6 +66,9 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
         }
     }
 
+    /**
+     * 点击事件啥的处理
+     */
     private fun initEvent() {
         //登录
         btn_login_sign_in.setOnClickListener {
@@ -89,6 +96,9 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
         }
     }
 
+    /**
+     * 登录成功的回调
+     */
     @SuppressLint("CommitPrefEdits")
     override fun onLoginSucceeded(avUser: AVUser, username: String, password: String) {
         progressDialog.dismiss()
@@ -112,12 +122,15 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
         finish()
     }
 
+    /**
+     * 登录失败的回调
+     */
     override fun onLoginFailed(e: AVException) {
         progressDialog.dismiss()
         btn_login_sign_in.isEnabled = true
         LogUtil.d("LoginActivity", "登录失败---->0")
         Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
-        //todo:和注册界面一样要转换成看得懂的文字
+        //todo: 2 把异常最后转换成能看的懂得文字
     }
 
     override fun onDestroy() {

@@ -35,4 +35,43 @@ class MessageFragment : BaseFragment() {
         return view
     }
 
+
+    private fun clientOpen() {
+//     发送消息的简单逻辑
+//        CoolChatApp.avImClient?.open(object : AVIMClientCallback() {
+//            override fun done(client: AVIMClient?, e: AVIMException?) {
+//                if (e == null) {
+//                    LogUtil.d("MainActivity", "client.open()成功---->1")
+//                    CoolChatApp.avImClient?.createConversation(
+//                        listOf("xiaohu"),
+//                        "zz",
+//                        null,
+//                        false,
+//                        true, object : AVIMConversationCreatedCallback() {
+//                            override fun done(conversation: AVIMConversation?, e: AVIMException?) {
+//                                if (e == null) {
+//                                    LogUtil.d("MainActivity", "创建对话成功 ----> 1")
+//                                    val avImTextMessage = AVIMTextMessage()
+//                                    avImTextMessage.text = "xiaohu 起床了"
+//                                    conversation?.sendMessage(avImTextMessage, object : AVIMConversationCallback(){
+//                                        override fun done(e: AVIMException?) {
+//                                            if(e==null){
+//                                                LogUtil.d("MainActivity","消息发送成功 ----> 1")
+//                                            }else{
+//                                                LogUtil.d("MainActivity","AVIMException ----> $e")
+//                                            }
+//                                        }
+//                                    })
+//                                } else {
+//                                    LogUtil.d("MainActivity", "AVIMException ----> $e")
+//                                }
+//                            }
+//                        })
+//                }
+//            }
+//
+//        })
+
+
+    }
 }
