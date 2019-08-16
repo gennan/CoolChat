@@ -8,31 +8,63 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.avos.avoscloud.AVException
+import com.avos.avoscloud.AVObject
+import com.avos.avoscloud.AVQuery
+import com.avos.avoscloud.FindCallback
 import com.gennan.summer.R
 import com.gennan.summer.adapter.MessageAdapter
 import com.gennan.summer.base.BaseFragment
+import com.gennan.summer.util.LogUtil
 
 class MessageFragment : BaseFragment() {
+
+    lateinit var messageAdapter: MessageAdapter
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_message, container, false)
-        val addFriendIv: ImageView = view.findViewById(R.id.iv_add_friend)//点击跳转到添加好友和群聊的页面
+        initView(view, container)
+        getAVIMConversationList()//获取对话列表
+        return view
+    }
+
+    private fun getAVIMConversationList() {
+        val query = AVQuery<AVObject>("_Conversation")
+        query.findInBackground(object : FindCallback<AVObject>() {
+            override fun done(avObjects: MutableList<AVObject>?, avException: AVException?) {
+                if (avException == null) {
+                    LogUtil.d("MessageFragment", "avObjects.size ----> ${avObjects?.size}")
+                    messageAdapter.setData(avObjects!!)
+                    messageAdapter.notifyDataSetChanged()
+                } else {
+                    LogUtil.d("MessageFragment", "avException ----> $avException")
+                }
+            }
+        })
+    }
+
+    /**
+     * 找到MessageFragment里的一些控件实例
+     */
+    private fun initView(view: View?, container: ViewGroup?) {
+        val addFriendIv: ImageView = view!!.findViewById(R.id.iv_add_friend)//点击跳转到添加好友和群聊的页面
         val newsIsEmptyRl: RelativeLayout =
             view.findViewById(R.id.rl_news_is_empty_message)//数据为空时显示这个
         val newsList: RecyclerView = view.findViewById(R.id.rv_news_message)//数据不为空时显示数据
-
         //一些有关RecyclerView的设置
+        newsList.visibility = View.VISIBLE
         val manager = LinearLayoutManager(container?.context)
         newsList.layoutManager = manager
-        val messageAdapter = MessageAdapter()
+        messageAdapter = MessageAdapter()
         newsList.adapter = messageAdapter
-
-
-        //todo：如何获得消息列表 然后显示 并实时刷新 然后又是如何点击进入聊天界面
-//        addFriendIv.setOnClickListener {
-//            LogUtil.d("MessageFragment", "AppAVUser---->${CoolChatApp.avUser}")
-//            LogUtil.d("MessageFragment", "AppAVIMClient---->${CoolChatApp.avImClient}")
+//        if (conversationList.size > 0) {
+//            newsIsEmptyRl.visibility = View.GONE
+//            newsList.visibility = View.VISIBLE
+//            newsList.adapter = messageAdapter
+//        } else {
+//            newsList.visibility = View.GONE
+//            newsIsEmptyRl.visibility = View.VISIBLE
 //        }
-        return view
     }
 
 

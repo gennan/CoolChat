@@ -24,6 +24,7 @@
             android:layout_marginLeft="15dp">
 
         <TextView
+                android:id="@+id/tv_chat_title_recycle_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="聊天对象"
