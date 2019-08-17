@@ -1,8 +1,10 @@
 package com.gennan.summer.activity
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.avos.avoscloud.im.v2.AVIMClient
@@ -13,10 +15,11 @@ import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_chat.*
 
-class ChatActivity : AppCompatActivity {
+
+class ChatActivity : AppCompatActivity() {
     //这里需要传进来一个 需要和哪个人聊天的对象 eg：我和tom对象 就需要把tom传进来
     //todo：MessageFragment那边怎么获得当前的聊天列表
-    constructor()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,14 +39,22 @@ class ChatActivity : AppCompatActivity {
     }
 
     private fun initEvent() {
-
         //设置点击语音显示播放按钮
         iv_voice_chat.setOnClickListener {
+
+            //判断当前软键盘是否展开 展开的话就关闭软键盘
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (imm.isActive) {
+                val v = window.peekDecorView()
+                imm.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+
             if (rl_press_to_say_voice.isVisible) {
                 rl_press_to_say_voice.visibility = GONE
             } else {
                 rl_press_to_say_voice.visibility = VISIBLE
             }
+
         }
 
         //设置长按录制语音  然后松手时发送语音
@@ -67,7 +78,7 @@ class ChatActivity : AppCompatActivity {
                 //就是发送的消息为空 感觉也没有要弹Toast的必要
             } else {
                 val messageWillSend: String = et_send_message_chat.text.toString()
-                //todo:当发送成功了之后就把edittext里的东西全换成""
+                //todo:当发送成功了之后就把EditText里的东西全换成""
             }
         }
 
@@ -81,5 +92,6 @@ class ChatActivity : AppCompatActivity {
             super.onBackPressed()
         }
     }
+
 
 }

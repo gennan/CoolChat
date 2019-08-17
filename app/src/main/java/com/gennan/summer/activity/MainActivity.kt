@@ -3,7 +3,7 @@ package com.gennan.summer.activity
 import android.os.Bundle
 import com.gennan.summer.R
 import com.gennan.summer.base.BaseFragment
-import com.gennan.summer.base.BaseMvpActivity
+import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.fragment.MessageFragment
 import com.gennan.summer.fragment.SettingFragment
 import com.gennan.summer.fragment.UserFragment
@@ -13,14 +13,14 @@ import com.gennan.summer.util.Constants.Companion.USER_FRAGMENT
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : BaseMvpActivity() {
+class MainActivity : BaseActivity() {
     private val fragments = mutableListOf<BaseFragment>()//创建一个存放fragment的集合
     private var lastFragment = -1//刚开始先设置一个和代表三个界面的整数值无关的-1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initView()
+        initView()//创建Fragment
     }
 
 

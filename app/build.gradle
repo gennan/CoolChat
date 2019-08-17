@@ -32,6 +32,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //material design控件需要的一些包
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.0.0'
 
@@ -39,7 +41,7 @@ dependencies {
     implementation('cn.leancloud.android:avoscloud-sdk:4.7.15')
     // 推送与即时通讯需要的包
     implementation('cn.leancloud.android:avoscloud-push:4.7.15@aar') { transitive = true }
-//    // Android 混合推送需要的包
+//    // Android 混合推送需要的包 有点问题就先不用了
 //    compile ('cn.leancloud.android:avoscloud-mixpush:4.7.15@aar'){transitive = true}
     // LeanCloud 用户反馈包
     implementation('cn.leancloud.android:avoscloud-feedback:4.7.15@aar')
@@ -49,6 +51,16 @@ dependencies {
 
     //EventBus
     implementation 'org.greenrobot:eventbus:3.1.1'
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    //rxAndroid和rxJava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    //Gson
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
-    //圆形头像框的库 一些Java编写的库都无法在Kotlin环境下使用
+
+    //圆形头像框的库 一些Java编写的库在kotlin下好像找不到R这个资源文件
 }

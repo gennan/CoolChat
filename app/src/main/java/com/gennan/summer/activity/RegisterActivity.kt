@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.widget.Toast
 import com.avos.avoscloud.AVException
 import com.gennan.summer.R
-import com.gennan.summer.base.BaseMvpActivity
+import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.mvp.contract.IRegisterViewCallback
 import com.gennan.summer.mvp.presenter.RegisterPresenter
 import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_register.*
 
-class RegisterActivity : BaseMvpActivity(), IRegisterViewCallback {
+class RegisterActivity : BaseActivity(), IRegisterViewCallback {
     private lateinit var username: String
     private lateinit var password: String
     private val registerPresenter: RegisterPresenter = RegisterPresenter.instance
@@ -48,7 +48,6 @@ class RegisterActivity : BaseMvpActivity(), IRegisterViewCallback {
         btn_register_sign_up.isEnabled = true
         LogUtil.d("RegisterActivity", "账号注册失败---->0")
         Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
-        //todo: 2 把异常最后转换成能看的懂得文字
     }
 
 

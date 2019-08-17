@@ -12,13 +12,13 @@ import com.avos.avoscloud.AVUser
 import com.avos.avoscloud.im.v2.AVIMClient
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
-import com.gennan.summer.base.BaseMvpActivity
+import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.mvp.contract.ILoginViewCallback
 import com.gennan.summer.mvp.presenter.LoginPresenter
 import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_login.*
 
-class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
+class LoginActivity : BaseActivity(), ILoginViewCallback {
     lateinit var username: String
     private lateinit var password: String
     private val loginPresenter = LoginPresenter.instance
@@ -31,8 +31,8 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-//todo：1 在上线了之后或者是添加了退出当前账号的功能之后把这里的自动登录功能加上
-//        judgeUserWhetherNeedToLogin()
+//在上线了之后或者是添加了退出当前账号的功能之后把这里的自动登录功能加上
+        judgeUserWhetherNeedToLogin()
         initData()
         loginPresenter.attachViewCallback(this)
         initEvent()
@@ -130,7 +130,6 @@ class LoginActivity : BaseMvpActivity(), ILoginViewCallback {
         btn_login_sign_in.isEnabled = true
         LogUtil.d("LoginActivity", "登录失败---->0")
         Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
-        //todo: 2 把异常最后转换成能看的懂得文字
     }
 
     override fun onDestroy() {
