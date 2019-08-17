@@ -8,16 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.avos.avoscloud.AVObject
-import com.avos.avoscloud.im.v2.AVIMClient
-import com.avos.avoscloud.im.v2.AVIMConversation
-import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.AVIMMessage
-import com.avos.avoscloud.im.v2.callback.AVIMClientCallback
-import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback
-import com.avos.avoscloud.im.v2.messages.AVIMTextMessage
+import com.bumptech.glide.Glide
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
-import com.gennan.summer.util.LogUtil
+import com.gennan.summer.bean.TextMessageBean
+import com.gennan.summer.event.ConversationTitleEvent
+import com.gennan.summer.mvp.presenter.MessagePresenter
 import java.text.SimpleDateFormat
 
 
@@ -25,6 +22,8 @@ import java.text.SimpleDateFormat
  *Created by Gennan on 2019/8/15.
  */
 class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
+    private lateinit var msg: AVIMMessage
+    private lateinit var url: String
     private lateinit var listener: OnItemClickListener
     var conversationList = mutableListOf<AVObject>()
 
@@ -40,15 +39,19 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        MessagePresenter.instance.getConversationIconAndLastMessage(conversationList[position])
         holder.titleTv.text = conversationList[position].getString("name")
         val dateStr = SimpleDateFormat("hh:mm").format(conversationList[position].getDate("lm"))
         holder.lastTimeTv.text = dateStr
-        LogUtil.d("MessageAdapter", "conversation data ----> ${conversationList[position]}")
-        //在这里用objectId获取conversation 然后conv.query()
-        //在这里通过User的名字获取UrlIcon
-        //todo:信息再写的详细一些
+        Glide.with(CoolChatApp.getAppContext()!!).load(url).error(R.drawable.place_holder_user_icon)
+            .into(holder.iconIv)
+        val textMessage =
+            CoolChatApp.getAppGson()?.fromJson(msg.content, TextMessageBean::class.java)
+        holder.lastMsgTv.text = textMessage?._lctext
 
         holder.itemView.setOnClickListener {
+            CoolChatApp.getAppEventBus()
+                .postSticky(ConversationTitleEvent(conversationList[position].getString("name")))
             listener.onItemClick(position)
         }
         holder.itemView.setOnLongClickListener {
@@ -59,6 +62,14 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     fun setData(conversationList: MutableList<AVObject>) {
         this.conversationList = conversationList
+    }
+
+    fun setConversationIconUrl(url: String) {
+        this.url = url
+    }
+
+    fun setLastMessage(msg: AVIMMessage) {
+        this.msg = msg
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -8,6 +8,7 @@ import com.avos.avoscloud.AVOSCloud
 import com.avos.avoscloud.AVUser
 import com.avos.avoscloud.im.v2.AVIMClient
 import com.gennan.summer.util.LogUtil
+import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 
 class CoolChatApp : Application() {
@@ -16,9 +17,11 @@ class CoolChatApp : Application() {
         private var sHandler: Handler? = null
         @SuppressLint("StaticFieldLeak")
         private var sContext: Context? = null
+        private var sGson: Gson? = null
 
         var avUser: AVUser? = null
         var avImClient: AVIMClient? = null
+        var openedClient: AVIMClient? = null
 
         fun getAppContext(): Context? {
             return sContext
@@ -26,6 +29,10 @@ class CoolChatApp : Application() {
 
         fun getAppHandler(): Handler? {
             return sHandler
+        }
+
+        fun getAppGson(): Gson? {
+            return sGson
         }
 
         fun getAppEventBus(): EventBus {
@@ -38,6 +45,7 @@ class CoolChatApp : Application() {
         super.onCreate()
         sHandler = Handler()//创建全局handler
         sContext = baseContext//获取全局context
+        sGson = Gson()
 
 
         //初始化Leancloud=======================================================

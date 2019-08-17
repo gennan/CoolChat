@@ -46,7 +46,7 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
         if (currentUser != null) {
             //在再次登录的时候再往CoolChat里添加一份
             CoolChatApp.avUser = currentUser
-            CoolChatApp.avImClient = AVIMClient.getInstance(currentUser)
+            CoolChatApp.avImClient = AVIMClient.getInstance(currentUser.username)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
@@ -114,7 +114,7 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
         }
         loginSPEditor.commit()
         CoolChatApp.avUser = avUser//通过这里使AVUser全局可获得
-        CoolChatApp.avImClient = AVIMClient.getInstance(avUser)//获取AVIMClient里并保存为全局可得的变量
+        CoolChatApp.avImClient = AVIMClient.getInstance(avUser.username)//获取AVIMClient里并保存为全局可得的变量
         LogUtil.d("LoginActivity", "avImClient ----> ${CoolChatApp.avImClient}")
         //跳转到新的界面
         val intent = Intent(this, MainActivity::class.java)

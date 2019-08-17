@@ -12,8 +12,11 @@ import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
+import com.gennan.summer.event.ConversationTitleEvent
 import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_chat.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 class ChatActivity : AppCompatActivity() {
@@ -24,8 +27,22 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+        CoolChatApp.getAppEventBus().register(this)
         clientOpen()
         initEvent()
+    }
+
+    /**
+     * 从MessageFragment那边传过来的标题
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onConversationTitleEvent(event: ConversationTitleEvent) {
+        tv_title_chat.text = event.conversationTitle
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        CoolChatApp.getAppEventBus().unregister(this)
     }
 
     private fun clientOpen() {

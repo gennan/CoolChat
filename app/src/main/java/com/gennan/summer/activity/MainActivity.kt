@@ -1,15 +1,21 @@
 package com.gennan.summer.activity
 
 import android.os.Bundle
+import com.avos.avoscloud.im.v2.AVIMClient
+import com.avos.avoscloud.im.v2.AVIMException
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback
 import com.gennan.summer.R
-import com.gennan.summer.base.BaseFragment
+import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
+import com.gennan.summer.base.BaseFragment
+import com.gennan.summer.event.ClientOpenEvent
 import com.gennan.summer.fragment.MessageFragment
 import com.gennan.summer.fragment.SettingFragment
 import com.gennan.summer.fragment.UserFragment
 import com.gennan.summer.util.Constants.Companion.MESSAGE_FRAGMENT
 import com.gennan.summer.util.Constants.Companion.SETTING_FRAGMENT
 import com.gennan.summer.util.Constants.Companion.USER_FRAGMENT
+import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -20,7 +26,21 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        clientOpen()//先进行client.open()获得open后的client
         initView()//创建Fragment
+    }
+
+    private fun clientOpen() {
+        CoolChatApp.avImClient?.open(object : AVIMClientCallback() {
+            override fun done(client: AVIMClient?, e: AVIMException?) {
+                if (e == null) {
+                    CoolChatApp.openedClient = client
+                    CoolChatApp.getAppEventBus().postSticky(ClientOpenEvent())
+                } else {
+                    LogUtil.d("MainAcitivity", "AVIMException ----> $e")
+                }
+            }
+        })
     }
 
 
