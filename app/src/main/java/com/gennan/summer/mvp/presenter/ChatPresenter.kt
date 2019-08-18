@@ -16,6 +16,8 @@ class ChatPresenter : IChatPresenter {
     }
 
     val callbacks = mutableListOf<IChatViewCallback>()
+
+
     override fun sendMessage(text: String, conversation: AVIMConversation) {
         val msg = AVIMTextMessage()
         msg.text = text
@@ -31,7 +33,6 @@ class ChatPresenter : IChatPresenter {
                     }
                 }
             }
-
         })
     }
 

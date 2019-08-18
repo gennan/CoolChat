@@ -45,7 +45,12 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         messagePresenter.attachViewCallback(this)
         initView(view, container)
         initEvent()
-        return view
+        return view.rootView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        messagePresenter.queryConversationList()
     }
 
     /**
@@ -76,7 +81,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         //一些有关RecyclerView的设置
         val manager = LinearLayoutManager(container.context)
         newsList.layoutManager = manager
-        messageAdapter = MessageAdapter()
+        messageAdapter = MessageAdapter(container.context)
         messageAdapter.setOnItemClickListener(this)
         newsList.adapter = messageAdapter
     }
@@ -107,6 +112,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         newsList.visibility = View.VISIBLE
         messageAdapter.setData(mutableList)
         messageAdapter.notifyDataSetChanged()
+        MessagePresenter.instance.getConversationIconAndLastMessage(mutableList)
         if (swipeRefreshLayout.isRefreshing) {
             swipeRefreshLayout.isRefreshing = false
             Toast.makeText(activity, "刷新成功", Toast.LENGTH_SHORT).show()
@@ -119,7 +125,6 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     override fun onLoadConversationListHaveNoNumbers() {
         newsList.visibility = View.GONE
         newsIsEmptyRl.visibility = View.VISIBLE
-
         if (swipeRefreshLayout.isRefreshing) {
             swipeRefreshLayout.isRefreshing = false
             Toast.makeText(activity, "刷新成功", Toast.LENGTH_SHORT).show()
@@ -128,11 +133,11 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
 
 
     /**
-     * 获取对话item的回调
+     * 获取对话iconUrl的回调
      */
     override fun onConversationIconUrlLoaded(url: String) {
         messageAdapter.setConversationIconUrl(url)
-
+        messageAdapter.notifyDataSetChanged()
     }
 
     /**
@@ -140,6 +145,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
      */
     override fun onConversationLastMessageLoaded(msg: AVIMMessage) {
         messageAdapter.setLastMessage(msg)
+        messageAdapter.notifyDataSetChanged()
     }
 
 

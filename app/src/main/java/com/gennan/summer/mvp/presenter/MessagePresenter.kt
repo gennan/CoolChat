@@ -17,31 +17,22 @@ import java.util.*
  *Created by Gennan on 2019/8/17.
  */
 class MessagePresenter : IMessagePresenter {
-    override fun getConversationIconAndLastMessage(avObject: AVObject) {
+    override fun getConversationIconAndLastMessage(list: MutableList<AVObject>) {
         if (CoolChatApp.openedClient != null) {
-            val conversation = CoolChatApp.openedClient!!.getConversation(avObject.objectId)
-            LogUtil.d("MessageAdapter", "conversation ----> $conversation")
-            for (callback in callbacks) {
-                //todo:这里的头像也有问题 是要设置成User的头像 而不是直接从conversation里获取
-                if (conversation.getAttribute("conversationIconUrl") != null) {
-                    callback.onConversationIconUrlLoaded(conversation.getAttribute("conversationIconUrl").toString())
-                } else {
-                    callback.onConversationIconUrlLoaded("")
-                }
-            }
-            conversation.queryMessages(1, object : AVIMMessagesQueryCallback() {
-                override fun done(messages: MutableList<AVIMMessage>?, e: AVIMException?) {
-                    LogUtil.d("zz", "${messages!![0].from}")
-                    messages[0]
-                    for (callback in callbacks) {
-                        if (messages?.get(0)!!.content != null) {
-                            callback.onConversationLastMessageLoaded(messages[0])
-                            LogUtil.d("zz", "message ----> ${messages[0].messageIOType}")
+            for (avObject in list) {
+                val conversation =
+                    CoolChatApp.openedClient!!.getConversation(avObject.objectId)
+                //获取最后一条消息
+                conversation.queryMessages(1, object : AVIMMessagesQueryCallback() {
+                    override fun done(messages: MutableList<AVIMMessage>?, e: AVIMException?) {
+                        for (callback in callbacks) {
+                            if (messages?.get(0)!!.content != null) {
+                                callback.onConversationLastMessageLoaded(messages[0])
+                            }
                         }
                     }
-                }
-
-            })
+                })
+            }
         }
     }
 
@@ -52,7 +43,7 @@ class MessagePresenter : IMessagePresenter {
     }
 
     /**
-     * 获得当前用户特有的对话列表
+     * 获得当前用户拥有的对话列表
      */
     override fun queryConversationList() {
         val query = AVQuery<AVObject>("_Conversation")

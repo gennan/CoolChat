@@ -9,8 +9,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.im.v2.AVIMMessage
-import com.avos.avoscloud.im.v2.AVIMMessageManager
-import com.gennan.summer.CoolChatMessageHandler
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
@@ -26,23 +24,10 @@ import org.greenrobot.eventbus.ThreadMode
 
 
 class ChatActivity : BaseActivity(), IChatViewCallback {
-    override fun onMessageSendSucceeded() {
-        et_send_message_chat.setText("")
-        LogUtil.d("ChatActivity", "消息发送成功")
-    }
-
-    override fun onMessageSendFailed() {
-        LogUtil.d("ChatActivity", "消息发送失败")
-    }
-
     val messageList = mutableListOf<AVIMMessage>()
     var conversationList = mutableListOf<AVObject>()
     var position = 0
     private val chatPresenter = ChatPresenter.instance
-
-    //这里需要传进来一个 需要和哪个人聊天的对象 eg：我和tom对象 就需要把tom传进来
-    //todo：MessageFragment那边怎么获得当前的聊天列表
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,36 +41,6 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
     private fun initView() {
         val manager = LinearLayoutManager(this)
         rv_chat.layoutManager = manager
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        CoolChatApp.getAppEventBus().unregister(this)
-        chatPresenter.unAttachViewCallback(this)
-    }
-
-    /**
-     * 从MessageFragment那边传过来的标题
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onConversationTitleEvent(event: ConversationTitleEvent) {
-        tv_title_chat.text = event.conversationTitle
-    }
-
-
-    /**
-     * 接收从MainActivity那边client.open的事件 然后开始接收聊天信息
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onClientOpenEvent(event: ClientOpenEvent) {
-        //todo:聊天信息有坑 巨毒
-        AVIMMessageManager.registerDefaultMessageHandler(CoolChatMessageHandler())
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onConversationObjectEvent(event: ConversationObjectEvent) {
-        conversationList = event.conversationList
-        position = event.position
     }
 
     private fun initEvent() {
@@ -128,6 +83,44 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        CoolChatApp.getAppEventBus().unregister(this)
+        chatPresenter.unAttachViewCallback(this)
+    }
+
+    /**
+     * 从MessageFragment那边传过来的标题
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onConversationTitleEvent(event: ConversationTitleEvent) {
+        tv_title_chat.text = event.conversationTitle
+    }
+
+
+    /**
+     * 接收从MainActivity那边client.open的事件 然后开始接收聊天信息
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onClientOpenEvent(event: ClientOpenEvent) {
+        //todo:聊天信息有坑 巨毒
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onConversationObjectEvent(event: ConversationObjectEvent) {
+        conversationList = event.conversationList
+        position = event.position
+    }
+
+    override fun onMessageSendSucceeded() {
+        et_send_message_chat.setText("")
+        LogUtil.d("ChatActivity", "消息发送成功")
+    }
+
+    override fun onMessageSendFailed() {
+        LogUtil.d("ChatActivity", "消息发送失败")
     }
 
     override fun onBackPressed() {

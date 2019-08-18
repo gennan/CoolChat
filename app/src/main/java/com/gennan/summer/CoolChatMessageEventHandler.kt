@@ -6,14 +6,16 @@ import com.avos.avoscloud.im.v2.AVIMMessage
 import com.avos.avoscloud.im.v2.AVIMMessageHandler
 import com.gennan.summer.util.LogUtil
 
-
 /**
  *Created by Gennan on 2019/8/18.
  */
-class CoolChatMessageHandler : AVIMMessageHandler() {
+class CoolChatMessageEventHandler : AVIMMessageHandler {
+    private val TAG = "CoolChatMessageEventHandler"
+
+    constructor()
 
     override fun onMessage(message: AVIMMessage?, conversation: AVIMConversation?, client: AVIMClient?) {
         super.onMessage(message, conversation, client)
-        LogUtil.d("CoolChatMessageHandler", "收到新消息了")
+        LogUtil.d(TAG, "收到新消息了")
     }
 }

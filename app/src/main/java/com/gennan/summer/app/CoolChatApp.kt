@@ -8,7 +8,8 @@ import com.avos.avoscloud.AVOSCloud
 import com.avos.avoscloud.AVUser
 import com.avos.avoscloud.im.v2.AVIMClient
 import com.avos.avoscloud.im.v2.AVIMMessageManager
-import com.gennan.summer.CoolChatMessageHandler
+import com.gennan.summer.CoolChatConversationEventHandler
+import com.gennan.summer.CoolChatMessageEventHandler
 import com.gennan.summer.util.LogUtil
 import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
@@ -20,7 +21,6 @@ class CoolChatApp : Application() {
         @SuppressLint("StaticFieldLeak")
         private var sContext: Context? = null
         private var sGson: Gson? = null
-
         var avUser: AVUser? = null
         var avImClient: AVIMClient? = null
         var openedClient: AVIMClient? = null
@@ -42,22 +42,19 @@ class CoolChatApp : Application() {
         }
     }
 
-
     override fun onCreate() {
         super.onCreate()
-        sHandler = Handler()//创建全局handler
-        sContext = baseContext//获取全局context
+        sHandler = Handler()//创建全局Handler
+        sContext = baseContext//获取全局Context
         sGson = Gson()
-
-
         //初始化Leancloud=======================================================
         // 初始化参数依次为 this，App Id，App Key
         AVOSCloud.initialize(this, "pSmpgrLy4yH2kMVqJ72TqXhT-gzGzoHsz", "vqPwr2GqEjFecNbA8KppFGhs")
-        // 放在 SDK 初始化语句 AVOSCloud.initialize() 后面，只需要调用一次即可 云端调试 感觉还用不到
-        //AVOSCloud.setDebugLogEnabled(true)
+        AVOSCloud.setDebugLogEnabled(false)
+        AVIMMessageManager.registerDefaultMessageHandler(CoolChatMessageEventHandler())
+        AVIMMessageManager.setConversationEventHandler(CoolChatConversationEventHandler())
         //=====================================================================
-
-        LogUtil.init(this.packageName, false)//初始化LogUtil 设置为true后关闭log
+        LogUtil.init(this.packageName, false)//初始化LogUtil 设置为true后关闭Log
     }
-
 }
+

@@ -1,27 +1,35 @@
 package com.gennan.summer.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVObject
+import com.avos.avoscloud.AVQuery
+import com.avos.avoscloud.FindCallback
 import com.avos.avoscloud.im.v2.AVIMMessage
 import com.bumptech.glide.Glide
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
-import com.gennan.summer.bean.TextMessageBean
+import com.gennan.summer.bean.AVIMMessageBean
 import com.gennan.summer.event.ConversationTitleEvent
-import com.gennan.summer.mvp.presenter.MessagePresenter
 import java.text.SimpleDateFormat
 
 
 /**
  *Created by Gennan on 2019/8/15.
  */
-class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
+class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+    constructor(context: Context) {
+        this.context = context
+    }
+
+    private var context: Context
     private var msg: AVIMMessage = AVIMMessage()
     private var url: String = ""
     private lateinit var listener: OnItemClickListener
@@ -39,20 +47,38 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        MessagePresenter.instance.getConversationIconAndLastMessage(conversationList[position])
-        holder.titleTv.text = conversationList[position].getString("name")
+        val conversationName = conversationList[position].getString("name").replace(CoolChatApp.avUser!!.username, "")
+        holder.titleTv.text = conversationName
+        val query = AVQuery<AVObject>("_User")
+        query.whereEqualTo("username", conversationName)
+        query.findInBackground(object : FindCallback<AVObject>() {
+            override fun done(avObjects: MutableList<AVObject>?, avException: AVException?) {
+                if (avObjects!![0].getString("iconUrl") != null) {
+                    val url = avObjects[0].getString("iconUrl")
+                    //这里url好像微调就好了
+                    Glide.with(context).load(url).into(holder.iconIv)
+                }
+            }
+        })
+
+
         val dateStr = SimpleDateFormat("hh:mm").format(conversationList[position].getDate("lm"))
         holder.lastTimeTv.text = dateStr
-        Glide.with(CoolChatApp.getAppContext()!!).load(url).error(R.drawable.place_holder_user_icon)
-            .into(holder.iconIv)
-        val textMessage =
-            CoolChatApp.getAppGson()?.fromJson(msg.content, TextMessageBean::class.java)
-        holder.lastMsgTv.text = textMessage?._lctext
+
+        val lm =
+            CoolChatApp.getAppGson()?.fromJson(msg.content, AVIMMessageBean::class.java)
+        //设置为true表示执行完长按后的事件不再处理点击的事件
+        when {
+            -1 == lm?._lctype -> holder.lastMsgTv.text = lm._lctext
+            -2 == lm?._lctype -> holder.lastMsgTv.text = "[图片]"
+            -3 == lm?._lctype -> holder.lastMsgTv.text = "[语音]"
+            -4 == lm?._lctype -> holder.lastMsgTv.text = "[视频]"
+        }
 
 
         holder.itemView.setOnClickListener {
             CoolChatApp.getAppEventBus()
-                .postSticky(ConversationTitleEvent(conversationList[position].getString("name")))
+                .postSticky(ConversationTitleEvent(conversationName))
             listener.onItemClick(position, conversationList)
         }
         holder.itemView.setOnLongClickListener {

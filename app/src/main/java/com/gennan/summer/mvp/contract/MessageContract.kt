@@ -10,7 +10,7 @@ import com.gennan.summer.base.IBasePresenter
 
 interface IMessagePresenter : IBasePresenter<IMessageViewCallback> {
     fun queryConversationList()
-    fun getConversationIconAndLastMessage(avObject:AVObject)
+    fun getConversationIconAndLastMessage(list: MutableList<AVObject>)
 }
 
 interface IMessageViewCallback {
