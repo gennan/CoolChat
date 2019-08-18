@@ -3,6 +3,7 @@ package com.gennan.summer.bean
 /**
  *Created by Gennan on 2019/8/17.
  */
+//还没用上
 class ConversationBean(
     val conversationId: String,//对话唯一的objectId 可以用这个id通过getConversation来获得id
     val iconUrl: String, //该对话的头像Url  ----> 单聊的话就为聊天用户的url  群聊的话就默认头像就完事了

@@ -21,7 +21,7 @@ import com.gennan.summer.adapter.MessageAdapter
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseFragment
 import com.gennan.summer.event.ClientOpenEvent
-import com.gennan.summer.event.ConversationTitleEvent
+import com.gennan.summer.event.ConversationObjectEvent
 import com.gennan.summer.mvp.contract.IMessageViewCallback
 import com.gennan.summer.mvp.presenter.MessagePresenter
 import com.gennan.summer.util.LogUtil
@@ -85,7 +85,8 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     /**
      * item单击进入聊天界面
      */
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(position: Int, conversationList: MutableList<AVObject>) {
+        CoolChatApp.getAppEventBus().postSticky(ConversationObjectEvent(conversationList, position))
         val intent = Intent(activity, ChatActivity::class.java)
         startActivity(intent)
     }
@@ -93,7 +94,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     /**
      * 长按item 删除item
      */
-    override fun onItemLongClick(position: Int) {
+    override fun onItemLongClick(position: Int, conversationList: MutableList<AVObject>) {
         //todo：长按删除的功能还没添加
         LogUtil.d("MessageFragment", "长按了第${position}个item---->1")
     }
@@ -139,8 +140,8 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
      */
     override fun onConversationLastMessageLoaded(msg: AVIMMessage) {
         messageAdapter.setLastMessage(msg)
-
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -152,5 +153,4 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     fun onClientOpenEvent(event: ClientOpenEvent) {
         messagePresenter.queryConversationList()
     }
-
 }

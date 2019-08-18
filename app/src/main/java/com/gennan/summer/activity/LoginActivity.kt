@@ -32,7 +32,7 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 //在上线了之后或者是添加了退出当前账号的功能之后把这里的自动登录功能加上
-        judgeUserWhetherNeedToLogin()
+//        judgeUserWhetherNeedToLogin()
         initData()
         loginPresenter.attachViewCallback(this)
         initEvent()

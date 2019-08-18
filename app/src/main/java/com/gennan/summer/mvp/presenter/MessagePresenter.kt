@@ -22,15 +22,20 @@ class MessagePresenter : IMessagePresenter {
             val conversation = CoolChatApp.openedClient!!.getConversation(avObject.objectId)
             LogUtil.d("MessageAdapter", "conversation ----> $conversation")
             for (callback in callbacks) {
-                //todo:这里的图片不知道为什么加载不出url了来了 刚才还可以的 我草了...
+                //todo:这里的图片不知道为什么加载不出url了来了 刚才还可以的 我草了... 加个判空 随缘了...
                 LogUtil.d("MessageFragment", "url ----> ${conversation.getAttribute("conversationIconUrl")}")
-                callback.onConversationIconUrlLoaded("")
+                if (conversation.getAttribute("conversationIconUrl") != null) {
+                    callback.onConversationIconUrlLoaded(conversation.getAttribute("conversationIconUrl").toString())
+                } else {
+                    callback.onConversationIconUrlLoaded("")
+                }
             }
             conversation.getLastMessage(object : AVIMSingleMessageQueryCallback() {
                 override fun done(msg: AVIMMessage?, e: AVIMException?) {
-
                     for (callback in callbacks) {
-                        callback.onConversationLastMessageLoaded(msg!!)
+                      if (msg!=null){
+                          callback.onConversationLastMessageLoaded(msg)
+                      }
                     }
                 }
 

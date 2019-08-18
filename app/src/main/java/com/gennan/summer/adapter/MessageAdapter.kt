@@ -22,8 +22,8 @@ import java.text.SimpleDateFormat
  *Created by Gennan on 2019/8/15.
  */
 class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
-    private lateinit var msg: AVIMMessage
-    private lateinit var url: String
+    private var msg: AVIMMessage = AVIMMessage()
+    private var url: String = ""
     private lateinit var listener: OnItemClickListener
     var conversationList = mutableListOf<AVObject>()
 
@@ -49,13 +49,14 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
             CoolChatApp.getAppGson()?.fromJson(msg.content, TextMessageBean::class.java)
         holder.lastMsgTv.text = textMessage?._lctext
 
+
         holder.itemView.setOnClickListener {
             CoolChatApp.getAppEventBus()
                 .postSticky(ConversationTitleEvent(conversationList[position].getString("name")))
-            listener.onItemClick(position)
+            listener.onItemClick(position, conversationList)
         }
         holder.itemView.setOnLongClickListener {
-            listener.onItemLongClick(position)
+            listener.onItemLongClick(position, conversationList)
             true//设置为true表示执行完长按后的事件不再处理点击的事件
         }
     }
@@ -86,7 +87,7 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
     }
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int)
-        fun onItemLongClick(position: Int)
+        fun onItemClick(position: Int, conversationList: MutableList<AVObject>)
+        fun onItemLongClick(position: Int, conversationList: MutableList<AVObject>)
     }
 }

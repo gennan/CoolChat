@@ -55,6 +55,7 @@
                     android:layout_marginTop="18dp"
                     android:layout_marginBottom="16dp"
                     android:gravity="center"
+                    android:src="@drawable/chat_see_data"
                     android:visibility="visible"
                     tools:ignore="RtlHardcoded"/>
         </androidx.appcompat.widget.Toolbar>
@@ -148,6 +149,7 @@
 
     <!--用来刷新消息的RecyclerView-->
     <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_chat"
             android:layout_below="@id/app_bar_layout_chat"
             android:layout_above="@id/ll_bottom_chat"
             android:layout_width="match_parent"

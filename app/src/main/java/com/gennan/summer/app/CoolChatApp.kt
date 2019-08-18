@@ -7,6 +7,8 @@ import android.os.Handler
 import com.avos.avoscloud.AVOSCloud
 import com.avos.avoscloud.AVUser
 import com.avos.avoscloud.im.v2.AVIMClient
+import com.avos.avoscloud.im.v2.AVIMMessageManager
+import com.gennan.summer.CoolChatMessageHandler
 import com.gennan.summer.util.LogUtil
 import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
