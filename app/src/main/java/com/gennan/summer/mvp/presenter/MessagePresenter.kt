@@ -6,7 +6,7 @@ import com.avos.avoscloud.AVQuery
 import com.avos.avoscloud.FindCallback
 import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.AVIMMessage
-import com.avos.avoscloud.im.v2.callback.AVIMSingleMessageQueryCallback
+import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.mvp.contract.IMessagePresenter
 import com.gennan.summer.mvp.contract.IMessageViewCallback
@@ -30,12 +30,12 @@ class MessagePresenter : IMessagePresenter {
                     callback.onConversationIconUrlLoaded("")
                 }
             }
-            conversation.getLastMessage(object : AVIMSingleMessageQueryCallback() {
-                override fun done(msg: AVIMMessage?, e: AVIMException?) {
+            conversation.queryMessages(1, object : AVIMMessagesQueryCallback() {
+                override fun done(messages: MutableList<AVIMMessage>?, e: AVIMException?) {
                     for (callback in callbacks) {
-                      if (msg!=null){
-                          callback.onConversationLastMessageLoaded(msg)
-                      }
+                        if (messages?.get(0)!!.content != null) {
+                            callback.onConversationLastMessageLoaded(messages[0])
+                        }
                     }
                 }
 
