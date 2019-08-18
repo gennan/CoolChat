@@ -32,7 +32,9 @@
                 <action android:name="android.intent.action.USER_PRESENT"/>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
-        </receiver> <!-- 即时通讯模块、推送 END -->
+        </receiver>
+
+        <!-- 即时通讯模块、推送 END -->
         <!-- 反馈组件（需要加入以下声明）START -->
         <activity android:name="com.avos.avoscloud.feedback.ThreadActivity">
         </activity> <!-- 反馈组件 END -->

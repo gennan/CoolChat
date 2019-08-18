@@ -31,7 +31,7 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-//在上线了之后或者是添加了退出当前账号的功能之后把这里的自动登录功能加上
+//todo:在上线了之后或者是添加了退出当前账号的功能之后把这里的自动登录功能加上
 //        judgeUserWhetherNeedToLogin()
         initData()
         loginPresenter.attachViewCallback(this)
@@ -114,7 +114,7 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
         }
         loginSPEditor.commit()
         CoolChatApp.avUser = avUser//通过这里使AVUser全局可获得
-        CoolChatApp.avImClient = AVIMClient.getInstance(avUser.username)//获取AVIMClient里并保存为全局可得的变量
+        CoolChatApp.avImClient = AVIMClient.getInstance(avUser.username)//获取AVIMClient里并保存为全局可得的变量 这里的avImClient是还没有open过的avImClient
         LogUtil.d("LoginActivity", "avImClient ----> ${CoolChatApp.avImClient}")
         //跳转到新的界面
         val intent = Intent(this, MainActivity::class.java)

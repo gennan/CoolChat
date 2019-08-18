@@ -22,8 +22,7 @@ class MessagePresenter : IMessagePresenter {
             val conversation = CoolChatApp.openedClient!!.getConversation(avObject.objectId)
             LogUtil.d("MessageAdapter", "conversation ----> $conversation")
             for (callback in callbacks) {
-                //todo:这里的图片不知道为什么加载不出url了来了 刚才还可以的 我草了... 加个判空 随缘了...
-                LogUtil.d("MessageFragment", "url ----> ${conversation.getAttribute("conversationIconUrl")}")
+                //todo:这里的头像也有问题 是要设置成User的头像 而不是直接从conversation里获取
                 if (conversation.getAttribute("conversationIconUrl") != null) {
                     callback.onConversationIconUrlLoaded(conversation.getAttribute("conversationIconUrl").toString())
                 } else {
@@ -32,9 +31,12 @@ class MessagePresenter : IMessagePresenter {
             }
             conversation.queryMessages(1, object : AVIMMessagesQueryCallback() {
                 override fun done(messages: MutableList<AVIMMessage>?, e: AVIMException?) {
+                    LogUtil.d("zz", "${messages!![0].from}")
+                    messages[0]
                     for (callback in callbacks) {
                         if (messages?.get(0)!!.content != null) {
                             callback.onConversationLastMessageLoaded(messages[0])
+                            LogUtil.d("zz", "message ----> ${messages[0].messageIOType}")
                         }
                     }
                 }
