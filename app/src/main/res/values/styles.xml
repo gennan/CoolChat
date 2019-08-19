@@ -16,4 +16,16 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="CoolChatMatisse" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="toolbar">@style/Toolbar.Dracula</item>
+        <item name="album.emptyView">@drawable/ic_empty_dracula</item>
+        <item name="item.placeholder">@color/white</item>
+        <item name="page.bg">@color/white</item>
+        <item name="bottomToolbar.bg">@color/white</item>
+        <item name="android:listPopupWindowStyle">@style/Popup.Dracula</item>
+        <item name="listPopupWindowStyle">@style/Popup.Dracula</item>
+    </style>
+
 </resources>

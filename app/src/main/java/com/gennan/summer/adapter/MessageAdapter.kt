@@ -49,23 +49,33 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val conversationName = conversationList[position].getString("name").replace(CoolChatApp.avUser!!.username, "")
-        holder.titleTv.text = conversationName
-        val query = AVQuery<AVObject>("_User")
-        query.whereEqualTo("username", conversationName)
-        query.findInBackground(object : FindCallback<AVObject>() {
-            override fun done(avObjects: MutableList<AVObject>?, avException: AVException?) {
-                if (avObjects!![0].getString("iconUrl") != null) {
-                    val url = avObjects[0].getString("iconUrl")
-                    Glide.with(context).load(url).apply(RequestOptions.bitmapTransform(CircleCrop())).into(holder.iconIv)
+
+        if (conversationList[position].getList("m").size == 2) {
+            holder.msgType.text = "单聊"
+            //对话名称
+            val conversationName =
+                conversationList[position].getString("name").replace(CoolChatApp.avUser!!.username, "")
+            holder.titleTv.text = conversationName
+            //对话头像的url
+            val query = AVQuery<AVObject>("_User")
+            query.whereEqualTo("username", conversationName)
+            query.findInBackground(object : FindCallback<AVObject>() {
+                override fun done(avObjects: MutableList<AVObject>?, avException: AVException?) {
+                    if (avObjects!![0].getString("iconUrl") != null) {
+                        val url = avObjects[0].getString("iconUrl")
+                        Glide.with(context).load(url).apply(RequestOptions.bitmapTransform(CircleCrop()))
+                            .into(holder.iconIv)
+                    }
                 }
-            }
-        })
+            })
+        }
 
 
-        val dateStr = SimpleDateFormat("hh:mm").format(conversationList[position].getDate("lm"))
+        //对话的最后发送时间
+        val dateStr = SimpleDateFormat("MM-dd HH:mm").format(conversationList[position].getDate("lm"))
         holder.lastTimeTv.text = dateStr
 
+        //最后获得的消息
         val lm =
             CoolChatApp.getAppGson()?.fromJson(msg.content, AVIMMessageBean::class.java)
         //设置为true表示执行完长按后的事件不再处理点击的事件
@@ -78,8 +88,13 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
 
         holder.itemView.setOnClickListener {
-            CoolChatApp.getAppEventBus()
-                .postSticky(ConversationTitleEvent(conversationName))
+            //单聊
+            if (conversationList[position].getList("m").size == 2) {
+                val conversationName =
+                    conversationList[position].getString("name").replace(CoolChatApp.avUser!!.username, "")
+                CoolChatApp.getAppEventBus()
+                    .postSticky(ConversationTitleEvent(conversationName))
+            }
             listener.onItemClick(position, conversationList)
         }
         holder.itemView.setOnLongClickListener {
@@ -106,6 +121,7 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         val titleTv: TextView = itemView.findViewById(R.id.tv_chat_title_recycle_item)
         val lastMsgTv: TextView = itemView.findViewById(R.id.tv_chat_last_msg_recycle_item)//通过查询消息来获得最新的消息
         val lastTimeTv: TextView = itemView.findViewById(R.id.tv_chat_last_time_recycle_item)
+        val msgType: TextView = itemView.findViewById(R.id.tv_msg_type_recycle_item)
     }
 
 

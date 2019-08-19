@@ -1,6 +1,7 @@
 package com.gennan.summer.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -8,9 +9,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.avos.avoscloud.AVFile
 import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.AVIMMessage
+import com.avos.avoscloud.im.v2.messages.AVIMImageMessage
+import com.gennan.summer.MyGlideEngine
 import com.gennan.summer.R
 import com.gennan.summer.adapter.ChatAdapter
 import com.gennan.summer.app.CoolChatApp
@@ -22,6 +26,10 @@ import com.gennan.summer.event.NewMessageEvent
 import com.gennan.summer.mvp.contract.IChatViewCallback
 import com.gennan.summer.mvp.presenter.ChatPresenter
 import com.gennan.summer.util.LogUtil
+import com.gennan.summer.util.UriToRealPathUtil.getRealFilePath
+import com.zhihu.matisse.Matisse
+import com.zhihu.matisse.MimeType
+import com.zhihu.matisse.internal.entity.CaptureStrategy
 import kotlinx.android.synthetic.main.activity_chat.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -36,6 +44,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
     private val chatPresenter = ChatPresenter.instance
     private val TAG = "ChatActivity"
     lateinit var chatAdapter: ChatAdapter
+    val IMG_REQUEST_CODE = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +59,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
     private fun initView() {
         val manager = LinearLayoutManager(this)
         rv_chat.layoutManager = manager
-        chatAdapter = ChatAdapter(messageList)
+        chatAdapter = ChatAdapter(messageList, this)
         rv_chat.adapter = chatAdapter
     }
 
@@ -91,7 +100,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
                 LogUtil.d("zz", "message ----> $messageWillSend")
                 if (CoolChatApp.avImClient != null) {
                     val conversation = CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)
-                    chatPresenter.sendMessage(messageWillSend, conversation)
+                    chatPresenter.sendTextMessage(messageWillSend, conversation)
                 }
             }
         }
@@ -102,6 +111,18 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
                 15,
                 CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)
             )
+        }
+        //设置点击发送图片
+        iv_send_img_chat.setOnClickListener {
+            Matisse.from(this)
+                .choose(MimeType.allOf())
+                .countable(false)//勾选后不显示数字 显示勾号
+                .maxSelectable(1)
+                .capture(true)//选择照片时，是否显示拍照
+                .captureStrategy(CaptureStrategy(true, "com.gennan.summer.fileprovider"))
+                .theme(R.style.CoolChatMatisse)
+                .imageEngine(MyGlideEngine())
+                .forResult(IMG_REQUEST_CODE)
         }
     }
 
@@ -134,7 +155,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
         position = event.position
     }
 
-    override fun onMessageSendSucceeded(msg: AVIMMessage) {
+    override fun onTextMessageSendSucceeded(msg: AVIMMessage) {
         et_send_message_chat.setText("")
         messageList.add(msg)
         chatAdapter.notifyItemInserted(messageList.size - 1)
@@ -142,7 +163,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
         LogUtil.d("ChatActivity", "消息发送成功")
     }
 
-    override fun onMessageSendFailed() {
+    override fun onTextMessageSendFailed() {
         LogUtil.d("ChatActivity", "消息发送失败")
     }
 
@@ -185,7 +206,6 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
     override fun onFirstTenMsgLoadedSucceeded(messages: MutableList<AVIMMessage>?, oldestMsg: AVIMMessage) {
         if (messages != null) {
             this.oldestMsg = oldestMsg
-//            messages.reverse()
             messageList.addAll(messages)
             for (x in 0 until messages.size - 1) {
                 chatAdapter.notifyItemInserted(x)
@@ -213,4 +233,32 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMG_REQUEST_CODE && resultCode == RESULT_OK) {
+            val result = Matisse.obtainResult(data)
+            val filePath = getRealFilePath(this, result[0])
+            val fileName =
+                filePath?.substring(filePath.lastIndexOf("/") + 1, filePath.length)
+            val imgFile = AVFile.withAbsoluteLocalPath(fileName, filePath)
+            val avimImageMessage = AVIMImageMessage(imgFile)
+            if (CoolChatApp.avImClient != null) {
+                val conversation = CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)
+                chatPresenter.sendImgMessage(avimImageMessage, conversation)
+            }
+        }
+    }
+
+    override fun onImgMessageSendSucceeded(msg: AVIMMessage) {
+        messageList.add(msg)
+        chatAdapter.notifyItemInserted(messageList.size - 1)
+        rv_chat.scrollToPosition(messageList.size - 1)
+        LogUtil.d(TAG, "图像消息发送成功")
+        Toast.makeText(this, "图片发送成功", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onImgMessageSendFailed() {
+        LogUtil.d(TAG, "图像消息发送失败")
+        Toast.makeText(this, "图片发送失败 请重新试试", Toast.LENGTH_SHORT).show()
+    }
 }

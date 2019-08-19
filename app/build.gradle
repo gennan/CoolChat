@@ -61,6 +61,10 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    //RxPermissions
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
     //Gson
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    //Matisse
+    implementation 'com.zhihu.android:matisse:0.4.3'
 }

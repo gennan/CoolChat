@@ -4,6 +4,7 @@
           package="com.gennan.summer">
     <!-- 基础模块（必须加入以下声明）START -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
@@ -20,6 +21,19 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning"
             tools:targetApi="n">
+
+
+        <provider
+                android:name="androidx.core.content.FileProvider"
+                android:authorities="com.gennan.summer.fileprovider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/file_paths_public">
+            </meta-data>
+        </provider>
+
         <activity android:name=".activity.UserDataActivity">
         </activity>
         <!-- 即时通讯模块、推送（均需要加入以下声明）START -->

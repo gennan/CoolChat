@@ -5,14 +5,33 @@ import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.AVIMMessage
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback
+import com.avos.avoscloud.im.v2.messages.AVIMImageMessage
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage
 import com.gennan.summer.mvp.contract.IChatPresenter
 import com.gennan.summer.mvp.contract.IChatViewCallback
+import com.gennan.summer.util.LogUtil
 
 /**
  *Created by Gennan on 2019/8/18.
  */
 class ChatPresenter : IChatPresenter {
+    override fun sendImgMessage(avimImageMessage: AVIMImageMessage, conversation: AVIMConversation) {
+        conversation.sendMessage(avimImageMessage, object : AVIMConversationCallback() {
+            override fun done(e: AVIMException?) {
+                if (e == null) {
+                    for (callback in callbacks) {
+                        callback.onImgMessageSendSucceeded(avimImageMessage)
+                    }
+                } else {
+                    for (callback in callbacks) {
+                        LogUtil.d("zz","AVIMException----> $e")
+                        callback.onImgMessageSendFailed()
+                    }
+                }
+            }
+
+        })
+    }
 
     var oldestMessage: AVIMMessage = AVIMMessage()
 
@@ -70,18 +89,18 @@ class ChatPresenter : IChatPresenter {
         })
     }
 
-    override fun sendMessage(text: String, conversation: AVIMConversation) {
+    override fun sendTextMessage(text: String, conversation: AVIMConversation) {
         val msg = AVIMTextMessage()
         msg.text = text
         conversation.sendMessage(msg, object : AVIMConversationCallback() {
             override fun done(e: AVIMException?) {
                 if (e == null) {
                     for (callback in callbacks) {
-                        callback.onMessageSendSucceeded(msg)
+                        callback.onTextMessageSendSucceeded(msg)
                     }
                 } else {
                     for (callback in callbacks) {
-                        callback.onMessageSendFailed()
+                        callback.onTextMessageSendFailed()
                     }
                 }
             }

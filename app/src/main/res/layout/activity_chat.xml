@@ -108,6 +108,7 @@
                     android:src="@drawable/chat_voice"/>
 
             <ImageView
+                    android:id="@+id/iv_send_img_chat"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginTop="5dp"
@@ -130,12 +131,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp">
 
+
             <ImageView
                     android:id="@+id/rounded_image_view_press_to_say"
                     android:layout_centerInParent="true"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/chat_send_voice"/>
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/chat_send_voice"/>
+
+            <ImageView
+                    android:layout_centerInParent="true"
+                    android:layout_width="50dp"
+                    android:src="@drawable/chat_send_voice_inner"
+                    android:layout_height="50dp"/>
 
             <TextView
                     android:layout_marginBottom="20dp"
