@@ -45,7 +45,8 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
     }
 
     override fun onBindViewHolder(holder: InnerHolder, position: Int) {
-        val msg = list[position]
+        //收到消息的处理
+       val msg = list[position]
         val msgBean = CoolChatApp.getAppGson()?.fromJson(msg.content, AVIMMessageBean::class.java)
         if (msg.from != CoolChatApp.openedClient?.clientId) {
             //别人发送的消息

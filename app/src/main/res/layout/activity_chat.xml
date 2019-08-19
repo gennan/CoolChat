@@ -135,7 +135,7 @@
                     android:layout_centerInParent="true"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:background="@color/colorPrimary"/>
+                    android:src="@drawable/chat_send_voice"/>
 
             <TextView
                     android:layout_marginBottom="20dp"

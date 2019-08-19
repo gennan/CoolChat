@@ -14,6 +14,8 @@ import com.avos.avoscloud.AVQuery
 import com.avos.avoscloud.FindCallback
 import com.avos.avoscloud.im.v2.AVIMMessage
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.bean.AVIMMessageBean
@@ -55,8 +57,7 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             override fun done(avObjects: MutableList<AVObject>?, avException: AVException?) {
                 if (avObjects!![0].getString("iconUrl") != null) {
                     val url = avObjects[0].getString("iconUrl")
-                    //这里url好像微调就好了
-                    Glide.with(context).load(url).into(holder.iconIv)
+                    Glide.with(context).load(url).apply(RequestOptions.bitmapTransform(CircleCrop())).into(holder.iconIv)
                 }
             }
         })
@@ -101,7 +102,7 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val iconIv: ImageView =
-            itemView.findViewById(R.id.rounded_image_view_recycle_item_message)//这个要通过名称来找User的iconUrl
+            itemView.findViewById(R.id.circle_image_view_recycle_item_message)//这个要通过名称来找User的iconUrl
         val titleTv: TextView = itemView.findViewById(R.id.tv_chat_title_recycle_item)
         val lastMsgTv: TextView = itemView.findViewById(R.id.tv_chat_last_msg_recycle_item)//通过查询消息来获得最新的消息
         val lastTimeTv: TextView = itemView.findViewById(R.id.tv_chat_last_time_recycle_item)

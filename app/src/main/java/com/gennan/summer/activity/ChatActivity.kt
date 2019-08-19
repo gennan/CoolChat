@@ -18,6 +18,7 @@ import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.event.ClientOpenEvent
 import com.gennan.summer.event.ConversationObjectEvent
 import com.gennan.summer.event.ConversationTitleEvent
+import com.gennan.summer.event.NewMessageEvent
 import com.gennan.summer.mvp.contract.IChatViewCallback
 import com.gennan.summer.mvp.presenter.ChatPresenter
 import com.gennan.summer.util.LogUtil
@@ -200,6 +201,16 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
 
     override fun onFirstTenMsgIsNull() {
         LogUtil.d(TAG, "第一次加载的消息为空 ----> 就是还有发送过消息")
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onNewMessageEventHandle(event: NewMessageEvent) {
+        if (event.conversation == CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)) {
+            messageList.add(event.message)
+            chatAdapter.notifyItemInserted(messageList.size - 1)
+            rv_chat.scrollToPosition(messageList.size - 1)
+            LogUtil.d("ChatActivity", "成功接收到新消息")
+        }
     }
 
 }
