@@ -147,11 +147,17 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <!--用来刷新消息的RecyclerView-->
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_chat"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout_activity_chat"
             android:layout_below="@id/app_bar_layout_chat"
             android:layout_above="@id/ll_bottom_chat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+        <!--用来刷新消息的RecyclerView-->
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_chat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </RelativeLayout>

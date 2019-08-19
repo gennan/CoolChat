@@ -72,7 +72,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
      * 找到MessageFragment里的一些控件实例
      */
     private fun initView(view: View?, container: ViewGroup?) {
-        swipeRefreshLayout = view!!.findViewById(R.id.swipe_fresh_layout)
+        swipeRefreshLayout = view!!.findViewById(R.id.swipe_fresh_layout_fragment_message)
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(container!!.context, R.color.colorPrimary))
         addFriendIv = view.findViewById(R.id.iv_add_friend)//点击跳转到添加好友和群聊的页面
         newsIsEmptyRl =
@@ -93,6 +93,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     override fun onItemClick(position: Int, conversationList: MutableList<AVObject>) {
         CoolChatApp.getAppEventBus().postSticky(ConversationObjectEvent(conversationList, position))
         val intent = Intent(activity, ChatActivity::class.java)
+
         startActivity(intent)
     }
 

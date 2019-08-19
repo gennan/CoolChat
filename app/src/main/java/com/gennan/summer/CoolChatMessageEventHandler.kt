@@ -17,5 +17,8 @@ class CoolChatMessageEventHandler : AVIMMessageHandler {
     override fun onMessage(message: AVIMMessage?, conversation: AVIMConversation?, client: AVIMClient?) {
         super.onMessage(message, conversation, client)
         LogUtil.d(TAG, "收到新消息了")
+        LogUtil.d(TAG, "message ----> $message")
+        LogUtil.d(TAG, "conversation ----> $conversation")
+        LogUtil.d(TAG, "client ----> $client")
     }
 }

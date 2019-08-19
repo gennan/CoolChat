@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avos.avoscloud.AVObject
+import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.AVIMMessage
 import com.gennan.summer.R
+import com.gennan.summer.adapter.ChatAdapter
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.event.ClientOpenEvent
@@ -24,10 +27,14 @@ import org.greenrobot.eventbus.ThreadMode
 
 
 class ChatActivity : BaseActivity(), IChatViewCallback {
-    val messageList = mutableListOf<AVIMMessage>()
+
+    var oldestMsg: AVIMMessage = AVIMMessage()
+    var messageList = mutableListOf<AVIMMessage>()
     var conversationList = mutableListOf<AVObject>()
     var position = 0
     private val chatPresenter = ChatPresenter.instance
+    private val TAG = "ChatActivity"
+    lateinit var chatAdapter: ChatAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +42,15 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
         CoolChatApp.getAppEventBus().register(this)
         chatPresenter.attachViewCallback(this)
         initView()
+        chatPresenter.getFirstTenMsg(10, CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId))
         initEvent()
     }
 
     private fun initView() {
         val manager = LinearLayoutManager(this)
         rv_chat.layoutManager = manager
+        chatAdapter = ChatAdapter(messageList)
+        rv_chat.adapter = chatAdapter
     }
 
     private fun initEvent() {
@@ -73,15 +83,24 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
         }
         //这个发送负责发送文字消息
         tv_send_message_chat.setOnClickListener {
-            if (et_send_message_chat.text.toString() == "" && et_send_message_chat.text == null) {
+            if (et_send_message_chat.text.toString().trim() == "" || et_send_message_chat.text.trim().isEmpty() || et_send_message_chat.text == null) {
                 //就是发送的消息为空 感觉也没有要弹Toast的必要
             } else {
                 val messageWillSend: String = et_send_message_chat.text.toString()
+                LogUtil.d("zz", "message ----> $messageWillSend")
                 if (CoolChatApp.avImClient != null) {
                     val conversation = CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)
                     chatPresenter.sendMessage(messageWillSend, conversation)
                 }
             }
+        }
+        //下拉刷新
+        swipe_refresh_layout_activity_chat.setOnRefreshListener {
+            chatPresenter.getMsgHistory(
+                oldestMsg,
+                15,
+                CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)
+            )
         }
     }
 
@@ -114,8 +133,11 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
         position = event.position
     }
 
-    override fun onMessageSendSucceeded() {
+    override fun onMessageSendSucceeded(msg: AVIMMessage) {
         et_send_message_chat.setText("")
+        messageList.add(msg)
+        chatAdapter.notifyItemInserted(messageList.size - 1)
+        rv_chat.scrollToPosition(messageList.size - 1)
         LogUtil.d("ChatActivity", "消息发送成功")
     }
 
@@ -131,4 +153,53 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
             super.onBackPressed()
         }
     }
+
+    override fun onHistoryMsgLoadedSucceeded(messages: MutableList<AVIMMessage>?, oldestMsg: AVIMMessage) {
+        if (messages != null) {
+            this.oldestMsg = oldestMsg
+            messageList.addAll(0, messages)
+            for (x in 0 until messages.size) {
+                chatAdapter.notifyItemInserted(x)
+            }
+            rv_chat.scrollToPosition(chatAdapter.itemCount)
+            if (swipe_refresh_layout_activity_chat.isRefreshing) {
+                swipe_refresh_layout_activity_chat.isRefreshing = false
+                Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onHistoryMsgLoadedFailed(e: AVIMException?) {
+        LogUtil.d(TAG, "onHistoryMsgLoadedFailed ----> $e")
+    }
+
+    override fun onHistoryMsgIsNull() {
+        if (swipe_refresh_layout_activity_chat.isRefreshing) {
+            swipe_refresh_layout_activity_chat.isRefreshing = false
+            Toast.makeText(this, "没有更多消息了", Toast.LENGTH_SHORT).show()
+        }
+        LogUtil.d(TAG, "onHistoryMsgIsNull ----> 没有更多消息了")
+    }
+
+    override fun onFirstTenMsgLoadedSucceeded(messages: MutableList<AVIMMessage>?, oldestMsg: AVIMMessage) {
+        if (messages != null) {
+            this.oldestMsg = oldestMsg
+//            messages.reverse()
+            messageList.addAll(messages)
+            for (x in 0 until messages.size - 1) {
+                chatAdapter.notifyItemInserted(x)
+            }
+            rv_chat.scrollToPosition(chatAdapter.itemCount)
+            LogUtil.d(TAG, "onFirstTenMsgLoadedSucceeded ----> 1")
+        }
+    }
+
+    override fun onFirstTenMsgLoadedFailed(e: AVIMException?) {
+        LogUtil.d(TAG, "onFirstTenMsgLoadedFailed ----> $e")
+    }
+
+    override fun onFirstTenMsgIsNull() {
+        LogUtil.d(TAG, "第一次加载的消息为空 ----> 就是还有发送过消息")
+    }
+
 }

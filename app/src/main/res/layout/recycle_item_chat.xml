@@ -10,6 +10,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+
             android:background="@drawable/message_left">
 
         <TextView
@@ -19,6 +20,20 @@
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:textColor="#fff"/>
+
+        <!--<ImageView-->
+                <!--android:id="@+id/iv_left_img_item_chat"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:layout_gravity="center"/>-->
+
+        <!--<VideoView-->
+                <!--android:id="@+id/video_view_left_chat"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_height="wrap_content"/>-->
     </LinearLayout>
 
     <LinearLayout
@@ -34,5 +49,20 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"/>
+
+        <!--<ImageView-->
+                <!--android:id="@+id/iv_right_img_item_chat"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:layout_gravity="center"/>-->
+
+        <!--<VideoView-->
+                <!--android:id="@+id/video_view_right_chat"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_height="wrap_content"/>-->
+
     </LinearLayout>
 </LinearLayout>

@@ -49,7 +49,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_fresh_layout"
+            android:id="@+id/swipe_fresh_layout_fragment_message"
             android:layout_below="@id/app_bar_layout_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
