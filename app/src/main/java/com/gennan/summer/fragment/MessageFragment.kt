@@ -15,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.im.v2.AVIMMessage
 import com.gennan.summer.R
+import com.gennan.summer.activity.AddNewActivity
 import com.gennan.summer.activity.ChatActivity
 import com.gennan.summer.adapter.MessageAdapter
 import com.gennan.summer.app.CoolChatApp
@@ -61,8 +62,8 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
             messagePresenter.queryConversationList()
         }
         addFriendIv.setOnClickListener {
-            val addNewDialogFragment = AddNewDialogFragment()
-            addNewDialogFragment.show(fragmentManager,"show")
+            val intent = Intent(context, AddNewActivity::class.java)
+            startActivity(intent)
         }
     }
 
