@@ -144,6 +144,10 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
                 .imageEngine(MyGlideEngine())
                 .forResult(IMG_REQUEST_CODE)
         }
+        //设置点击返回消息列表
+        tv_admission_required_title_left.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onDestroy() {

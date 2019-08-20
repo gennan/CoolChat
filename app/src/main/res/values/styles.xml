@@ -28,4 +28,9 @@
         <item name="listPopupWindowStyle">@style/Popup.Dracula</item>
     </style>
 
+    <style name="CoolChatInnerEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@android:color/darker_gray</item>
+    </style>
+
 </resources>

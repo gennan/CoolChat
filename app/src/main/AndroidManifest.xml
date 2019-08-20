@@ -54,8 +54,7 @@
         <!-- 反馈组件（需要加入以下声明）START -->
         <activity android:name="com.avos.avoscloud.feedback.ThreadActivity">
         </activity> <!-- 反馈组件 END -->
-        <activity android:name=".activity.AddNewActivity">
-        </activity>
+
         <activity android:name=".activity.ChatActivity">
         </activity>
         <activity android:name=".activity.MainActivity">

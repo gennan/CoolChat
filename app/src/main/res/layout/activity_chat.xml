@@ -79,6 +79,8 @@
             <EditText
                     android:id="@+id/et_send_message_chat"
                     android:layout_width="0dp"
+                    android:theme="@style/CoolChatInnerEditText"
+                    android:textCursorDrawable="@drawable/chat_et_cursor_color"
                     android:layout_height="wrap_content"
                     android:layout_weight="9"
                     android:textSize="17sp"/>
