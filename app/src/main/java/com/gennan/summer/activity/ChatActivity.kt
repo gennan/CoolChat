@@ -13,6 +13,7 @@ import com.avos.avoscloud.AVFile
 import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.AVIMMessage
+import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage
 import com.gennan.summer.MyGlideEngine
 import com.gennan.summer.R
@@ -45,6 +46,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
     private val TAG = "ChatActivity"
     lateinit var chatAdapter: ChatAdapter
     val IMG_REQUEST_CODE = 0
+    var sendVoiceLongClick = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,9 +89,18 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
         }
         //设置长按录制语音  然后松手时发送语音
         rounded_image_view_press_to_say.setOnLongClickListener {
-            //todo:从这里开始需要开始计算时间并录取声音
-            LogUtil.d("ChatActivity", "长按成功")
-            true
+
+            sendVoiceLongClick = true
+            LogUtil.d(TAG, "长按成功")
+            chatPresenter.startRecordAudio(this)
+            false//加入短按的点击事件就是停止语音的录制
+        }
+        rounded_image_view_press_to_say.setOnClickListener {
+            if (sendVoiceLongClick) {
+                LogUtil.d(TAG, "短按成功")
+                chatPresenter.stopRecordAudio()
+                sendVoiceLongClick = false
+            }
         }
         //这个发送负责发送文字消息
         tv_send_message_chat.setOnClickListener {
@@ -146,7 +157,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
      */
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onClientOpenEvent(event: ClientOpenEvent) {
-        //todo:聊天信息有坑 巨毒
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -233,6 +244,9 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
         }
     }
 
+    /**
+     * 选择图片返回的结果
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == IMG_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -260,5 +274,27 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
     override fun onImgMessageSendFailed() {
         LogUtil.d(TAG, "图像消息发送失败")
         Toast.makeText(this, "图片发送失败 请重新试试", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onAudioMessageSendSucceeded(msg: AVIMMessage) {
+        messageList.add(msg)
+        chatAdapter.notifyItemInserted(messageList.size - 1)
+        rv_chat.scrollToPosition(messageList.size - 1)
+        LogUtil.d(TAG, "语音发送成功")
+    }
+
+    override fun onAudioMessageSendFailed() {
+        LogUtil.d(TAG, "语音消息发送失败")
+        Toast.makeText(this, "语音发送失败 请重新试试", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onAudioFilePathGetSucceeded(filePath: String) {
+        LogUtil.d(TAG, "获取到了语音 ----> $filePath")
+        val fileName =
+            filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length)
+        val file = AVFile.withAbsoluteLocalPath(fileName, filePath)
+        val audioMessage = AVIMAudioMessage(file)
+        val conversation = CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)
+        chatPresenter.sendAudioMessage(audioMessage, conversation)
     }
 }

@@ -3,7 +3,9 @@ package com.gennan.summer.mvp.contract
 import com.avos.avoscloud.im.v2.AVIMConversation
 import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.AVIMMessage
+import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage
+import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.base.IBasePresenter
 
 /**
@@ -14,13 +16,19 @@ interface IChatPresenter : IBasePresenter<IChatViewCallback> {
     fun sendTextMessage(text: String, conversation: AVIMConversation)
     fun getMsgHistory(oldestMsg: AVIMMessage, messageNumber: Int, conversation: AVIMConversation)
     fun getFirstTenMsg(messageNumber: Int, conversation: AVIMConversation)
+    fun startRecordAudio(activity: BaseActivity)
+    fun stopRecordAudio()
+    fun sendAudioMessage(msg: AVIMAudioMessage, conversation: AVIMConversation)
 }
 
 interface IChatViewCallback {
+    fun onAudioMessageSendSucceeded(msg: AVIMMessage)
+    fun onAudioMessageSendFailed()
     fun onTextMessageSendSucceeded(msg: AVIMMessage)
     fun onTextMessageSendFailed()
     fun onImgMessageSendSucceeded(msg: AVIMMessage)
     fun onImgMessageSendFailed()
+    fun onAudioFilePathGetSucceeded(filePath: String)
     fun onHistoryMsgLoadedSucceeded(messages: MutableList<AVIMMessage>?, oldestMsg: AVIMMessage)
     fun onHistoryMsgLoadedFailed(e: AVIMException?)
     fun onHistoryMsgIsNull()
