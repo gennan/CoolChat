@@ -72,5 +72,6 @@ dependencies {
     implementation 'android.arch.lifecycle:livedata:1.1.1'
     //ViewModel
     implementation 'android.arch.lifecycle:viewmodel:1.1.1'
+    //扩展
     api 'android.arch.lifecycle:extensions:1.1.1'
 }

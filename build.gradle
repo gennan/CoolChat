@@ -19,6 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        //需要从jitpack.io导入Matisse
         maven { url 'https://jitpack.io' }
     }
 }
