@@ -146,6 +146,7 @@
                     android:layout_height="50dp"/>
 
             <TextView
+                    android:id="@+id/tv_press_to_say"
                     android:layout_marginBottom="20dp"
                     android:layout_above="@id/rounded_image_view_press_to_say"
                     android:layout_centerHorizontal="true"

@@ -79,6 +79,7 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         val lm =
             CoolChatApp.getAppGson()?.fromJson(msg.content, AVIMMessageBean::class.java)
         //设置为true表示执行完长按后的事件不再处理点击的事件
+        //在这里根据类型设置的收到消息类型
         when {
             -1 == lm?._lctype -> holder.lastMsgTv.text = lm._lctext
             -2 == lm?._lctype -> holder.lastMsgTv.text = "[图片]"

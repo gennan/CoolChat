@@ -10,7 +10,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-
             android:background="@drawable/message_left">
 
         <TextView
@@ -21,14 +20,15 @@
                 android:layout_margin="10dp"
                 android:textColor="#fff"/>
 
-        <!--<TextView-->
-        <!--android:textColor="@color/white"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_margin="10dp"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="语音"-->
-        <!--android:drawableRight="@drawable/chat_voice"/>-->
+        <TextView
+                android:id="@+id/tv_left_voice_item_chat"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="语音"
+                android:drawableRight="@drawable/chat_voice"/>
 
         <ImageView
                 android:id="@+id/iv_left_img_item_chat"
@@ -58,6 +58,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"/>
+
+        <TextView
+                android:id="@+id/tv_right_voice_item_chat"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="语音"
+                android:drawableLeft="@drawable/chat_voice"/>
 
         <ImageView
                 android:id="@+id/iv_right_img_item_chat"

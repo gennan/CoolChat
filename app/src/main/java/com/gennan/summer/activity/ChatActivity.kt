@@ -20,6 +20,7 @@ import com.gennan.summer.R
 import com.gennan.summer.adapter.ChatAdapter
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
+import com.gennan.summer.bean.AVIMMessageBean
 import com.gennan.summer.event.ClientOpenEvent
 import com.gennan.summer.event.ConversationObjectEvent
 import com.gennan.summer.event.ConversationTitleEvent
@@ -36,7 +37,14 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 
-class ChatActivity : BaseActivity(), IChatViewCallback {
+class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemClickListener {
+    override fun onVoiceItemPlayStop() {
+        chatPresenter.stopReceivedAudioMessage()
+    }
+
+    override fun onVoiceItemPlayStart(msgBean: AVIMMessageBean) {
+        chatPresenter.playReceivedAudioMessage(msgBean)
+    }
 
     var oldestMsg: AVIMMessage = AVIMMessage()
     var messageList = mutableListOf<AVIMMessage>()
@@ -45,7 +53,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
     private val chatPresenter = ChatPresenter.instance
     private val TAG = "ChatActivity"
     lateinit var chatAdapter: ChatAdapter
-    val IMG_REQUEST_CODE = 0
+    private val IMG_REQUEST_CODE = 0
     var sendVoiceLongClick = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +71,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
         rv_chat.layoutManager = manager
         chatAdapter = ChatAdapter(messageList, this)
         rv_chat.adapter = chatAdapter
+        chatAdapter.setOnVoiceItemClickListener(this)
     }
 
     private fun initEvent() {
@@ -89,7 +98,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
         }
         //设置长按录制语音  然后松手时发送语音
         rounded_image_view_press_to_say.setOnLongClickListener {
-
+            tv_press_to_say.text = "松开发送语音"
             sendVoiceLongClick = true
             LogUtil.d(TAG, "长按成功")
             chatPresenter.startRecordAudio(this)
@@ -289,6 +298,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback {
     }
 
     override fun onAudioFilePathGetSucceeded(filePath: String) {
+        tv_press_to_say.text = "按住说话"
         LogUtil.d(TAG, "获取到了语音 ----> $filePath")
         val fileName =
             filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length)

@@ -7,6 +7,7 @@ import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.base.IBasePresenter
+import com.gennan.summer.bean.AVIMMessageBean
 
 /**
  *Created by Gennan on 2019/8/18.
@@ -19,6 +20,8 @@ interface IChatPresenter : IBasePresenter<IChatViewCallback> {
     fun startRecordAudio(activity: BaseActivity)
     fun stopRecordAudio()
     fun sendAudioMessage(msg: AVIMAudioMessage, conversation: AVIMConversation)
+    fun playReceivedAudioMessage(msgBean: AVIMMessageBean)
+    fun stopReceivedAudioMessage()
 }
 
 interface IChatViewCallback {

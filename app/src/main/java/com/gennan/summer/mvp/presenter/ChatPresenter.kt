@@ -2,6 +2,7 @@ package com.gennan.summer.mvp.presenter
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import com.avos.avoscloud.im.v2.AVIMConversation
 import com.avos.avoscloud.im.v2.AVIMException
@@ -13,6 +14,7 @@ import com.avos.avoscloud.im.v2.messages.AVIMImageMessage
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
+import com.gennan.summer.bean.AVIMMessageBean
 import com.gennan.summer.mvp.contract.IChatPresenter
 import com.gennan.summer.mvp.contract.IChatViewCallback
 import com.gennan.summer.util.LogUtil
@@ -25,7 +27,27 @@ import java.io.File
  */
 class ChatPresenter : IChatPresenter {
 
-    val TAG = "ChatPresenter"
+    var mediaPlayer: MediaPlayer? = null
+
+    override fun playReceivedAudioMessage(msgBean: AVIMMessageBean) {
+        mediaPlayer = MediaPlayer()
+        mediaPlayer?.setDataSource(msgBean._lcfile.url)
+        mediaPlayer?.prepare()
+        mediaPlayer?.start()
+        mediaPlayer?.setOnCompletionListener {
+            LogUtil.d("zz", "文件播放结束！")
+        }
+
+    }
+
+    override fun stopReceivedAudioMessage() {
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+        }
+    }
+
+    private val TAG = "ChatPresenter"
 
     var oldestMessage: AVIMMessage = AVIMMessage()
 

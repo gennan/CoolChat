@@ -20,8 +20,10 @@ import com.gennan.summer.util.LogUtil
  */
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
 
+    private lateinit var listener: OnVoiceItemClickListener
     private var context: Context
     private var list: MutableList<AVIMMessage>
+    var isVoicePlaying = false
 
     constructor(list: MutableList<AVIMMessage>, context: Context) {
         this.context = context
@@ -35,6 +37,8 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
         val rightTextMessage: TextView = itemView.findViewById(R.id.tv_right_msg_item_chat)
         val leftImgMessage: ImageView = itemView.findViewById(R.id.iv_left_img_item_chat)
         val rightImgMessage: ImageView = itemView.findViewById(R.id.iv_right_img_item_chat)
+        val leftVoiceMessage: TextView = itemView.findViewById(R.id.tv_left_voice_item_chat)
+        val rightVoiceMessage: TextView = itemView.findViewById(R.id.tv_right_voice_item_chat)
 //        val leftVideoView: VideoView = itemView.findViewById(R.id.video_view_left_chat)
 //        val rightVideoView: VideoView = itemView.findViewById(R.id.video_view_right_chat)
     }
@@ -59,15 +63,33 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
             if (msgBean?._lctype == -1) {
                 holder.leftTextMessage.visibility = View.VISIBLE
                 holder.leftImgMessage.visibility = View.GONE
+                holder.leftVoiceMessage.visibility = View.GONE
                 holder.leftTextMessage.text = msgBean._lctext
             } else if (msgBean?._lctype == -2) {
                 holder.leftTextMessage.visibility = View.GONE
                 holder.leftImgMessage.visibility = View.VISIBLE
+                holder.leftVoiceMessage.visibility = View.GONE
                 GlideApp.with(context).load(msgBean._lcfile.url).into(holder.leftImgMessage)
-            } else {
-                //todo:后面还是把这里删掉 不然可能出现一大片空白的情况
-                holder.rightLayout.visibility = View.GONE
+            } else if (msgBean?._lctype == -3) {
+                holder.leftTextMessage.visibility = View.GONE
+                holder.leftImgMessage.visibility = View.GONE
+                holder.leftVoiceMessage.visibility = View.VISIBLE
+                holder.itemView.setOnClickListener {
+                    if (isVoicePlaying) {
+//                        holder.leftVoiceMessage.text = "语音"
+                        listener.onVoiceItemPlayStop()
+                    } else {
+//                        holder.leftVoiceMessage.text = "正在播放"
+                        listener.onVoiceItemPlayStart(msgBean)
+                    }
+                    isVoicePlaying = !isVoicePlaying
+                }
+                //收到的是音频文件
             }
+//            else {
+//                //todo:后面还是把这里删掉 不然可能出现一大片空白的情况
+//                holder.rightLayout.visibility = View.GONE
+//            }
         } else {
             //自己发送的消息
             holder.leftLayout.visibility = View.GONE
@@ -76,14 +98,41 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
             if (msgBean?._lctype == -1) {
                 holder.rightTextMessage.visibility = View.VISIBLE
                 holder.rightImgMessage.visibility = View.GONE
+                holder.rightVoiceMessage.visibility = View.GONE
                 holder.rightTextMessage.text = msgBean._lctext
             } else if (msgBean?._lctype == -2) {
                 holder.rightTextMessage.visibility = View.GONE
                 holder.rightImgMessage.visibility = View.VISIBLE
+                holder.rightVoiceMessage.visibility = View.GONE
                 GlideApp.with(context).load(msgBean._lcfile.url).into(holder.rightImgMessage)
-            } else {
-                holder.rightLayout.visibility = View.GONE
+            } else if (msgBean?._lctype == -3) {
+                holder.rightTextMessage.visibility = View.GONE
+                holder.rightImgMessage.visibility = View.GONE
+                holder.rightVoiceMessage.visibility = View.VISIBLE
+                holder.itemView.setOnClickListener {
+                    if (isVoicePlaying) {
+//                        holder.rightVoiceMessage.text = "语音"
+                        listener.onVoiceItemPlayStop()
+                    } else {
+//                        holder.rightVoiceMessage.text = "正在播放"
+                        listener.onVoiceItemPlayStart(msgBean)
+                    }
+                    isVoicePlaying = !isVoicePlaying
+                }
             }
+//            else {
+//                holder.rightLayout.visibility = View.GONE
+//            }
         }
+    }
+
+
+    fun setOnVoiceItemClickListener(listener: OnVoiceItemClickListener) {
+        this.listener = listener
+    }
+
+    interface OnVoiceItemClickListener {
+        fun onVoiceItemPlayStart(msgBean: AVIMMessageBean)
+        fun onVoiceItemPlayStop()
     }
 }
