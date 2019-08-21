@@ -117,7 +117,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         newsList.visibility = View.VISIBLE
         messageAdapter.setData(mutableList)
         messageAdapter.notifyDataSetChanged()
-        MessagePresenter.instance.getConversationIconAndLastMessage(mutableList)
+//        MessagePresenter.instance.getConversationIconAndLastMessage(mutableList)
         if (swipeRefreshLayout.isRefreshing) {
             swipeRefreshLayout.isRefreshing = false
             Toast.makeText(activity, "刷新成功", Toast.LENGTH_SHORT).show()
@@ -145,14 +145,17 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         messageAdapter.notifyDataSetChanged()
     }
 
-    /**
-     * 获取对话message的回调
-     */
-    override fun onConversationLastMessageLoaded(msg: AVIMMessage) {
-        messageAdapter.setLastMessage(msg)
-        messageAdapter.notifyDataSetChanged()
-    }
+//    /**
+//     * 获取对话message的回调
+//     */
+//    override fun onConversationLastMessageLoaded(msg: AVIMMessage) {
+//        messageAdapter.addLastMessage(msg)
+//        messageAdapter.notifyDataSetChanged()
+//    }
 
+    /**
+     * client.open()方法调用成功的回调
+     */
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onClientOpenEvent(event: ClientOpenEvent) {
         messagePresenter.queryConversationList()

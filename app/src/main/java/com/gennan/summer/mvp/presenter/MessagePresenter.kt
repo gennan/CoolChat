@@ -4,9 +4,6 @@ import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.AVQuery
 import com.avos.avoscloud.FindCallback
-import com.avos.avoscloud.im.v2.AVIMException
-import com.avos.avoscloud.im.v2.AVIMMessage
-import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.mvp.contract.IMessagePresenter
 import com.gennan.summer.mvp.contract.IMessageViewCallback
@@ -17,26 +14,28 @@ import java.util.*
  *Created by Gennan on 2019/8/17.
  */
 class MessagePresenter : IMessagePresenter {
-    override fun getConversationIconAndLastMessage(list: MutableList<AVObject>) {
-        if (CoolChatApp.openedClient != null) {
-            for (avObject in list) {
-                val conversation =
-                    CoolChatApp.openedClient!!.getConversation(avObject.objectId)
-                //获取最后一条消息
-                conversation.queryMessages(1, object : AVIMMessagesQueryCallback() {
-                    override fun done(messages: MutableList<AVIMMessage>?, e: AVIMException?) {
-                        for (callback in callbacks) {
-                            if (messages != null && messages.size != 0) {
-                                if (messages[0].content != null) {
-                                    callback.onConversationLastMessageLoaded(messages[0])
-                                }
-                            }
-                        }
-                    }
-                })
-            }
-        }
-    }
+
+
+//    override fun getConversationIconAndLastMessage(list: MutableList<AVObject>) {
+//        if (CoolChatApp.openedClient != null) {
+//            for (avObject in list) {
+//                val conversation =
+//                    CoolChatApp.openedClient!!.getConversation(avObject.objectId)
+//                //获取最后一条消息
+//                conversation.queryMessages(1, object : AVIMMessagesQueryCallback() {
+//                    override fun done(messages: MutableList<AVIMMessage>?, e: AVIMException?) {
+//                        for (callback in callbacks) {
+//                            if (messages != null && messages.size != 0) {
+//                                if (messages[0].content != null) {
+//                                    callback.onConversationLastMessageLoaded(messages[0])
+//                                }
+//                            }
+//                        }
+//                    }
+//                })
+//            }
+//        }
+//    }
 
     val callbacks = mutableListOf<IMessageViewCallback>()
 

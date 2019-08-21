@@ -12,7 +12,9 @@ import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.AVQuery
 import com.avos.avoscloud.FindCallback
+import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.AVIMMessage
+import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
@@ -20,6 +22,7 @@ import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.bean.AVIMMessageBean
 import com.gennan.summer.event.ConversationTitleEvent
+import com.gennan.summer.util.LogUtil
 import java.text.SimpleDateFormat
 
 
@@ -32,7 +35,8 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     }
 
     private var context: Context
-    private var msg: AVIMMessage = AVIMMessage()
+    val lastMsgList: MutableList<AVIMMessage> = mutableListOf()
+    //    private var msg: AVIMMessage = AVIMMessage()
     private var url: String = ""
     private lateinit var listener: OnItemClickListener
     var conversationList = mutableListOf<AVObject>()
@@ -84,18 +88,44 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         }
         holder.lastTimeTv.text = dateStr
 
-        //最后获得的消息
-        val lm =
-            CoolChatApp.getAppGson()?.fromJson(msg.content, AVIMMessageBean::class.java)
-        //设置为true表示执行完长按后的事件不再处理点击的事件
-        //在这里根据类型设置的收到消息类型
-        when {
-            -1 == lm?._lctype -> holder.lastMsgTv.text = lm._lctext
-            -2 == lm?._lctype -> holder.lastMsgTv.text = "[图片]"
-            -3 == lm?._lctype -> holder.lastMsgTv.text = "[语音]"
-            -4 == lm?._lctype -> holder.lastMsgTv.text = "[视频]"
-        }
 
+        val conversationObjectId = conversationList[position].objectId
+        val conversation = CoolChatApp.openedClient?.getConversation(conversationObjectId)
+        conversation?.queryMessages(1, object : AVIMMessagesQueryCallback() {
+            override fun done(messages: MutableList<AVIMMessage>?, e: AVIMException?) {
+                if (e == null) {
+                    if (messages != null && messages.size > 0) {
+                        val lastMessage =
+                            CoolChatApp.getAppGson()?.fromJson(messages[0].content, AVIMMessageBean::class.java)
+                        when {
+                            -1 == lastMessage?._lctype -> holder.lastMsgTv.text = lastMessage._lctext
+                            -2 == lastMessage?._lctype -> holder.lastMsgTv.text = "[图片]"
+                            -3 == lastMessage?._lctype -> holder.lastMsgTv.text = "[语音]"
+                            -4 == lastMessage?._lctype -> holder.lastMsgTv.text = "[视频]"
+                        }
+                    }
+                } else {
+                    LogUtil.d("MessageAdapter", "AVException ----> $e")
+                }
+            }
+        })
+
+//================================================================================================
+
+//
+//        //最后获得的消息
+//        val lm =
+//            CoolChatApp.getAppGson()?.fromJson(msg.content, AVIMMessageBean::class.java)
+//        //设置为true表示执行完长按后的事件不再处理点击的事件
+//        //在这里根据类型设置的收到消息类型
+//        when {
+//            -1 == lm?._lctype -> holder.lastMsgTv.text = lm._lctext
+//            -2 == lm?._lctype -> holder.lastMsgTv.text = "[图片]"
+//            -3 == lm?._lctype -> holder.lastMsgTv.text = "[语音]"
+//            -4 == lm?._lctype -> holder.lastMsgTv.text = "[视频]"
+//        }
+
+//================================================================================================
 
         holder.itemView.setOnClickListener {
             //单聊
@@ -121,9 +151,9 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         this.url = url
     }
 
-    fun setLastMessage(msg: AVIMMessage) {
-        this.msg = msg
-    }
+//    fun addLastMessage(msg: AVIMMessage) {
+//        this.msg = msg
+//    }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val iconIv: ImageView =
