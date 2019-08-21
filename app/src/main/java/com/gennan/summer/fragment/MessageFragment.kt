@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avos.avoscloud.AVObject
-import com.avos.avoscloud.im.v2.AVIMMessage
+import com.avos.avoscloud.im.v2.AVIMConversation
 import com.gennan.summer.R
 import com.gennan.summer.activity.AddNewActivity
 import com.gennan.summer.activity.ChatActivity
@@ -95,8 +95,13 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     /**
      * item单击进入聊天界面
      */
-    override fun onItemClick(position: Int, conversationList: MutableList<AVObject>) {
-        CoolChatApp.getAppEventBus().postSticky(ConversationObjectEvent(conversationList, position))
+//    override fun onItemClick(position: Int, conversationList: MutableList<AVObject>) {
+//        CoolChatApp.getAppEventBus().postSticky(ConversationObjectEvent(conversationList, position))
+//        val intent = Intent(activity, ChatActivity::class.java)
+//        startActivity(intent)
+//    }
+    override fun onItemClick(conversation: AVIMConversation?) {
+        CoolChatApp.getAppEventBus().postSticky(ConversationObjectEvent(conversation))
         val intent = Intent(activity, ChatActivity::class.java)
         startActivity(intent)
     }

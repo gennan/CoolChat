@@ -12,6 +12,7 @@ import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.AVQuery
 import com.avos.avoscloud.FindCallback
+import com.avos.avoscloud.im.v2.AVIMConversation
 import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.AVIMMessage
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback
@@ -135,7 +136,8 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
                 CoolChatApp.getAppEventBus()
                     .postSticky(ConversationTitleEvent(conversationName))
             }
-            listener.onItemClick(position, conversationList)
+//            listener.onItemClick(position, conversationList)
+            listener.onItemClick(conversation)
         }
         holder.itemView.setOnLongClickListener {
             listener.onItemLongClick(position, conversationList)
@@ -170,7 +172,9 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     }
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int, conversationList: MutableList<AVObject>)
+        //        fun onItemClick(position: Int, conversationList: MutableList<AVObject>)
+        fun onItemClick(conversation: AVIMConversation?)
+
         fun onItemLongClick(position: Int, conversationList: MutableList<AVObject>)
     }
 }

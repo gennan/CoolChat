@@ -62,6 +62,12 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
         initEvent()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+    }
+
+
     private fun initView() {
         val manager = LinearLayoutManager(this)
         rv_chat.layoutManager = manager
@@ -162,6 +168,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onFriendItemClickEvent(event: FriendItemClickEvent) {
         conversation = event.conversation!!
+        CoolChatApp.getAppEventBus().removeStickyEvent(FriendItemClickEvent::class.java)
     }
 
     /**
@@ -174,10 +181,16 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onConversationObjectEvent(event: ConversationObjectEvent) {
-        val conversationList = event.conversationList
-        val position = event.position
-        objectId = conversationList[position].objectId
-        conversation = CoolChatApp.avImClient!!.getConversation(objectId)
+//        val conversationList = event.conversationList
+//        val position = event.position
+//        LogUtil.d(TAG,"item position ----> $position")
+//        objectId = conversationList[position].objectId
+//        conversation = CoolChatApp.avImClient!!.getConversation(objectId)
+        if (event.conversation != null) {
+            conversation = event.conversation
+            CoolChatApp.getAppEventBus().removeStickyEvent(ConversationObjectEvent::class.java)
+            LogUtil.d(TAG, "conversationid ----> ${conversation.conversationId}")
+        }
     }
 
     override fun onTextMessageSendSucceeded(msg: AVIMMessage) {
