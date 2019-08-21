@@ -53,20 +53,11 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         messagePresenter.queryConversationList()
     }
 
-    /**
-     * 处理控件的一些事件
-     */
-    private fun initEvent() {
-        swipeRefreshLayout.setOnRefreshListener {
-            LogUtil.d("MessageFragment", "下拉刷新中...")
-            messagePresenter.queryConversationList()
-        }
-        addFriendIv.setOnClickListener {
-            val intent = Intent(context, AddNewActivity::class.java)
-            startActivity(intent)
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        messagePresenter.unAttachViewCallback(this)
+        CoolChatApp.getAppEventBus().unregister(this)
     }
-
 
     /**
      * 找到MessageFragment里的一些控件实例
@@ -86,6 +77,20 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         newsList.adapter = messageAdapter
     }
 
+    /**
+     * 处理控件的一些事件
+     */
+    private fun initEvent() {
+        swipeRefreshLayout.setOnRefreshListener {
+            LogUtil.d("MessageFragment", "下拉刷新中...")
+            messagePresenter.queryConversationList()
+        }
+        addFriendIv.setOnClickListener {
+            val intent = Intent(context, AddNewActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
 
     /**
      * item单击进入聊天界面
@@ -93,7 +98,6 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     override fun onItemClick(position: Int, conversationList: MutableList<AVObject>) {
         CoolChatApp.getAppEventBus().postSticky(ConversationObjectEvent(conversationList, position))
         val intent = Intent(activity, ChatActivity::class.java)
-
         startActivity(intent)
     }
 
@@ -147,13 +151,6 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     override fun onConversationLastMessageLoaded(msg: AVIMMessage) {
         messageAdapter.setLastMessage(msg)
         messageAdapter.notifyDataSetChanged()
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        messagePresenter.unAttachViewCallback(this)
-        CoolChatApp.getAppEventBus().unregister(this)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)

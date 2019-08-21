@@ -1,20 +1,29 @@
 package com.gennan.summer.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.avos.avoscloud.AVUser
+import com.avos.avoscloud.AVObject
+import com.avos.avoscloud.im.v2.AVIMConversation
+import com.avos.avoscloud.im.v2.AVIMException
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback
+import com.gennan.summer.GlideApp
 import com.gennan.summer.R
+import com.gennan.summer.app.CoolChatApp
+import com.gennan.summer.event.ConversationTitleEvent
 import com.gennan.summer.util.LogUtil
+import java.util.*
 
 /**
  *Created by Gennan on 2019/8/20.
  */
-class FriendAdapter : RecyclerView.Adapter<FriendAdapter.InnerHolder>() {
-    var avUserList: MutableList<AVUser> = mutableListOf()
+class FriendAdapter(private var context: Context) : RecyclerView.Adapter<FriendAdapter.InnerHolder>() {
+    var listener: OnUserItemClickListener? = null
+    var avUserList: MutableList<AVObject> = mutableListOf()
     val TAG = "FriendAdapter"
 
     class InnerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -32,11 +41,42 @@ class FriendAdapter : RecyclerView.Adapter<FriendAdapter.InnerHolder>() {
     }
 
     override fun onBindViewHolder(holder: InnerHolder, position: Int) {
-        holder.userName.text = avUserList[position].username
-        LogUtil.d(TAG, "iconUrl ----> ${avUserList[position].getString("iconUrl")}")
+        LogUtil.d(TAG, "avUser ----> ${avUserList[position].objectId}")
+        val username = avUserList[position].getString("username")
+        holder.userName.text = username
+        GlideApp.with(context).load(avUserList[position].getString("iconUrl")).into(holder.userIcon)
+        holder.itemView.setOnClickListener {
+            CoolChatApp.getAppEventBus().postSticky(ConversationTitleEvent(username))
+            CoolChatApp.openedClient?.createConversation(
+                Arrays.asList(username),
+                CoolChatApp.avUser?.username + username,
+                null,
+                object : AVIMConversationCreatedCallback() {
+                    override fun done(conversation: AVIMConversation?, e: AVIMException?) {
+                        if (e == null) {
+                            LogUtil.d(TAG, "conversation ----> $conversation")
+                            listener?.onUserItemClick(conversation)
+                        } else {
+                            LogUtil.d(TAG, "avimconversation ----> $e")
+                        }
+                    }
+                })
+        }
     }
 
-    fun setData(avObjects: MutableList<AVUser>) {
-        avUserList = avObjects
+    fun addData(avObject: AVObject) {
+        avUserList.add(avObject)
+    }
+
+    fun clearData() {
+        avUserList.clear()
+    }
+
+    fun setOnUserItemClickListener(listener: OnUserItemClickListener) {
+        this.listener = listener
+    }
+
+    interface OnUserItemClickListener {
+        fun onUserItemClick(conversation: AVIMConversation?)
     }
 }

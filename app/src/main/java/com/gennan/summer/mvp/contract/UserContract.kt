@@ -1,7 +1,6 @@
 package com.gennan.summer.mvp.contract
 
 import com.avos.avoscloud.AVObject
-import com.avos.avoscloud.AVUser
 import com.gennan.summer.base.IBasePresenter
 
 /**
@@ -9,11 +8,11 @@ import com.gennan.summer.base.IBasePresenter
  */
 
 interface IUserPresenter : IBasePresenter<IUserViewCallback> {
-//    fun queryConversationList()
+    //    fun queryConversationList()
     fun queryFriendList()
 }
 
 interface IUserViewCallback {
-//    fun onConversationListLoaded(avObjects: MutableList<AVObject>)
-    fun onFriendListLoaded(avObjects: MutableList<AVUser>)
+    //    fun onConversationListLoaded(avObjects: MutableList<AVObject>)
+    fun onFriendListAdded(avObject: AVObject)
 }

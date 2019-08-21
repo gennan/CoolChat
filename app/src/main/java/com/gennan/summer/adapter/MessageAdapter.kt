@@ -52,9 +52,12 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
         if (conversationList[position].getList("m").size == 2) {
 //            holder.msgType.text = "单聊"
-            //对话名称
-            val conversationName =
-                conversationList[position].getString("name").replace(CoolChatApp.avUser!!.username, "")
+            var conversationName: String = ""
+            if (conversationList[position].getString("name") != null) {
+                conversationName =
+                    conversationList[position].getString("name").replace(CoolChatApp.avUser!!.username, "")
+
+            }
             holder.titleTv.text = conversationName
             //对话头像的url
             val query = AVQuery<AVObject>("_User")

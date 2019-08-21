@@ -5,7 +5,6 @@ import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.mvp.contract.IUserPresenter
 import com.gennan.summer.mvp.contract.IUserViewCallback
 import com.gennan.summer.util.LogUtil
-import java.util.*
 
 /**
  *Created by Gennan on 2019/8/20.
@@ -13,6 +12,7 @@ import java.util.*
 class UserPresenter : IUserPresenter {
     val TAG = "UserPresenter"
     val callbacks = mutableListOf<IUserViewCallback>()
+
     companion object {
         val instance: UserPresenter by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { UserPresenter() }
     }
@@ -21,10 +21,28 @@ class UserPresenter : IUserPresenter {
         val friendQuery = CoolChatApp.avUser?.followeeQuery(AVUser::class.java)
         friendQuery?.findInBackground(object : FindCallback<AVUser>() {
             override fun done(avObjects: MutableList<AVUser>?, avException: AVException?) {
-                if (avException === null) {
+                if (avException == null) {
                     //这个是所有与我有关的好友列表
-                    for (callback in callbacks) {
-                        callback.onFriendListLoaded(avObjects!!)
+
+                    if (avObjects != null && avObjects.size > 0) {
+                        for (i in 0 until avObjects.size) {
+                            val query = AVQuery<AVObject>("_User")
+                            query.whereEqualTo("objectId", avObjects[i].objectId)
+                            query.findInBackground(object : FindCallback<AVObject>() {
+                                override fun done(avObjects: MutableList<AVObject>?, avException: AVException?) {
+                                    if (avException == null) {
+                                        if (avObjects != null && avObjects.size > 0) {
+                                            for (callback in callbacks) {
+                                                callback.onFriendListAdded(avObjects[0])
+                                            }
+                                        }
+                                    } else {
+                                        LogUtil.d(TAG, "avException ----> $avException")
+                                    }
+                                }
+                            })
+
+                        }
                     }
                 } else {
                     LogUtil.d(TAG, "avException ----> $avException")

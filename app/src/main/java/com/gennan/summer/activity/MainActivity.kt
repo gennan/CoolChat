@@ -11,7 +11,7 @@ import com.gennan.summer.base.BaseFragment
 import com.gennan.summer.event.ClientOpenEvent
 import com.gennan.summer.fragment.MessageFragment
 import com.gennan.summer.fragment.SettingFragment
-import com.gennan.summer.fragment.UserFragment
+import com.gennan.summer.fragment.FriendFragment
 import com.gennan.summer.util.Constants.Companion.MESSAGE_FRAGMENT
 import com.gennan.summer.util.Constants.Companion.SETTING_FRAGMENT
 import com.gennan.summer.util.Constants.Companion.USER_FRAGMENT
@@ -50,7 +50,7 @@ class MainActivity : BaseActivity() {
     private fun initView() {
         //创建一些碎片 在这里才创建的Fragment 因此在LoginActivity设置的avUser不会为空
         val messageFragment = MessageFragment()
-        val userFragment = UserFragment()
+        val userFragment = FriendFragment()
         val settingFragment = SettingFragment()
         fragments.add(messageFragment)
         fragments.add(userFragment)

@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avos.avoscloud.AVFile
-import com.avos.avoscloud.AVObject
+import com.avos.avoscloud.im.v2.AVIMConversation
 import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.AVIMMessage
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage
@@ -21,10 +21,7 @@ import com.gennan.summer.adapter.ChatAdapter
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.bean.AVIMMessageBean
-import com.gennan.summer.event.ClientOpenEvent
-import com.gennan.summer.event.ConversationObjectEvent
-import com.gennan.summer.event.ConversationTitleEvent
-import com.gennan.summer.event.NewMessageEvent
+import com.gennan.summer.event.*
 import com.gennan.summer.mvp.contract.IChatViewCallback
 import com.gennan.summer.mvp.presenter.ChatPresenter
 import com.gennan.summer.util.LogUtil
@@ -38,23 +35,20 @@ import org.greenrobot.eventbus.ThreadMode
 
 
 class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemClickListener {
-    override fun onVoiceItemPlayStop() {
-        chatPresenter.stopReceivedAudioMessage()
-    }
 
-    override fun onVoiceItemPlayStart(msgBean: AVIMMessageBean) {
-        chatPresenter.playReceivedAudioMessage(msgBean)
-    }
 
+//    var position = 0
+//    var conversationList = mutableListOf<AVObject>()
+
+    var objectId: String? = null
     var oldestMsg: AVIMMessage = AVIMMessage()
     var messageList = mutableListOf<AVIMMessage>()
-    var conversationList = mutableListOf<AVObject>()
-    var position = 0
     private val chatPresenter = ChatPresenter.instance
     private val TAG = "ChatActivity"
     lateinit var chatAdapter: ChatAdapter
     private val IMG_REQUEST_CODE = 0
     var sendVoiceLongClick = false
+    lateinit var conversation: AVIMConversation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +56,9 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
         CoolChatApp.getAppEventBus().register(this)
         chatPresenter.attachViewCallback(this)
         initView()
-        chatPresenter.getFirstTenMsg(10, CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId))
+        chatPresenter.getFirstTenMsg(
+            10, conversation
+        )
         initEvent()
     }
 
@@ -119,7 +115,6 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
                 val messageWillSend: String = et_send_message_chat.text.toString()
                 LogUtil.d("zz", "message ----> $messageWillSend")
                 if (CoolChatApp.avImClient != null) {
-                    val conversation = CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)
                     chatPresenter.sendTextMessage(messageWillSend, conversation)
                 }
             }
@@ -129,7 +124,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
             chatPresenter.getMsgHistory(
                 oldestMsg,
                 15,
-                CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)
+                conversation
             )
         }
         //设置点击发送图片
@@ -164,6 +159,10 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
         tv_title_chat.text = event.conversationTitle
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onFriendItemClickEvent(event: FriendItemClickEvent) {
+        conversation = event.conversation!!
+    }
 
     /**
      * 接收从MainActivity那边client.open的事件 然后开始接收聊天信息
@@ -175,8 +174,10 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onConversationObjectEvent(event: ConversationObjectEvent) {
-        conversationList = event.conversationList
-        position = event.position
+        val conversationList = event.conversationList
+        val position = event.position
+        objectId = conversationList[position].objectId
+        conversation = CoolChatApp.avImClient!!.getConversation(objectId)
     }
 
     override fun onTextMessageSendSucceeded(msg: AVIMMessage) {
@@ -249,7 +250,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onNewMessageEventHandle(event: NewMessageEvent) {
-        if (event.conversation == CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)) {
+        if (event.conversation == conversation) {
             messageList.add(event.message)
             chatAdapter.notifyItemInserted(messageList.size - 1)
             rv_chat.scrollToPosition(messageList.size - 1)
@@ -270,7 +271,6 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
             val imgFile = AVFile.withAbsoluteLocalPath(fileName, filePath)
             val avimImageMessage = AVIMImageMessage(imgFile)
             if (CoolChatApp.avImClient != null) {
-                val conversation = CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)
                 chatPresenter.sendImgMessage(avimImageMessage, conversation)
             }
         }
@@ -308,7 +308,14 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
             filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length)
         val file = AVFile.withAbsoluteLocalPath(fileName, filePath)
         val audioMessage = AVIMAudioMessage(file)
-        val conversation = CoolChatApp.avImClient!!.getConversation(conversationList[position].objectId)
         chatPresenter.sendAudioMessage(audioMessage, conversation)
+    }
+
+    override fun onVoiceItemPlayStop() {
+        chatPresenter.stopReceivedAudioMessage()
+    }
+
+    override fun onVoiceItemPlayStart(msgBean: AVIMMessageBean) {
+        chatPresenter.playReceivedAudioMessage(msgBean)
     }
 }
