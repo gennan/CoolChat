@@ -95,11 +95,6 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     /**
      * item单击进入聊天界面
      */
-//    override fun onItemClick(position: Int, conversationList: MutableList<AVObject>) {
-//        CoolChatApp.getAppEventBus().postSticky(ConversationObjectEvent(conversationList, position))
-//        val intent = Intent(activity, ChatActivity::class.java)
-//        startActivity(intent)
-//    }
     override fun onItemClick(conversation: AVIMConversation?) {
         CoolChatApp.getAppEventBus().postSticky(ConversationObjectEvent(conversation))
         val intent = Intent(activity, ChatActivity::class.java)
@@ -122,7 +117,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         newsList.visibility = View.VISIBLE
         messageAdapter.setData(mutableList)
         messageAdapter.notifyDataSetChanged()
-//        MessagePresenter.instance.getConversationIconAndLastMessage(mutableList)
+
         if (swipeRefreshLayout.isRefreshing) {
             swipeRefreshLayout.isRefreshing = false
             Toast.makeText(activity, "刷新成功", Toast.LENGTH_SHORT).show()
@@ -150,13 +145,6 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         messageAdapter.notifyDataSetChanged()
     }
 
-//    /**
-//     * 获取对话message的回调
-//     */
-//    override fun onConversationLastMessageLoaded(msg: AVIMMessage) {
-//        messageAdapter.addLastMessage(msg)
-//        messageAdapter.notifyDataSetChanged()
-//    }
 
     /**
      * client.open()方法调用成功的回调

@@ -49,6 +49,7 @@ class AddNewViewModel : ViewModel() {
             }
         })
     }
+    //群聊的添加和创建先省略=====================================================================
 //    fun addNewConversation(conversationName: String) {
 //        val query = AVQuery<AVObject>("_Conversation")
 //        query.whereEqualTo("name", conversationName)
@@ -98,4 +99,5 @@ class AddNewViewModel : ViewModel() {
 //                }
 //            })
 //    }
+    //=======================================================================================
 }

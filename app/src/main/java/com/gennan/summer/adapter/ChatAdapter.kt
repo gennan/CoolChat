@@ -39,6 +39,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
         val rightImgMessage: ImageView = itemView.findViewById(R.id.iv_right_img_item_chat)
         val leftVoiceMessage: TextView = itemView.findViewById(R.id.tv_left_voice_item_chat)
         val rightVoiceMessage: TextView = itemView.findViewById(R.id.tv_right_voice_item_chat)
+        //先被省略的视频部分
 //        val leftVideoView: VideoView = itemView.findViewById(R.id.video_view_left_chat)
 //        val rightVideoView: VideoView = itemView.findViewById(R.id.video_view_right_chat)
     }
@@ -86,10 +87,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                 }
                 //收到的是音频文件
             }
-//            else {
-//                //todo:后面还是把这里删掉 不然可能出现一大片空白的情况
-//                holder.rightLayout.visibility = View.GONE
-//            }
+
         } else {
             //自己发送的消息
             holder.leftLayout.visibility = View.GONE
@@ -120,9 +118,6 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                     isVoicePlaying = !isVoicePlaying
                 }
             }
-//            else {
-//                holder.rightLayout.visibility = View.GONE
-//            }
         }
     }
 

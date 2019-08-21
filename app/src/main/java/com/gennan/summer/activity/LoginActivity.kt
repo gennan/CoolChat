@@ -114,7 +114,8 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
         }
         loginSPEditor.commit()
         CoolChatApp.avUser = avUser//通过这里使AVUser全局可获得
-        CoolChatApp.avImClient = AVIMClient.getInstance(avUser.username)//获取AVIMClient里并保存为全局可得的变量 这里的avImClient是还没有open过的avImClient
+        //获取AVIMClient里并保存为全局可得的变量 这里的avImClient是还没有open过的avImClient
+        CoolChatApp.avImClient = AVIMClient.getInstance(avUser.username)
         LogUtil.d("LoginActivity", "avImClient ----> ${CoolChatApp.avImClient}")
         //跳转到新的界面
         val intent = Intent(this, MainActivity::class.java)

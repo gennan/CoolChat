@@ -2,7 +2,7 @@ package com.gennan.summer.adapter
 
 /**
  *Created by Gennan on 2019/8/20.
- *LeanCloud同时写单聊和群聊也太难受了 就还是只能写一个单聊了
+ *LeanCloud同时写单聊和群聊也太难受了 就还是只能写一个单聊了 先放着后面再慢慢补上
  */
 //class ConversationAdapter : RecyclerView.Adapter<ConversationAdapter.InnerHolder>() {
 //

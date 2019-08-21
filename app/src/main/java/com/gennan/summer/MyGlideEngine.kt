@@ -10,6 +10,7 @@ import com.zhihu.matisse.engine.ImageEngine
 
 /**
  *Created by Gennan on 2019/8/19.
+ * 配合知乎图像选择框架做的一些更改
  */
 class MyGlideEngine : ImageEngine {
     override fun loadThumbnail(context: Context, resize: Int, placeholder: Drawable, imageView: ImageView, uri: Uri) {

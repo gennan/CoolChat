@@ -2,6 +2,7 @@ package com.gennan.summer.bean
 
 /**
  *Created by Gennan on 2019/8/17.
+ * 找了好久 踩了好多坑才搞了个这个 先用着了
  */
 data class AVIMMessageBean(
     val _lcattrs: Lcattrs,

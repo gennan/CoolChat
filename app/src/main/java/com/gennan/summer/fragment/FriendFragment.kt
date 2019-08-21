@@ -1,5 +1,8 @@
 package com.gennan.summer.fragment
 
+/**
+ * 注释的部分都是群聊部分的代码
+ */
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -34,6 +37,7 @@ class FriendFragment : BaseFragment(), IUserViewCallback, FriendAdapter.OnUserIt
             swipeRefreshLayout?.isRefreshing = false
         }
     }
+    //群聊
 //    override fun onConversationListLoaded(avObjects: MutableList<AVObject>) {
 //        conversationAdapter?.addData(avObjects)
 //        conversationAdapter?.notifyDataSetChanged()
@@ -60,7 +64,7 @@ class FriendFragment : BaseFragment(), IUserViewCallback, FriendAdapter.OnUserIt
             friendAdapter?.clearData()
             userPresenter.queryFriendList()
         }
-
+// 群聊
 //        val conversationList: RecyclerView = view.findViewById(R.id.rv_conversation)
 //        val conversationLayoutManager = LinearLayoutManager(container?.context)
 //        conversationList.layoutManager = conversationLayoutManager

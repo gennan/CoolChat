@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_add_new.*
 
 class AddNewActivity : AppCompatActivity() {
     val TAG = "AddNewActivity"
-    var mAddNewViewModel: AddNewViewModel? = null
+    private var mAddNewViewModel: AddNewViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +29,7 @@ class AddNewActivity : AppCompatActivity() {
                 finish()
             }
         })
+        //todo：群聊
 //        mAddNewViewModel?.addConversationLiveData?.observe(this, Observer {
 //            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
 //            if (it == "添加群聊成功") {
@@ -55,10 +56,11 @@ class AddNewActivity : AppCompatActivity() {
         iv_back_add_new.setOnClickListener {
             finish()
         }
+        //todo：群聊
 //        tv_add_conversation.setOnClickListener {
 //            val conversationNameWillBeAdd = et_add_conversation.text.toString()
 //            if (conversationNameWillBeAdd == "") {
-//                LogUtil.d(TAG, "对话名不能为空")
+//                LogUtil.d(TAG, "群聊名不能为空")
 //            } else {
 //                mAddNewViewModel?.addNewConversation(conversationNameWillBeAdd)
 //            }
@@ -66,7 +68,7 @@ class AddNewActivity : AppCompatActivity() {
 //        tv_create_new_conversation.setOnClickListener {
 //            val conversationNameWillBeCreate = et_create_new_conversation.text.toString()
 //            if (conversationNameWillBeCreate == "") {
-//                LogUtil.d(TAG, "对话名不能为空")
+//                LogUtil.d(TAG, "群聊名不能为空")
 //            } else {
 //                val conversationMembersList = conversationNameWillBeCreate.split(" ")
 //                mAddNewViewModel?.createNewConversation(conversationMembersList)

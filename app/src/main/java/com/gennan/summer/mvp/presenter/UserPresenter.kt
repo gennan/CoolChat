@@ -51,7 +51,9 @@ class UserPresenter : IUserPresenter {
         })
     }
 
-
+    /**
+     * 获取群聊对话列表
+     */
 //    override fun queryConversationList() {
 //        val query = AVQuery<AVObject>("_Conversation")
 //        //查询和当前用户有关的对话

@@ -35,11 +35,6 @@ import org.greenrobot.eventbus.ThreadMode
 
 
 class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemClickListener {
-
-
-//    var position = 0
-//    var conversationList = mutableListOf<AVObject>()
-
     var objectId: String? = null
     var oldestMsg: AVIMMessage = AVIMMessage()
     var messageList = mutableListOf<AVIMMessage>()
@@ -61,12 +56,6 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
         )
         initEvent()
     }
-
-    override fun onResume() {
-        super.onResume()
-
-    }
-
 
     private fun initView() {
         val manager = LinearLayoutManager(this)
@@ -181,15 +170,10 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onConversationObjectEvent(event: ConversationObjectEvent) {
-//        val conversationList = event.conversationList
-//        val position = event.position
-//        LogUtil.d(TAG,"item position ----> $position")
-//        objectId = conversationList[position].objectId
-//        conversation = CoolChatApp.avImClient!!.getConversation(objectId)
         if (event.conversation != null) {
             conversation = event.conversation
             CoolChatApp.getAppEventBus().removeStickyEvent(ConversationObjectEvent::class.java)
-            LogUtil.d(TAG, "conversationid ----> ${conversation.conversationId}")
+            LogUtil.d(TAG, "ConversationId ----> ${conversation.conversationId}")
         }
     }
 

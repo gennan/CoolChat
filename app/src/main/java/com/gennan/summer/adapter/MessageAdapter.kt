@@ -30,12 +30,8 @@ import java.text.SimpleDateFormat
 /**
  *Created by Gennan on 2019/8/15.
  */
-class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
-    constructor(context: Context) {
-        this.context = context
-    }
+class MessageAdapter(private var context: Context) : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
-    private var context: Context
     val lastMsgList: MutableList<AVIMMessage> = mutableListOf()
     //    private var msg: AVIMMessage = AVIMMessage()
     private var url: String = ""
@@ -111,23 +107,6 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             }
         })
 
-//================================================================================================
-
-//
-//        //最后获得的消息
-//        val lm =
-//            CoolChatApp.getAppGson()?.fromJson(msg.content, AVIMMessageBean::class.java)
-//        //设置为true表示执行完长按后的事件不再处理点击的事件
-//        //在这里根据类型设置的收到消息类型
-//        when {
-//            -1 == lm?._lctype -> holder.lastMsgTv.text = lm._lctext
-//            -2 == lm?._lctype -> holder.lastMsgTv.text = "[图片]"
-//            -3 == lm?._lctype -> holder.lastMsgTv.text = "[语音]"
-//            -4 == lm?._lctype -> holder.lastMsgTv.text = "[视频]"
-//        }
-
-//================================================================================================
-
         holder.itemView.setOnClickListener {
             //单聊
             if (conversationList[position].getList("m").size == 2) {
@@ -136,7 +115,6 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
                 CoolChatApp.getAppEventBus()
                     .postSticky(ConversationTitleEvent(conversationName))
             }
-//            listener.onItemClick(position, conversationList)
             listener.onItemClick(conversation)
         }
         holder.itemView.setOnLongClickListener {
@@ -153,10 +131,6 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         this.url = url
     }
 
-//    fun addLastMessage(msg: AVIMMessage) {
-//        this.msg = msg
-//    }
-
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val iconIv: ImageView =
             itemView.findViewById(R.id.circle_image_view_recycle_item_message)//这个要通过名称来找User的iconUrl
@@ -172,9 +146,7 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     }
 
     interface OnItemClickListener {
-        //        fun onItemClick(position: Int, conversationList: MutableList<AVObject>)
         fun onItemClick(conversation: AVIMConversation?)
-
         fun onItemLongClick(position: Int, conversationList: MutableList<AVObject>)
     }
 }

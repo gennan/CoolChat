@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -26,8 +27,7 @@
                 android:id="@+id/tv_chat_title_recycle_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="聊天对象"
-                />
+                tools:text="聊天对象"/>
 
         <TextView
                 android:id="@+id/tv_chat_last_msg_recycle_item"
@@ -37,7 +37,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:layout_marginRight="100dp"
-                android:text="聊天内容"/>
+                tools:text="聊天内容"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_height="wrap_content"
-                android:text="消息发送距离现在的时间"/>
+                tools:text="消息发送距离现在的时间"/>
 
         <!--<TextView-->
         <!--android:id="@+id/tv_msg_type_recycle_item"-->

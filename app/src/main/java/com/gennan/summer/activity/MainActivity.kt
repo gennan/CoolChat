@@ -9,9 +9,9 @@ import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.base.BaseFragment
 import com.gennan.summer.event.ClientOpenEvent
+import com.gennan.summer.fragment.FriendFragment
 import com.gennan.summer.fragment.MessageFragment
 import com.gennan.summer.fragment.SettingFragment
-import com.gennan.summer.fragment.FriendFragment
 import com.gennan.summer.util.Constants.Companion.MESSAGE_FRAGMENT
 import com.gennan.summer.util.Constants.Companion.SETTING_FRAGMENT
 import com.gennan.summer.util.Constants.Companion.USER_FRAGMENT
@@ -57,7 +57,10 @@ class MainActivity : BaseActivity() {
         fragments.add(settingFragment)
         lastFragment = MESSAGE_FRAGMENT
         //先默认进入的界面
-        supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, messageFragment).commit()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.frame_layout_main, messageFragment)
+            .commit()
         combineFragmentWithBottomNavigation()
     }
 

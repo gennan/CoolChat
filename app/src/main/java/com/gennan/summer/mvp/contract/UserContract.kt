@@ -5,6 +5,7 @@ import com.gennan.summer.base.IBasePresenter
 
 /**
  *Created by Gennan on 2019/8/20.
+ *
  */
 
 interface IUserPresenter : IBasePresenter<IUserViewCallback> {

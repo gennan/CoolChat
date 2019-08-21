@@ -5,6 +5,7 @@ import com.gennan.summer.base.IBasePresenter
 
 /**
  *Created by Gennan on 2019/8/17.
+ * 同样群聊部分先省略
  */
 
 interface IMessagePresenter : IBasePresenter<IMessageViewCallback> {

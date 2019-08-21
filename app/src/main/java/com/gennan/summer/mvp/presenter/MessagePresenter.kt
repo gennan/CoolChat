@@ -15,28 +15,6 @@ import java.util.*
  */
 class MessagePresenter : IMessagePresenter {
 
-
-//    override fun getConversationIconAndLastMessage(list: MutableList<AVObject>) {
-//        if (CoolChatApp.openedClient != null) {
-//            for (avObject in list) {
-//                val conversation =
-//                    CoolChatApp.openedClient!!.getConversation(avObject.objectId)
-//                //获取最后一条消息
-//                conversation.queryMessages(1, object : AVIMMessagesQueryCallback() {
-//                    override fun done(messages: MutableList<AVIMMessage>?, e: AVIMException?) {
-//                        for (callback in callbacks) {
-//                            if (messages != null && messages.size != 0) {
-//                                if (messages[0].content != null) {
-//                                    callback.onConversationLastMessageLoaded(messages[0])
-//                                }
-//                            }
-//                        }
-//                    }
-//                })
-//            }
-//        }
-//    }
-
     val callbacks = mutableListOf<IMessageViewCallback>()
 
     companion object {
