@@ -16,10 +16,10 @@ import com.gennan.summer.mvp.contract.IUserViewCallback
 import com.gennan.summer.mvp.presenter.UserPresenter
 
 class UserFragment : BaseFragment(), IUserViewCallback {
-    override fun onConversationListLoaded(avObjects: MutableList<AVObject>) {
-        conversationAdapter?.setData(avObjects)
-        conversationAdapter?.notifyDataSetChanged()
-    }
+//    override fun onConversationListLoaded(avObjects: MutableList<AVObject>) {
+//        conversationAdapter?.setData(avObjects)
+//        conversationAdapter?.notifyDataSetChanged()
+//    }
 
     override fun onFriendListLoaded(avObjects: MutableList<AVUser>) {
         friendAdapter?.setData(avObjects)
@@ -28,22 +28,22 @@ class UserFragment : BaseFragment(), IUserViewCallback {
 
     val userPresenter = UserPresenter.instance
     var friendAdapter: FriendAdapter? = null
-    var conversationAdapter: ConversationAdapter? = null
+//    var conversationAdapter: ConversationAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_user, container, false)
         val friendList: RecyclerView = view.findViewById(R.id.rv_friend)
-        val conversationList: RecyclerView = view.findViewById(R.id.rv_conversation)
+//        val conversationList: RecyclerView = view.findViewById(R.id.rv_conversation)
         val friendLayoutManager = LinearLayoutManager(container?.context)
-        val conversationLayoutManager = LinearLayoutManager(container?.context)
+//        val conversationLayoutManager = LinearLayoutManager(container?.context)
         friendList.layoutManager = friendLayoutManager
-        conversationList.layoutManager = conversationLayoutManager
+//        conversationList.layoutManager = conversationLayoutManager
         friendAdapter = FriendAdapter()
-        conversationAdapter = ConversationAdapter()
+//        conversationAdapter = ConversationAdapter()
         friendList.adapter = friendAdapter
-        conversationList.adapter = conversationAdapter
+//        conversationList.adapter = conversationAdapter
         userPresenter.queryFriendList()
-        userPresenter.queryConversationList()
+//        userPresenter.queryConversationList()
         userPresenter.attachViewCallback(this)
         return view.rootView
     }

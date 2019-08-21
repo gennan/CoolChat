@@ -26,8 +26,10 @@ class MessagePresenter : IMessagePresenter {
                 conversation.queryMessages(1, object : AVIMMessagesQueryCallback() {
                     override fun done(messages: MutableList<AVIMMessage>?, e: AVIMException?) {
                         for (callback in callbacks) {
-                            if (messages?.get(0)!!.content != null) {
-                                callback.onConversationLastMessageLoaded(messages[0])
+                            if (messages != null && messages.size != 0) {
+                                if (messages[0].content != null) {
+                                    callback.onConversationLastMessageLoaded(messages[0])
+                                }
                             }
                         }
                     }

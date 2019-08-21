@@ -9,11 +9,11 @@ import com.gennan.summer.base.IBasePresenter
  */
 
 interface IUserPresenter : IBasePresenter<IUserViewCallback> {
-    fun queryConversationList()
+//    fun queryConversationList()
     fun queryFriendList()
 }
 
 interface IUserViewCallback {
-    fun onConversationListLoaded(avObjects: MutableList<AVObject>)
+//    fun onConversationListLoaded(avObjects: MutableList<AVObject>)
     fun onFriendListLoaded(avObjects: MutableList<AVUser>)
 }

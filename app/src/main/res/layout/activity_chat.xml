@@ -22,7 +22,7 @@
                 android:fitsSystemWindows="true">
 
             <ImageView
-                    android:id="@+id/tv_admission_required_title_left"
+                    android:id="@+id/iv_back_chat"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginLeft="15dp"
@@ -46,18 +46,18 @@
                     android:textSize="18sp"
                     android:visibility="visible"/>
 
-            <ImageView
-                    android:id="@+id/iv_add_friend"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="right"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginBottom="16dp"
-                    android:gravity="center"
-                    android:src="@drawable/chat_see_data"
-                    android:visibility="visible"
-                    tools:ignore="RtlHardcoded"/>
+            <!--<ImageView-->
+                    <!--android:id="@+id/iv_add_friend"-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:layout_marginEnd="15dp"-->
+                    <!--android:layout_marginTop="18dp"-->
+                    <!--android:layout_marginBottom="16dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:src="@drawable/chat_see_data"-->
+                    <!--android:visibility="visible"-->
+                    <!--tools:ignore="RtlHardcoded"/>-->
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -118,13 +118,13 @@
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/chat_picture"/>
 
-            <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/chat_video"/>
+            <!--<ImageView-->
+            <!--android:layout_width="25dp"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginLeft="20dp"-->
+            <!--android:src="@drawable/chat_video"/>-->
         </LinearLayout>
 
         <RelativeLayout
@@ -168,6 +168,7 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_chat"
                 android:layout_width="match_parent"
+                android:overScrollMode="never"
                 android:layout_height="match_parent"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

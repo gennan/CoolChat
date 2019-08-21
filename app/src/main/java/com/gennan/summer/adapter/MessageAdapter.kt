@@ -51,7 +51,7 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         if (conversationList[position].getList("m").size == 2) {
-            holder.msgType.text = "单聊"
+//            holder.msgType.text = "单聊"
             //对话名称
             val conversationName =
                 conversationList[position].getString("name").replace(CoolChatApp.avUser!!.username, "")
@@ -61,10 +61,12 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
             query.whereEqualTo("username", conversationName)
             query.findInBackground(object : FindCallback<AVObject>() {
                 override fun done(avObjects: MutableList<AVObject>?, avException: AVException?) {
-                    if (avObjects!![0].getString("iconUrl") != null) {
-                        val url = avObjects[0].getString("iconUrl")
-                        Glide.with(context).load(url).apply(RequestOptions.bitmapTransform(CircleCrop()))
-                            .into(holder.iconIv)
+                    if (avObjects != null && avObjects.size != 0) {
+                        if (avObjects[0].getString("iconUrl") != null) {
+                            val url = avObjects[0].getString("iconUrl")
+                            Glide.with(context).load(url).apply(RequestOptions.bitmapTransform(CircleCrop()))
+                                .into(holder.iconIv)
+                        }
                     }
                 }
             })
@@ -72,7 +74,11 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
 
         //对话的最后发送时间
-        val dateStr = SimpleDateFormat("MM-dd HH:mm").format(conversationList[position].getDate("lm"))
+        val dateStr: String? = if (conversationList[position].getDate("lm") != null) {
+            SimpleDateFormat("MM-dd HH:mm").format(conversationList[position].getDate("lm"))
+        } else {
+            ""
+        }
         holder.lastTimeTv.text = dateStr
 
         //最后获得的消息
@@ -122,7 +128,7 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         val titleTv: TextView = itemView.findViewById(R.id.tv_chat_title_recycle_item)
         val lastMsgTv: TextView = itemView.findViewById(R.id.tv_chat_last_msg_recycle_item)//通过查询消息来获得最新的消息
         val lastTimeTv: TextView = itemView.findViewById(R.id.tv_chat_last_time_recycle_item)
-        val msgType: TextView = itemView.findViewById(R.id.tv_msg_type_recycle_item)
+//        val msgType: TextView = itemView.findViewById(R.id.tv_msg_type_recycle_item)
     }
 
 

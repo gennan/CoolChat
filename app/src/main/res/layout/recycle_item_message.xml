@@ -55,13 +55,13 @@
                 android:layout_height="wrap_content"
                 android:text="消息发送距离现在的时间"/>
 
-        <TextView
-                android:id="@+id/tv_msg_type_recycle_item"
-                android:layout_below="@id/tv_chat_last_time_recycle_item"
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="对话类型"/>
+        <!--<TextView-->
+        <!--android:id="@+id/tv_msg_type_recycle_item"-->
+        <!--android:layout_below="@id/tv_chat_last_time_recycle_item"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:text="对话类型"/>-->
     </RelativeLayout>
 </RelativeLayout>

@@ -12,7 +12,7 @@ import java.util.*
  */
 class UserPresenter : IUserPresenter {
     val TAG = "UserPresenter"
-
+    val callbacks = mutableListOf<IUserViewCallback>()
     companion object {
         val instance: UserPresenter by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { UserPresenter() }
     }
@@ -33,28 +33,28 @@ class UserPresenter : IUserPresenter {
         })
     }
 
-    val callbacks = mutableListOf<IUserViewCallback>()
-    override fun queryConversationList() {
-        val query = AVQuery<AVObject>("_Conversation")
-        //查询和当前用户有关的对话
-        query.whereContainsAll("m", Arrays.asList(CoolChatApp.avUser?.username))
-        query.findInBackground(object : FindCallback<AVObject>() {
-            override fun done(avObjects: MutableList<AVObject>?, avException: AVException?) {
-                if (avException == null) {
-                    if (avObjects!!.size > 0) {
-                        //这个是所有与我有关的对话列表 我们只需要取成员大于2的部分 即群聊部分
-                        for (callback in callbacks) {
-                            callback.onConversationListLoaded(avObjects)
-                        }
-                    } else {
-                        //查询的对话列表为空
-                    }
-                } else {
-                    LogUtil.d("UserPresenter", "avException ----> $avException")
-                }
-            }
-        })
-    }
+
+//    override fun queryConversationList() {
+//        val query = AVQuery<AVObject>("_Conversation")
+//        //查询和当前用户有关的对话
+//        query.whereContainsAll("m", Arrays.asList(CoolChatApp.avUser?.username))
+//        query.findInBackground(object : FindCallback<AVObject>() {
+//            override fun done(avObjects: MutableList<AVObject>?, avException: AVException?) {
+//                if (avException == null) {
+//                    if (avObjects!!.size > 0) {
+//                        //这个是所有与我有关的对话列表 我们只需要取成员大于2的部分 即群聊部分
+//                        for (callback in callbacks) {
+//                            callback.onConversationListLoaded(avObjects)
+//                        }
+//                    } else {
+//                        //查询的对话列表为空
+//                    }
+//                } else {
+//                    LogUtil.d("UserPresenter", "avException ----> $avException")
+//                }
+//            }
+//        })
+//    }
 
     override fun attachViewCallback(t: IUserViewCallback) {
         callbacks.add(t)
