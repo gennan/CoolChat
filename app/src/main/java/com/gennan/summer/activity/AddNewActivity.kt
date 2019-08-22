@@ -2,15 +2,15 @@ package com.gennan.summer.activity
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gennan.summer.R
+import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.mvvm.viewModel.AddNewViewModel
 import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_add_new.*
 
-class AddNewActivity : AppCompatActivity() {
+class AddNewActivity : BaseActivity() {
     val TAG = "AddNewActivity"
     private var mAddNewViewModel: AddNewViewModel? = null
 

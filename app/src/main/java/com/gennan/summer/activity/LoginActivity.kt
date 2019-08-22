@@ -31,7 +31,7 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-//todo:在上线了之后或者是添加了退出当前账号的功能之后把这里的自动登录功能加上
+//todo:在上线了之后或者是添加了退出当前账号的功能之后把这里的自动登录功能加上 有点问题先不加了 在退出登录之后又会自己登进来
 //        judgeUserWhetherNeedToLogin()
         initData()
         loginPresenter.attachViewCallback(this)
