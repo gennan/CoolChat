@@ -43,7 +43,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
     lateinit var chatAdapter: ChatAdapter
     private val IMG_REQUEST_CODE = 0
     var sendVoiceLongClick = false
-    lateinit var conversation: AVIMConversation
+    lateinit var conversation: AVIMConversation//todo：这里使用lateinit 快速点击时会没有赋值 可以通过添加dialog来解决这个快速点击没有赋值的情况
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

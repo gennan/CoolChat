@@ -1,5 +1,6 @@
 package com.gennan.summer.mvvm.viewModel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVStatus
@@ -12,6 +13,7 @@ import com.gennan.summer.util.LogUtil
  */
 class SquareViewModel : ViewModel() {
     val TAG = "SquareViewModel"
+    var getStatusLiveData = MutableLiveData<MutableList<AVStatus>>()
 
     fun getRecentStatus() {
         val inboxQuery = AVStatus.inboxQuery(CoolChatApp.avUser, AVStatus.INBOX_TYPE.TIMELINE.toString())
@@ -21,7 +23,8 @@ class SquareViewModel : ViewModel() {
             override fun done(avStatus: MutableList<AVStatus>?, avException: AVException?) {
                 if (avException == null) {
                     if (avStatus?.size!! > 0) {
-                        LogUtil.d(TAG, "avstatus ----> ${avStatus[0]}")
+                        LogUtil.d(TAG, "avstatus ----> ${avStatus.size}")//查看下第一个数据
+                        getStatusLiveData.value = avStatus
                     } else {
                         LogUtil.d(TAG, "返回来的状态列表的数据为0")
                     }

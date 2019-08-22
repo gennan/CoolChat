@@ -2,10 +2,7 @@ package com.gennan.summer.mvvm.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.avos.avoscloud.AVException
-import com.avos.avoscloud.AVFile
-import com.avos.avoscloud.AVStatus
-import com.avos.avoscloud.SaveCallback
+import com.avos.avoscloud.*
 import com.gennan.summer.util.LogUtil
 
 /**
@@ -20,6 +17,8 @@ class StatusSendViewModel : ViewModel() {
         val status = AVStatus()
         status.imageUrl = imageUrl
         status.message = textMessage
+        status.data = mutableMapOf(Pair("username", AVUser.getCurrentUser().username)) as Map<String, Any>?
+        status.data = mutableMapOf(Pair("iconUrl", AVUser.getCurrentUser().getString("iconUrl"))) as Map<String, Any>?
         AVStatus.sendStatusToFollowersInBackgroud(status, object : SaveCallback() {
             override fun done(e: AVException?) {
                 if (e == null) {

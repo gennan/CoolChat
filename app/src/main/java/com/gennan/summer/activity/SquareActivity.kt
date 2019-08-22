@@ -5,6 +5,7 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.NonNull
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,22 +19,30 @@ import kotlinx.android.synthetic.main.activity_square.*
 class SquareActivity : BaseActivity() {
 
     var squareViewModel: SquareViewModel? = null
+    var statusAdapter: StatusAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_square)
         squareViewModel = ViewModelProviders.of(this).get(SquareViewModel::class.java)
-//        //测试
-//        squareViewModel?.getRecentStatus()
-        //这边再拿到数据以后再去显示adapter
+        //测试
+        squareViewModel?.getRecentStatus()
+        observeLiveData()
         initView()
         initEvent()
+    }
+
+    private fun observeLiveData() {
+        squareViewModel?.getStatusLiveData?.observe(this, Observer {
+            statusAdapter?.setData(it)
+            statusAdapter?.notifyDataSetChanged()
+        })
     }
 
     private fun initView() {
         val layoutManager = LinearLayoutManager(this)
         rv_show_status_square.layoutManager = layoutManager
-        val statusAdapter = StatusAdapter()
+        statusAdapter = StatusAdapter(this)
         rv_show_status_square.adapter = statusAdapter
         rv_show_status_square.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(@NonNull outRect: Rect, @NonNull view: View, @NonNull parent: RecyclerView, @NonNull state: RecyclerView.State) {

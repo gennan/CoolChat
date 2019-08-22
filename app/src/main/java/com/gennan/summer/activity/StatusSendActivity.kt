@@ -46,8 +46,8 @@ class StatusSendActivity : AppCompatActivity() {
     }
 
     private fun initEvent() {
-        val textWillSend = et_text_msg_will_send_status.text.toString()
         tv_send_status.setOnClickListener {
+            val textWillSend = et_text_msg_will_send_status.text.toString()
             if (imgUrl == "" && textWillSend.isEmpty()) {
                 Toast.makeText(this, "动态内容不能为空", Toast.LENGTH_SHORT).show()
             } else {
