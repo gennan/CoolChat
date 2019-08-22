@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.avos.avoscloud.AVFile
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.gennan.summer.GlideApp
 import com.gennan.summer.MyGlideEngine
 import com.gennan.summer.R
@@ -53,7 +55,9 @@ class SettingFragment : BaseFragment() {
     private fun addLiveDataObserve() {
         settingViewModel?.changeAvatarLiveData?.observe(activity!!, Observer {
             Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()//显示下更改头像的结果
-            GlideApp.with(activity!!).load(CoolChatApp.avUser?.getString("iconUrl")).into(avatarIv!!)
+            GlideApp.with(activity!!).load(CoolChatApp.avUser?.getString("iconUrl"))
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .into(avatarIv!!)
         })
     }
 
@@ -95,7 +99,14 @@ class SettingFragment : BaseFragment() {
         provideFeedbackTv = view?.findViewById(R.id.tv_provide_feedback_setting)
         aboutTv = view?.findViewById(R.id.tv_about_setting)
         changeAccountTv = view?.findViewById(R.id.tv_change_account_setting)
-        GlideApp.with(activity!!).load(CoolChatApp.avUser?.getString("iconUrl")).into(avatarIv!!)
+        GlideApp.with(activity!!)
+            .load(CoolChatApp.avUser?.getString("iconUrl"))
+            .apply(
+                RequestOptions.bitmapTransform(
+                    CircleCrop()
+                )
+            )
+            .into(avatarIv!!)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

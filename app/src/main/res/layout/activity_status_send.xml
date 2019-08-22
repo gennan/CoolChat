@@ -4,11 +4,10 @@
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.gennan.summer.activity.SquareActivity">
+        android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar_layout_square"
+            android:id="@+id/app_bar_layout_send_status"
             app:elevation="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -21,7 +20,7 @@
                 android:fitsSystemWindows="true">
 
             <ImageView
-                    android:id="@+id/iv_back_square"
+                    android:id="@+id/iv_back_send_status"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginLeft="15dp"
@@ -40,14 +39,15 @@
                     android:layout_marginBottom="15dp"
                     android:singleLine="true"
                     android:textColor="@color/white"
-                    android:text="广场"
+                    android:text="发布动态"
                     android:textSize="18sp"
                     android:visibility="visible"/>
 
-            <ImageView
-                    android:id="@+id/iv_add_status_square"
-                    android:src="@drawable/square_add_status"
-                    android:layout_width="25dp"
+            <TextView
+                    android:id="@+id/tv_send_status"
+                    android:text="发布"
+                    android:textColor="@color/white"
+                    android:layout_width="50dp"
                     android:layout_height="25dp"
                     android:layout_gravity="right"
                     android:layout_marginEnd="15dp"
@@ -59,11 +59,24 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_show_status_square"
-            android:layout_below="@id/app_bar_layout_square"
+    <EditText
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/et_text_msg_will_send_status"
+            android:layout_below="@id/app_bar_layout_send_status"
+            android:hint="填写你想要发布的动态消息"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"/>
 
-    </androidx.recyclerview.widget.RecyclerView>
+    <ImageView
+            android:id="@+id/iv_send_status"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/status_send_img"
+            android:layout_below="@id/et_text_msg_will_send_status"
+            android:scaleType="fitCenter"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
 </RelativeLayout>

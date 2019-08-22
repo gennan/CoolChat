@@ -22,6 +22,8 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning"
             tools:targetApi="n">
+        <activity android:name=".activity.StatusSendActivity">
+        </activity>
         <activity android:name=".activity.FeedbackActivity">
         </activity>
         <activity android:name=".activity.AboutActivity">

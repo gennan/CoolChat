@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/iv_user_avatar_status_item"
+                android:src="@drawable/place_holder_user_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+
+        <TextView
+                android:id="@+id/tv_user_send_status_item"
+                android:layout_toRightOf="@id/iv_user_avatar_status_item"
+                android:text="发布状态的人"
+                android:layout_marginLeft="10dp"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:layout_below="@id/tv_user_send_status_item"
+                android:layout_toRightOf="@id/iv_user_avatar_status_item"
+                android:text="发布状态的时间"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:id="@+id/tv_content_send_status_item"
+                android:text="啦啊啦啦啦啦啦啦啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啦啊啦啦啦啦啦啦啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊"
+                android:layout_below="@id/iv_user_avatar_status_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <ImageView
+                android:layout_below="@id/tv_content_send_status_item"
+                android:layout_width="wrap_content"
+                android:scaleType="centerCrop"
+                android:layout_height="wrap_content"
+                android:src="@drawable/place_holder_user_icon"/>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

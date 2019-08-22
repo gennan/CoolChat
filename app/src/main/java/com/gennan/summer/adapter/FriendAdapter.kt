@@ -11,6 +11,8 @@ import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.im.v2.AVIMConversation
 import com.avos.avoscloud.im.v2.AVIMException
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.gennan.summer.GlideApp
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
@@ -44,7 +46,13 @@ class FriendAdapter(private var context: Context) : RecyclerView.Adapter<FriendA
         LogUtil.d(TAG, "avUser ----> ${avUserList[position].objectId}")
         val username = avUserList[position].getString("username")
         holder.userName.text = username
-        GlideApp.with(context).load(avUserList[position].getString("iconUrl")).into(holder.userIcon)
+        GlideApp.with(context)
+            .load(
+                avUserList[position]
+                    .getString("iconUrl")
+            )
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
+            .into(holder.userIcon)
         holder.itemView.setOnClickListener {
             CoolChatApp.getAppEventBus().postSticky(ConversationTitleEvent(username))
             CoolChatApp.openedClient?.createConversation(
