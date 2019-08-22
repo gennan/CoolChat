@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.gennan.summer.R
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.mvvm.viewModel.AddNewViewModel
+import com.gennan.summer.util.ClickUtil
 import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_add_new.*
 
@@ -46,6 +47,9 @@ class AddNewActivity : BaseActivity() {
 
     private fun initEvent() {
         tv_add_new_friend.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             val friendNameWillBeAdd = et_add_new_friend.text.toString()
             if (friendNameWillBeAdd == "") {
                 LogUtil.d(TAG, "好友名不能为空")
@@ -54,6 +58,9 @@ class AddNewActivity : BaseActivity() {
             }
         }
         iv_back_add_new.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             finish()
         }
         //todo：群聊

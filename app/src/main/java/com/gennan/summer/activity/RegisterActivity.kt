@@ -9,6 +9,7 @@ import com.gennan.summer.R
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.mvp.contract.IRegisterViewCallback
 import com.gennan.summer.mvp.presenter.RegisterPresenter
+import com.gennan.summer.util.ClickUtil
 import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_register.*
 
@@ -62,6 +63,9 @@ class RegisterActivity : BaseActivity(), IRegisterViewCallback {
     private fun initEvent() {
         //注册
         btn_register_sign_up.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             username = et_register_username.text.toString()
             password = et_register_password.text.toString()
 
@@ -80,6 +84,9 @@ class RegisterActivity : BaseActivity(), IRegisterViewCallback {
         }
         //从注册界面跳转到登录界面
         tv_register_link_to_login.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()

@@ -16,4 +16,6 @@ interface IUserPresenter : IBasePresenter<IUserViewCallback> {
 interface IUserViewCallback {
     //    fun onConversationListLoaded(avObjects: MutableList<AVObject>)
     fun onFriendListAdded(avObject: AVObject)
+
+    fun onFriendIsNull()
 }

@@ -23,7 +23,6 @@ class UserPresenter : IUserPresenter {
             override fun done(avObjects: MutableList<AVUser>?, avException: AVException?) {
                 if (avException == null) {
                     //这个是所有与我有关的好友列表
-
                     if (avObjects != null && avObjects.size > 0) {
                         for (i in 0 until avObjects.size) {
                             val query = AVQuery<AVObject>("_User")
@@ -41,7 +40,11 @@ class UserPresenter : IUserPresenter {
                                     }
                                 }
                             })
-
+                        }
+                    } else if (avObjects?.size == 0) {
+                        LogUtil.d(TAG, "返回的对话数量为空")
+                        for (callback in callbacks) {
+                            callback.onFriendIsNull()
                         }
                     }
                 } else {

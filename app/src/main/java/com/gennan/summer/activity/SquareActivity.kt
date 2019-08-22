@@ -4,7 +4,9 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +15,7 @@ import com.gennan.summer.R
 import com.gennan.summer.adapter.StatusAdapter
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.mvvm.viewModel.SquareViewModel
+import com.gennan.summer.util.ClickUtil
 import com.mredrock.cyxbs.freshman.lin.util.Dip2pxUtil
 import kotlinx.android.synthetic.main.activity_square.*
 
@@ -20,6 +23,7 @@ class SquareActivity : BaseActivity() {
 
     var squareViewModel: SquareViewModel? = null
     var statusAdapter: StatusAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,14 +36,32 @@ class SquareActivity : BaseActivity() {
         initEvent()
     }
 
+    override fun onResume() {
+        super.onResume()
+        //测试
+        squareViewModel?.getRecentStatus()
+    }
+
     private fun observeLiveData() {
         squareViewModel?.getStatusLiveData?.observe(this, Observer {
             statusAdapter?.setData(it)
             statusAdapter?.notifyDataSetChanged()
+            if (swipe_fresh_layout_activity_square.isRefreshing) {
+                swipe_fresh_layout_activity_square.isRefreshing = false
+                Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT).show()
+
+            }
         })
     }
 
     private fun initView() {
+        swipe_fresh_layout_activity_square.setColorSchemeColors(
+            ContextCompat.getColor(
+                this,
+                R.color.colorPrimary
+            )
+        )
+
         val layoutManager = LinearLayoutManager(this)
         rv_show_status_square.layoutManager = layoutManager
         statusAdapter = StatusAdapter(this)
@@ -57,12 +79,21 @@ class SquareActivity : BaseActivity() {
     private fun initEvent() {
         //返回按钮
         iv_back_square.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             finish()
         }
         iv_add_status_square.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             //发布动态
             val intent = Intent(this, StatusSendActivity::class.java)
             startActivity(intent)
+        }
+        swipe_fresh_layout_activity_square.setOnRefreshListener {
+            squareViewModel?.getRecentStatus()
         }
     }
 

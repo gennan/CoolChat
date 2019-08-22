@@ -66,6 +66,8 @@
             android:id="@+id/et_text_msg_will_send_status"
             android:layout_below="@id/app_bar_layout_send_status"
             android:hint="填写你想要发布的动态消息"
+            android:theme="@style/CoolChatInnerEditText"
+            android:textCursorDrawable="@drawable/chat_et_cursor_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -75,8 +77,8 @@
             android:layout_marginTop="5dp"
             android:src="@drawable/status_send_img"
             android:layout_below="@id/et_text_msg_will_send_status"
-            android:scaleType="fitCenter"
             android:layout_width="100dp"
+            android:scaleType="center"
             android:layout_height="100dp"/>
 
 </RelativeLayout>

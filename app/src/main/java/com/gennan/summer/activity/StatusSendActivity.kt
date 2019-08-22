@@ -1,5 +1,6 @@
 package com.gennan.summer.activity
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -12,7 +13,9 @@ import com.gennan.summer.GlideApp
 import com.gennan.summer.MyGlideEngine
 import com.gennan.summer.R
 import com.gennan.summer.mvvm.viewModel.StatusSendViewModel
+import com.gennan.summer.util.ClickUtil
 import com.gennan.summer.util.UriToRealPathUtil
+import com.tbruyelle.rxpermissions2.RxPermissions
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
@@ -47,6 +50,9 @@ class StatusSendActivity : AppCompatActivity() {
 
     private fun initEvent() {
         tv_send_status.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             val textWillSend = et_text_msg_will_send_status.text.toString()
             if (imgUrl == "" && textWillSend.isEmpty()) {
                 Toast.makeText(this, "动态内容不能为空", Toast.LENGTH_SHORT).show()
@@ -55,15 +61,30 @@ class StatusSendActivity : AppCompatActivity() {
             }
         }
         iv_send_status.setOnClickListener {
-            Matisse.from(this)
-                .choose(MimeType.allOf())
-                .countable(false)//勾选后不显示数字 显示勾号
-                .maxSelectable(1)
-                .capture(true)//选择照片时，是否显示拍照
-                .captureStrategy(CaptureStrategy(true, "com.gennan.summer.fileprovider"))
-                .theme(R.style.CoolChatMatisse)
-                .imageEngine(MyGlideEngine())
-                .forResult(IMG_REQUEST_CODE)
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
+            val rxPermissions = RxPermissions(this)
+            rxPermissions
+                .request(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                .subscribe { granted ->
+                    if (granted) {
+                        Matisse.from(this)
+                            .choose(MimeType.allOf())
+                            .countable(false)//勾选后不显示数字 显示勾号
+                            .maxSelectable(1)
+                            .capture(true)//选择照片时，是否显示拍照
+                            .captureStrategy(CaptureStrategy(true, "com.gennan.summer.fileprovider"))
+                            .theme(R.style.CoolChatMatisse)
+                            .imageEngine(MyGlideEngine())
+                            .forResult(IMG_REQUEST_CODE)
+                    } else {
+
+                    }
+                }
         }
     }
 

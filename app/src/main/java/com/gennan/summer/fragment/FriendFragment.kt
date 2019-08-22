@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,13 @@ import com.gennan.summer.mvp.contract.IUserViewCallback
 import com.gennan.summer.mvp.presenter.UserPresenter
 
 class FriendFragment : BaseFragment(), IUserViewCallback, FriendAdapter.OnUserItemClickListener {
+    override fun onFriendIsNull() {
+        if (swipeRefreshLayout != null && swipeRefreshLayout!!.isRefreshing) {
+            swipeRefreshLayout?.isRefreshing = false
+            Toast.makeText(activity, "您当前还没有好友", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onUserItemClick(conversation: AVIMConversation?) {
         CoolChatApp.getAppEventBus().postSticky(FriendItemClickEvent(conversation))
         val intent = Intent(activity, ChatActivity::class.java)
@@ -35,6 +43,7 @@ class FriendFragment : BaseFragment(), IUserViewCallback, FriendAdapter.OnUserIt
         friendAdapter?.notifyDataSetChanged()
         if (swipeRefreshLayout != null && swipeRefreshLayout!!.isRefreshing) {
             swipeRefreshLayout?.isRefreshing = false
+            Toast.makeText(activity, "刷新成功", Toast.LENGTH_SHORT).show()
         }
     }
     //群聊
@@ -42,12 +51,14 @@ class FriendFragment : BaseFragment(), IUserViewCallback, FriendAdapter.OnUserIt
 //        conversationAdapter?.addData(avObjects)
 //        conversationAdapter?.notifyDataSetChanged()
 //    }
+//    var conversationAdapter: ConversationAdapter? = null
 
 
     val userPresenter = UserPresenter.instance
     var friendAdapter: FriendAdapter? = null
     var swipeRefreshLayout: SwipeRefreshLayout? = null
-//    var conversationAdapter: ConversationAdapter? = null
+    val TAG = "FriendFragment"
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_user, container, false)
@@ -71,14 +82,23 @@ class FriendFragment : BaseFragment(), IUserViewCallback, FriendAdapter.OnUserIt
 //        conversationAdapter = ConversationAdapter()
 //        conversationList.adapter = conversationAdapter
 //        userPresenter.queryConversationList()
-
         userPresenter.attachViewCallback(this)
         return view.rootView
     }
 
-
     override fun onDestroy() {
         userPresenter.unAttachViewCallback(this)
         super.onDestroy()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+
+        if (hidden) {
+
+        } else {
+            friendAdapter?.clearData()
+            userPresenter.queryFriendList()
+        }
     }
 }

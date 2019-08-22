@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:tools="http://schemas.android.com/tools">
+        app:cardCornerRadius="10dp"
+        app:contentPadding="10dp"
+        app:cardElevation="23dp">
 
     <RelativeLayout
             android:layout_width="match_parent"
@@ -21,6 +25,7 @@
                 tools:text="发布状态的人"
                 android:layout_marginLeft="10dp"
                 android:textSize="18sp"
+                android:textColor="@android:color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -29,11 +34,13 @@
                 android:layout_below="@id/tv_user_send_status_item"
                 android:layout_toRightOf="@id/iv_user_avatar_status_item"
                 tools:text="发布状态的时间"
+                android:textSize="14sp"
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <TextView
+                android:layout_marginTop="10dp"
                 android:id="@+id/tv_content_send_status_item"
                 tools:text="啦啊啦啦啦啦啦啦啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啦啊啦啦啦啦啦啦啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊"
                 android:layout_below="@id/iv_user_avatar_status_item"
@@ -43,9 +50,11 @@
         <ImageView
                 android:id="@+id/iv_content_send_status_item"
                 android:layout_below="@id/tv_content_send_status_item"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:scaleType="centerCrop"
-                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:layout_height="200dp"
                 tools:src="@drawable/place_holder_user_icon"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

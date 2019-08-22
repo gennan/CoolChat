@@ -1,5 +1,6 @@
 package com.gennan.summer.fragment
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,9 +29,19 @@ import com.gennan.summer.util.LogUtil
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMessageViewCallback {
+class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMessageViewCallback,
+    MessageAdapter.OnLastMessageLoadedListener {
 
 
+    /**
+     * sdk逻辑感觉有点问题 但是跑了很多次都是最后一条消息的加载速度最慢 所以把这个当成是界面加载完成的时间即可
+     */
+    override fun onLastMessageLoaded() {
+        progressDialog.dismiss()
+    }
+
+    val TAG = "MessageFragment"
+    lateinit var progressDialog: ProgressDialog
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var newsList: RecyclerView
     private lateinit var newsIsEmptyRl: RelativeLayout
@@ -45,12 +56,13 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         messagePresenter.attachViewCallback(this)
         initView(view, container)
         initEvent()
-        return view.rootView
-    }
-
-    override fun onResume() {
-        super.onResume()
         messagePresenter.queryConversationList()
+        progressDialog = ProgressDialog(activity, R.style.AppTheme_Dark_Dialog)
+        progressDialog.isIndeterminate = true
+        progressDialog.setMessage("采坑中...")
+        progressDialog.setCanceledOnTouchOutside(false)
+        progressDialog.show()
+        return view.rootView
     }
 
     override fun onDestroyView() {
@@ -58,6 +70,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         messagePresenter.unAttachViewCallback(this)
         CoolChatApp.getAppEventBus().unregister(this)
     }
+
 
     /**
      * 找到MessageFragment里的一些控件实例
@@ -73,6 +86,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         val manager = LinearLayoutManager(container.context)
         newsList.layoutManager = manager
         messageAdapter = MessageAdapter(container.context)
+        messageAdapter.setOnLastMessageLoadedListener(this)
         messageAdapter.setOnItemClickListener(this)
         newsList.adapter = messageAdapter
     }
@@ -118,6 +132,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         messageAdapter.setData(mutableList)
         messageAdapter.notifyDataSetChanged()
 
+
         if (swipeRefreshLayout.isRefreshing) {
             swipeRefreshLayout.isRefreshing = false
             Toast.makeText(activity, "刷新成功", Toast.LENGTH_SHORT).show()
@@ -130,6 +145,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     override fun onLoadConversationListHaveNoNumbers() {
         newsList.visibility = View.GONE
         newsIsEmptyRl.visibility = View.VISIBLE
+
         if (swipeRefreshLayout.isRefreshing) {
             swipeRefreshLayout.isRefreshing = false
             Toast.makeText(activity, "刷新成功", Toast.LENGTH_SHORT).show()
@@ -145,6 +161,19 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         messageAdapter.notifyDataSetChanged()
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            LogUtil.d(TAG, "被隐藏了")
+        } else {
+            messagePresenter.queryConversationList()
+            progressDialog = ProgressDialog(activity, R.style.AppTheme_Dark_Dialog)
+            progressDialog.isIndeterminate = true
+            progressDialog.setMessage("采坑中...")
+            progressDialog.setCanceledOnTouchOutside(false)
+            progressDialog.show()
+        }
+    }
 
     /**
      * client.open()方法调用成功的回调

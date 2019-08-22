@@ -13,6 +13,7 @@ import com.gennan.summer.GlideApp
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.bean.AVIMMessageBean
+import com.gennan.summer.util.ClickUtil
 import com.gennan.summer.util.LogUtil
 
 /**
@@ -76,6 +77,9 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                 holder.leftImgMessage.visibility = View.GONE
                 holder.leftVoiceMessage.visibility = View.VISIBLE
                 holder.itemView.setOnClickListener {
+                    if (!ClickUtil.isFastClick()) {
+                        return@setOnClickListener
+                    }
                     if (isVoicePlaying) {
 //                        holder.leftVoiceMessage.text = "语音"
                         listener.onVoiceItemPlayStop()
@@ -108,6 +112,9 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                 holder.rightImgMessage.visibility = View.GONE
                 holder.rightVoiceMessage.visibility = View.VISIBLE
                 holder.itemView.setOnClickListener {
+                    if (!ClickUtil.isFastClick()) {
+                        return@setOnClickListener
+                    }
                     if (isVoicePlaying) {
 //                        holder.rightVoiceMessage.text = "语音"
                         listener.onVoiceItemPlayStop()

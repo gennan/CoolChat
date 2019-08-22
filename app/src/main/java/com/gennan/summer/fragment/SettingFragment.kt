@@ -1,5 +1,6 @@
 package com.gennan.summer.fragment
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,8 +25,10 @@ import com.gennan.summer.activity.SquareActivity
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseFragment
 import com.gennan.summer.mvvm.viewModel.SettingViewModel
+import com.gennan.summer.util.ClickUtil
 import com.gennan.summer.util.LogUtil
 import com.gennan.summer.util.UriToRealPathUtil
+import com.tbruyelle.rxpermissions2.RxPermissions
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
@@ -63,32 +66,84 @@ class SettingFragment : BaseFragment() {
 
     private fun initEvent() {
         changeAvatarTv?.setOnClickListener {
-            Matisse.from(this)
-                .choose(MimeType.allOf())
-                .countable(false)//勾选后不显示数字 显示勾号
-                .maxSelectable(1)
-                .capture(true)//选择照片时，是否显示拍照
-                .captureStrategy(CaptureStrategy(true, "com.gennan.summer.fileprovider"))
-                .theme(R.style.CoolChatMatisse)
-                .imageEngine(MyGlideEngine())
-                .forResult(IMG_REQUEST_CODE)
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
+            val rxPermissions = RxPermissions(this)
+            rxPermissions
+                .request(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                .subscribe { granted ->
+                    if (granted) {
+                        Matisse.from(this)
+                            .choose(MimeType.allOf())
+                            .countable(false)//勾选后不显示数字 显示勾号
+                            .maxSelectable(1)
+                            .capture(true)//选择照片时，是否显示拍照
+                            .captureStrategy(CaptureStrategy(true, "com.gennan.summer.fileprovider"))
+                            .theme(R.style.CoolChatMatisse)
+                            .imageEngine(MyGlideEngine())
+                            .forResult(IMG_REQUEST_CODE)
+                    } else {
+                    }
+                }
         }
         enterSquareTv?.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             val intent = Intent(activity, SquareActivity::class.java)
             startActivity(intent)
         }
         provideFeedbackTv?.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             val intent = Intent(activity, FeedbackActivity::class.java)
             startActivity(intent)
         }
         aboutTv?.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             val intent = Intent(activity, AboutActivity::class.java)
             startActivity(intent)
         }
         changeAccountTv?.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
             activity?.finish()
+        }
+        avatarIv?.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
+            val rxPermissions = RxPermissions(this)
+            rxPermissions
+                .request(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                .subscribe { granted ->
+                    if (granted) {
+                        Matisse.from(this)
+                            .choose(MimeType.allOf())
+                            .countable(false)//勾选后不显示数字 显示勾号
+                            .maxSelectable(1)
+                            .capture(true)//选择照片时，是否显示拍照
+                            .captureStrategy(CaptureStrategy(true, "com.gennan.summer.fileprovider"))
+                            .theme(R.style.CoolChatMatisse)
+                            .imageEngine(MyGlideEngine())
+                            .forResult(IMG_REQUEST_CODE)
+                    } else {
+                        LogUtil.d(TAG, "没给权限 ----> 0")//不给崩溃了也没办法啊...
+                    }
+                }
         }
     }
 

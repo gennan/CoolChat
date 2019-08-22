@@ -23,6 +23,7 @@ import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.bean.AVIMMessageBean
 import com.gennan.summer.event.ConversationTitleEvent
+import com.gennan.summer.util.ClickUtil
 import com.gennan.summer.util.LogUtil
 import java.text.SimpleDateFormat
 
@@ -32,6 +33,8 @@ import java.text.SimpleDateFormat
  */
 class MessageAdapter(private var context: Context) : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
+
+    private lateinit var onLastMessageLoadedListener: OnLastMessageLoadedListener
     val lastMsgList: MutableList<AVIMMessage> = mutableListOf()
     //    private var msg: AVIMMessage = AVIMMessage()
     private var url: String = ""
@@ -53,13 +56,13 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
 
         if (conversationList[position].getList("m").size == 2) {
 //            holder.msgType.text = "单聊"
-            var conversationName: String = ""
+            var conversationName = ""
             if (conversationList[position].getString("name") != null) {
                 conversationName =
                     conversationList[position].getString("name").replace(CoolChatApp.avUser!!.username, "")
-
             }
             holder.titleTv.text = conversationName
+
             //对话头像的url
             val query = AVQuery<AVObject>("_User")
             query.whereEqualTo("username", conversationName)
@@ -76,7 +79,6 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
             })
         }
 
-
         //对话的最后发送时间
         val dateStr: String? = if (conversationList[position].getDate("lm") != null) {
             SimpleDateFormat("MM-dd HH:mm").format(conversationList[position].getDate("lm"))
@@ -84,7 +86,6 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
             ""
         }
         holder.lastTimeTv.text = dateStr
-
 
         val conversationObjectId = conversationList[position].objectId
         val conversation = CoolChatApp.openedClient?.getConversation(conversationObjectId)
@@ -100,6 +101,7 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
                             -3 == lastMessage?._lctype -> holder.lastMsgTv.text = "[语音]"
                             -4 == lastMessage?._lctype -> holder.lastMsgTv.text = "[视频]"
                         }
+                        onLastMessageLoadedListener.onLastMessageLoaded()
                     }
                 } else {
                     LogUtil.d("MessageAdapter", "AVException ----> $e")
@@ -108,6 +110,9 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
         })
 
         holder.itemView.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             //单聊
             if (conversationList[position].getList("m").size == 2) {
                 val conversationName =
@@ -148,5 +153,14 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
     interface OnItemClickListener {
         fun onItemClick(conversation: AVIMConversation?)
         fun onItemLongClick(position: Int, conversationList: MutableList<AVObject>)
+    }
+
+
+    fun setOnLastMessageLoadedListener(onLastMessageLoadedListener: OnLastMessageLoadedListener) {
+        this.onLastMessageLoadedListener = onLastMessageLoadedListener
+    }
+
+    interface OnLastMessageLoadedListener {
+        fun onLastMessageLoaded()
     }
 }

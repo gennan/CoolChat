@@ -1,6 +1,5 @@
 package com.gennan.summer.mvp.presenter
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -18,7 +17,6 @@ import com.gennan.summer.bean.AVIMMessageBean
 import com.gennan.summer.mvp.contract.IChatPresenter
 import com.gennan.summer.mvp.contract.IChatViewCallback
 import com.gennan.summer.util.LogUtil
-import com.tbruyelle.rxpermissions2.RxPermissions
 import java.io.File
 
 
@@ -28,31 +26,9 @@ import java.io.File
 class ChatPresenter : IChatPresenter {
 
     var mediaPlayer: MediaPlayer? = null
-
-    override fun playReceivedAudioMessage(msgBean: AVIMMessageBean) {
-        mediaPlayer = MediaPlayer()
-        mediaPlayer?.setDataSource(msgBean._lcfile.url)
-        mediaPlayer?.prepare()
-        mediaPlayer?.start()
-        mediaPlayer?.setOnCompletionListener {
-            LogUtil.d("zz", "文件播放结束！")
-        }
-
-    }
-
-    override fun stopReceivedAudioMessage() {
-        if (mediaPlayer != null) {
-            mediaPlayer?.stop()
-            mediaPlayer?.release()
-        }
-    }
-
     private val TAG = "ChatPresenter"
-
     var oldestMessage: AVIMMessage = AVIMMessage()
-
     val callbacks = mutableListOf<IChatViewCallback>()
-
     var file: File? = null
     var fileName: String? = null
     var filePath: String? = null
@@ -146,12 +122,11 @@ class ChatPresenter : IChatPresenter {
                     }
                 } else {
                     for (callback in callbacks) {
-                        LogUtil.d("zz", "AVIMException----> $e")
+                        LogUtil.d(TAG, "AVIMException----> $e")
                         callback.onImgMessageSendFailed()
                     }
                 }
             }
-
         })
     }
 
@@ -168,39 +143,24 @@ class ChatPresenter : IChatPresenter {
 
     @SuppressLint("CheckResult")
     override fun startRecordAudio(activity: BaseActivity) {
-        val rxPermissions = RxPermissions(activity)
-        rxPermissions
-            .request(
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-            .subscribe { granted ->
-                if (granted) { // Always true pre-M
-                    // I can control the camera now
-                    try {
-                        setFileNameAndPath()
-                        if (recorder == null) {
-                            recorder = MediaRecorder()
-                            recorder?.setAudioSource(MediaRecorder.AudioSource.MIC)//设置音频源
-                            recorder?.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)//设置输出格式
-                            recorder?.setOutputFile(file?.absolutePath)//设置文件路径
-                            recorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)//设置音频编码格式
-                            recorder?.setAudioChannels(1)
-                            recorder?.setAudioSamplingRate(44100)//设置采样率
-                            recorder?.setAudioEncodingBitRate(192000)
-                            //到这里就设置好MediaRecorder了 可以开始准备然后播放了
-                            recorder?.prepare()
-                            recorder?.start()
-                        }
-                    } catch (e: Exception) {
-                        LogUtil.d(TAG, "Exception ----> $e")
-                    }
-                } else {
-                    // Oups permission denied
-                }
+        try {
+            setFileNameAndPath()
+            if (recorder == null) {
+                recorder = MediaRecorder()
+                recorder?.setAudioSource(MediaRecorder.AudioSource.MIC)//设置音频源
+                recorder?.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)//设置输出格式
+                recorder?.setOutputFile(file?.absolutePath)//设置文件路径
+                recorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)//设置音频编码格式
+                recorder?.setAudioChannels(1)
+                recorder?.setAudioSamplingRate(44100)//设置采样率
+                recorder?.setAudioEncodingBitRate(192000)
+                //到这里就设置好MediaRecorder了 可以开始准备然后播放了
+                recorder?.prepare()
+                recorder?.start()
             }
-
+        } catch (e: Exception) {
+            LogUtil.d(TAG, "Exception ----> $e")
+        }
     }
 
     override fun stopRecordAudio() {
@@ -237,5 +197,23 @@ class ChatPresenter : IChatPresenter {
                 }
             }
         })
+    }
+
+    override fun playReceivedAudioMessage(msgBean: AVIMMessageBean) {
+        mediaPlayer = MediaPlayer()
+        mediaPlayer?.setDataSource(msgBean._lcfile.url)
+        mediaPlayer?.prepare()
+        mediaPlayer?.start()
+        mediaPlayer?.setOnCompletionListener {
+            LogUtil.d("zz", "文件播放结束！")
+        }
+
+    }
+
+    override fun stopReceivedAudioMessage() {
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+        }
     }
 }

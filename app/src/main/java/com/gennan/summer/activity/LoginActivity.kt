@@ -10,11 +10,13 @@ import android.widget.Toast
 import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVUser
 import com.avos.avoscloud.im.v2.AVIMClient
+import com.avos.avoscloud.im.v2.messages.AVIMFileMessage
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.mvp.contract.ILoginViewCallback
 import com.gennan.summer.mvp.presenter.LoginPresenter
+import com.gennan.summer.util.ClickUtil
 import com.gennan.summer.util.LogUtil
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -72,6 +74,9 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
     private fun initEvent() {
         //登录
         btn_login_sign_in.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             username = et_login_username.text.toString()
             password = et_login_password.text.toString()
 
@@ -90,6 +95,9 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
         }
         //从登录界面跳转到注册界面
         tv_login_link_to_register.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
             finish()

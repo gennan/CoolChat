@@ -1,5 +1,6 @@
 package com.gennan.summer.activity
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,8 +25,10 @@ import com.gennan.summer.bean.AVIMMessageBean
 import com.gennan.summer.event.*
 import com.gennan.summer.mvp.contract.IChatViewCallback
 import com.gennan.summer.mvp.presenter.ChatPresenter
+import com.gennan.summer.util.ClickUtil
 import com.gennan.summer.util.LogUtil
 import com.gennan.summer.util.UriToRealPathUtil.getRealFilePath
+import com.tbruyelle.rxpermissions2.RxPermissions
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
@@ -68,20 +71,38 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
     private fun initEvent() {
         //设置点击语音显示播放按钮
         iv_voice_chat.setOnClickListener {
-            //判断当前软键盘是否展开 展开的话就关闭软键盘
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            if (imm.isActive) {
-                val v = window.peekDecorView()
-                imm.hideSoftInputFromWindow(v.windowToken, 0)
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
             }
-            if (rl_press_to_say_voice.isVisible) {
-                rl_press_to_say_voice.visibility = GONE
-            } else {
-                rl_press_to_say_voice.visibility = VISIBLE
-            }
+            val rxPermissions = RxPermissions(this)
+            rxPermissions
+                .request(
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                .subscribe { granted ->
+                    if (granted) {
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        if (imm.isActive) {
+                            val v = window.peekDecorView()
+                            imm.hideSoftInputFromWindow(v.windowToken, 0)
+                        }
+                        if (rl_press_to_say_voice.isVisible) {
+                            rl_press_to_say_voice.visibility = GONE
+                        } else {
+                            rl_press_to_say_voice.visibility = VISIBLE
+                        }
+                    } else {
+
+                    }
+                }
         }
         //设置点击到EditText时的事件的处理
         et_send_message_chat.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             //如果当前情况下的录制语音的那个界面是展开的 就让它点击到EditText的时候消失
             if (rl_press_to_say_voice.isVisible) {
                 rl_press_to_say_voice.visibility = GONE
@@ -96,6 +117,9 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
             false//加入短按的点击事件就是停止语音的录制
         }
         rounded_image_view_press_to_say.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             if (sendVoiceLongClick) {
                 LogUtil.d(TAG, "短按成功")
                 chatPresenter.stopRecordAudio()
@@ -104,6 +128,9 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
         }
         //这个发送负责发送文字消息
         tv_send_message_chat.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             if (et_send_message_chat.text.toString().trim() == "" || et_send_message_chat.text.trim().isEmpty() || et_send_message_chat.text == null) {
                 //就是发送的消息为空 感觉也没有要弹Toast的必要
             } else {
@@ -116,6 +143,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
         }
         //下拉刷新
         swipe_refresh_layout_activity_chat.setOnRefreshListener {
+
             chatPresenter.getMsgHistory(
                 oldestMsg,
                 15,
@@ -124,18 +152,36 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
         }
         //设置点击发送图片
         iv_send_img_chat.setOnClickListener {
-            Matisse.from(this)
-                .choose(MimeType.allOf())
-                .countable(false)//勾选后不显示数字 显示勾号
-                .maxSelectable(1)
-                .capture(true)//选择照片时，是否显示拍照
-                .captureStrategy(CaptureStrategy(true, "com.gennan.summer.fileprovider"))
-                .theme(R.style.CoolChatMatisse)
-                .imageEngine(MyGlideEngine())
-                .forResult(IMG_REQUEST_CODE)
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
+            val rxPermissions = RxPermissions(this)
+            rxPermissions
+                .request(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                .subscribe { granted ->
+                    if (granted) {
+                        Matisse.from(this)
+                            .choose(MimeType.allOf())
+                            .countable(false)//勾选后不显示数字 显示勾号
+                            .maxSelectable(1)
+                            .capture(true)//选择照片时，是否显示拍照
+                            .captureStrategy(CaptureStrategy(true, "com.gennan.summer.fileprovider"))
+                            .theme(R.style.CoolChatMatisse)
+                            .imageEngine(MyGlideEngine())
+                            .forResult(IMG_REQUEST_CODE)
+                    } else {
+
+                    }
+                }
         }
         //设置点击返回消息列表
         iv_back_chat.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             finish()
         }
     }

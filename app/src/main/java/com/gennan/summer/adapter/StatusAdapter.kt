@@ -58,10 +58,21 @@ class StatusAdapter : RecyclerView.Adapter<StatusAdapter.InnerHolder> {
             .into(holder.statusSenderAvatarIv)
         holder.statusSenderUserNameTv.text = list!![position].get("username").toString()
         holder.statusSendTimeTv.text = SimpleDateFormat("MM-dd HH:mm").format(list!![position].createdAt)
-        holder.statusTextContentTv.text = list!![position].message
-        GlideApp.with(activity)
-            .load(list!![position].imageUrl)
-            .into(holder.statusImageContentIv)
+
+        if (list!![position].message == "") {
+            holder.statusTextContentTv.visibility = View.GONE
+        } else {
+            holder.statusTextContentTv.text = list!![position].message
+        }
+
+        if (list!![position].imageUrl == "") {
+            holder.statusImageContentIv.visibility = View.GONE
+        } else {
+            GlideApp.with(activity)
+                .load(list!![position].imageUrl)
+                .into(holder.statusImageContentIv)
+        }
+
     }
 
     fun setData(list: MutableList<AVStatus>?) {

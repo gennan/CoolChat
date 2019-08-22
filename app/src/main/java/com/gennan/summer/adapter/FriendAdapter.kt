@@ -17,6 +17,7 @@ import com.gennan.summer.GlideApp
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.event.ConversationTitleEvent
+import com.gennan.summer.util.ClickUtil
 import com.gennan.summer.util.LogUtil
 import java.util.*
 
@@ -54,6 +55,9 @@ class FriendAdapter(private var context: Context) : RecyclerView.Adapter<FriendA
             .apply(RequestOptions.bitmapTransform(CircleCrop()))
             .into(holder.userIcon)
         holder.itemView.setOnClickListener {
+            if (!ClickUtil.isFastClick()) {
+                return@setOnClickListener
+            }
             CoolChatApp.getAppEventBus().postSticky(ConversationTitleEvent(username))
             CoolChatApp.openedClient?.createConversation(
                 Arrays.asList(username),
