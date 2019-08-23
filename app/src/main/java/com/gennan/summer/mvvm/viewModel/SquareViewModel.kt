@@ -14,6 +14,7 @@ import com.gennan.summer.util.LogUtil
 class SquareViewModel : ViewModel() {
     val TAG = "SquareViewModel"
     var getStatusLiveData = MutableLiveData<MutableList<AVStatus>>()
+    var notGetStatusLiveData = MutableLiveData<String>()
 
     fun getRecentStatus() {
         val inboxQuery = AVStatus.inboxQuery(CoolChatApp.avUser, AVStatus.INBOX_TYPE.TIMELINE.toString())
@@ -26,6 +27,7 @@ class SquareViewModel : ViewModel() {
                         LogUtil.d(TAG, "avstatus ----> ${avStatus.size}")//查看下第一个数据
                         getStatusLiveData.value = avStatus
                     } else {
+                        notGetStatusLiveData.value ="你的广场还没有动态"
                         LogUtil.d(TAG, "返回来的状态列表的数据为0")
                     }
                 } else {

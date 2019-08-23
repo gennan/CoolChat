@@ -117,6 +117,7 @@ class SettingFragment : BaseFragment() {
             }
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
+            CoolChatApp.isAutoLogin = false
             activity?.finish()
         }
         avatarIv?.setOnClickListener {

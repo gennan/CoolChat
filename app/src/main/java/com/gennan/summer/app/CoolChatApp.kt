@@ -24,6 +24,7 @@ class CoolChatApp : Application() {
         var avUser: AVUser? = null
         var avImClient: AVIMClient? = null
         var openedClient: AVIMClient? = null
+        var isAutoLogin = true
 
         fun getAppContext(): Context? {
             return sContext
@@ -53,7 +54,7 @@ class CoolChatApp : Application() {
         AVOSCloud.setDebugLogEnabled(false)
         AVIMMessageManager.registerDefaultMessageHandler(CoolChatMessageEventHandler())
         AVIMMessageManager.setConversationEventHandler(CoolChatConversationEventHandler())
-        AVIMClient.setUnreadNotificationEnabled(true)//设置未读消息的数目
+        AVIMClient.setUnreadNotificationEnabled(true)//设置之后AVIMConversation会维护未读消息的数目
         //=====================================================================
         LogUtil.init(this.packageName, false)//初始化LogUtil 设置为true后关闭Log
     }

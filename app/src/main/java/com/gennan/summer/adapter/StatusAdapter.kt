@@ -20,6 +20,9 @@ import java.text.SimpleDateFormat
  *Created by Gennan on 2019/8/22.
  */
 class StatusAdapter : RecyclerView.Adapter<StatusAdapter.InnerHolder> {
+
+
+    private lateinit var onStatusImageClickListener: OnStatusImageClickListener
     private var activity: BaseActivity
     private var list: MutableList<AVStatus>? = null
     val TAG = "StatusAdapter"
@@ -71,11 +74,23 @@ class StatusAdapter : RecyclerView.Adapter<StatusAdapter.InnerHolder> {
             GlideApp.with(activity)
                 .load(list!![position].imageUrl)
                 .into(holder.statusImageContentIv)
+            holder.itemView.setOnClickListener {
+                onStatusImageClickListener.onStatusImageItemClick(list!![position].imageUrl)
+            }
         }
 
     }
 
     fun setData(list: MutableList<AVStatus>?) {
         this.list = list
+    }
+
+
+    fun setOnStatusImageClickListener(onStatusImageClickListener: OnStatusImageClickListener) {
+        this.onStatusImageClickListener = onStatusImageClickListener
+    }
+
+    interface OnStatusImageClickListener {
+        fun onStatusImageItemClick(imageUrl: String)
     }
 }

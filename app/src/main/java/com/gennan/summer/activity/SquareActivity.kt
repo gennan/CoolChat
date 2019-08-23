@@ -13,13 +13,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gennan.summer.R
 import com.gennan.summer.adapter.StatusAdapter
+import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
+import com.gennan.summer.event.StatusImageItemClickEvent
 import com.gennan.summer.mvvm.viewModel.SquareViewModel
 import com.gennan.summer.util.ClickUtil
 import com.mredrock.cyxbs.freshman.lin.util.Dip2pxUtil
 import kotlinx.android.synthetic.main.activity_square.*
 
-class SquareActivity : BaseActivity() {
+class SquareActivity : BaseActivity(), StatusAdapter.OnStatusImageClickListener {
+    override fun onStatusImageItemClick(imageUrl: String) {
+        CoolChatApp.getAppEventBus().postSticky(StatusImageItemClickEvent(imageUrl))
+        val intent = Intent(this, PhotoActivity::class.java)
+        startActivity(intent)
+    }
 
     var squareViewModel: SquareViewModel? = null
     var statusAdapter: StatusAdapter? = null
@@ -29,7 +36,6 @@ class SquareActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_square)
         squareViewModel = ViewModelProviders.of(this).get(SquareViewModel::class.java)
-        //测试
         squareViewModel?.getRecentStatus()
         observeLiveData()
         initView()
@@ -38,7 +44,6 @@ class SquareActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        //测试
         squareViewModel?.getRecentStatus()
     }
 
@@ -49,7 +54,13 @@ class SquareActivity : BaseActivity() {
             if (swipe_fresh_layout_activity_square.isRefreshing) {
                 swipe_fresh_layout_activity_square.isRefreshing = false
                 Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT).show()
+            }
+        })
 
+        squareViewModel?.notGetStatusLiveData?.observe(this, Observer {
+            if (swipe_fresh_layout_activity_square.isRefreshing) {
+                swipe_fresh_layout_activity_square.isRefreshing = false
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -66,6 +77,7 @@ class SquareActivity : BaseActivity() {
         rv_show_status_square.layoutManager = layoutManager
         statusAdapter = StatusAdapter(this)
         rv_show_status_square.adapter = statusAdapter
+        statusAdapter!!.setOnStatusImageClickListener(this)
         rv_show_status_square.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(@NonNull outRect: Rect, @NonNull view: View, @NonNull parent: RecyclerView, @NonNull state: RecyclerView.State) {
                 outRect.top = Dip2pxUtil.dip2px(view.context, 8.0)

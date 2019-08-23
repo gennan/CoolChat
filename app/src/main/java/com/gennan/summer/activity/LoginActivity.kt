@@ -10,9 +10,9 @@ import android.widget.Toast
 import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVUser
 import com.avos.avoscloud.im.v2.AVIMClient
-import com.avos.avoscloud.im.v2.messages.AVIMFileMessage
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
+import com.gennan.summer.app.CoolChatApp.Companion.isAutoLogin
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.mvp.contract.ILoginViewCallback
 import com.gennan.summer.mvp.presenter.LoginPresenter
@@ -33,8 +33,10 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-//todo:在上线了之后或者是添加了退出当前账号的功能之后把这里的自动登录功能加上 有点问题先不加了 在退出登录之后又会自己登进来
-//        judgeUserWhetherNeedToLogin()
+//退出当前账号的功能之后把这里的自动登录功能
+        if (isAutoLogin) {
+            judgeUserWhetherNeedToLogin()
+        }
         initData()
         loginPresenter.attachViewCallback(this)
         initEvent()
@@ -51,6 +53,7 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
             CoolChatApp.avImClient = AVIMClient.getInstance(currentUser.username)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            isAutoLogin = true
             finish()
         }
     }
@@ -128,6 +131,7 @@ class LoginActivity : BaseActivity(), ILoginViewCallback {
         //跳转到新的界面
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        isAutoLogin = true
         finish()
     }
 

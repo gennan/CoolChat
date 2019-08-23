@@ -145,7 +145,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     override fun onLoadConversationListHaveNoNumbers() {
         newsList.visibility = View.GONE
         newsIsEmptyRl.visibility = View.VISIBLE
-
+        progressDialog.dismiss()
         if (swipeRefreshLayout.isRefreshing) {
             swipeRefreshLayout.isRefreshing = false
             Toast.makeText(activity, "刷新成功", Toast.LENGTH_SHORT).show()
