@@ -30,7 +30,7 @@ class AddNewActivity : BaseActivity() {
                 finish()
             }
         })
-        //todo：群聊
+        //群聊
 //        mAddNewViewModel?.addConversationLiveData?.observe(this, Observer {
 //            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
 //            if (it == "添加群聊成功") {
@@ -63,7 +63,7 @@ class AddNewActivity : BaseActivity() {
             }
             finish()
         }
-        //todo：群聊
+        //群聊
 //        tv_add_conversation.setOnClickListener {
 //            val conversationNameWillBeAdd = et_add_conversation.text.toString()
 //            if (conversationNameWillBeAdd == "") {

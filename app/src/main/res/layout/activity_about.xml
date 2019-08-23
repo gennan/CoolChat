@@ -1,7 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout_about"
+            app:elevation="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:fitsSystemWindows="true">
+
+            <ImageView
+                    android:id="@+id/iv_back_about"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="14dp"
+                    android:singleLine="true"
+                    android:gravity="center"
+                    android:src="@drawable/add_new_back"
+                    android:visibility="visible"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginBottom="15dp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:text="关于"
+                    android:textSize="18sp"
+                    android:visibility="visible"/>
+
+            <ImageView
+                    android:visibility="invisible"
+                    android:id="@+id/iv_add_status_about"
+                    android:src="@drawable/square_add_status"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
+                    tools:ignore="RtlHardcoded"/>
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ImageView
+            android:id="@+id/iv_logo_about"
+            android:layout_marginTop="26dp"
+            android:layout_below="@id/app_bar_layout_about"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            tools:srcCompat="@tools:sample/avatars"/>
+
+    <TextView
+            android:id="@+id/tv_app_name_about"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/iv_logo_about"
+            android:layout_width="wrap_content"
+            android:textSize="24sp"
+            android:text="CoolChat"
+            android:textColor="@android:color/black"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/tv_version_code_about"
+            android:layout_below="@id/tv_app_name_about"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:text="Version 1.0.1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:text="一款简单的即时通讯社交APP"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp"
+            android:textSize="16sp"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:textColor="@android:color/holo_red_light"
+            android:text="检查更新"/>
 </RelativeLayout>

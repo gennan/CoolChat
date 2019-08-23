@@ -6,7 +6,8 @@
     <uses-feature android:name="android.hardware.camera"/>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/> <!-- 基础模块（必须加入以下声明）START -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- 基础模块（必须加入以下声明）START -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -27,8 +28,6 @@
         <activity android:name=".activity.PhotoActivity">
         </activity>
         <activity android:name=".activity.StatusSendActivity">
-        </activity>
-        <activity android:name=".activity.FeedbackActivity">
         </activity>
         <activity android:name=".activity.AboutActivity">
         </activity>

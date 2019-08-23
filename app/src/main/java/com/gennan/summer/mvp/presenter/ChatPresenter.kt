@@ -165,7 +165,7 @@ class ChatPresenter : IChatPresenter {
     }
 
     override fun stopRecordAudio() {
-        //todo：短按结束录音
+        //短按结束录音
         recorder?.setOnErrorListener(null)
         recorder?.setOnInfoListener(null)
         recorder?.setPreviewDisplay(null)

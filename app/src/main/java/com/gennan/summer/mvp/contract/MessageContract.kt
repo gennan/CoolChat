@@ -1,11 +1,12 @@
 package com.gennan.summer.mvp.contract
 
 import com.avos.avoscloud.AVObject
+import com.avos.avoscloud.im.v2.AVIMConversation
 import com.gennan.summer.base.IBasePresenter
 
 /**
  *Created by Gennan on 2019/8/17.
- * 同样群聊部分先省略
+ * 群聊部分先省略
  */
 
 interface IMessagePresenter : IBasePresenter<IMessageViewCallback> {

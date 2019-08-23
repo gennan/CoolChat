@@ -91,4 +91,8 @@ class FriendAdapter(private var context: Context) : RecyclerView.Adapter<FriendA
     interface OnUserItemClickListener {
         fun onUserItemClick(conversation: AVIMConversation?)
     }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }
