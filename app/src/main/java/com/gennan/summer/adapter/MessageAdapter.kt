@@ -147,10 +147,12 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        //这个要通过名称来找User的iconUrl
         val iconIv: ImageView =
-            itemView.findViewById(R.id.circle_image_view_recycle_item_message)//这个要通过名称来找User的iconUrl
+            itemView.findViewById(R.id.circle_image_view_recycle_item_message)
         val titleTv: TextView = itemView.findViewById(R.id.tv_chat_title_recycle_item)
-        val lastMsgTv: TextView = itemView.findViewById(R.id.tv_chat_last_msg_recycle_item)//通过查询消息来获得最新的消息
+        //通过查询消息来获得最新的消息
+        val lastMsgTv: TextView = itemView.findViewById(R.id.tv_chat_last_msg_recycle_item)
         val lastTimeTv: TextView = itemView.findViewById(R.id.tv_chat_last_time_recycle_item)
         //val msgType: TextView = itemView.findViewById(R.id.tv_msg_type_recycle_item)
         val unreadMessageRl: RelativeLayout = itemView.findViewById(R.id.rl_unread_message_count)

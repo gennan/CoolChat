@@ -119,8 +119,9 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
      * 长按item 删除item
      */
     override fun onItemLongClick(position: Int, conversationList: MutableList<AVObject>) {
-        //todo：长按删除的功能还没添加
-        LogUtil.d("MessageFragment", "长按了第${position}个item---->1")
+        //todo：长按删除的功能无法添加 SDK没有直接删除Conversation的方法 只能先假装长按删除一下了 刷新以后又会出现了
+        conversationList.remove(conversationList[position])
+        messageAdapter.notifyDataSetChanged()
     }
 
     /**

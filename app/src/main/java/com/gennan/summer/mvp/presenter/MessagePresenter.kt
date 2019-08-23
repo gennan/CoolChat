@@ -14,7 +14,7 @@ import java.util.*
  *Created by Gennan on 2019/8/17.
  */
 class MessagePresenter : IMessagePresenter {
-
+    val TAG = "MessagePresenter"
     val callbacks = mutableListOf<IMessageViewCallback>()
 
     companion object {

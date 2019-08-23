@@ -23,6 +23,7 @@ import com.gennan.summer.base.BaseFragment
 import com.gennan.summer.event.FriendItemClickEvent
 import com.gennan.summer.mvp.contract.IUserViewCallback
 import com.gennan.summer.mvp.presenter.UserPresenter
+import com.gennan.summer.util.LogUtil
 
 class FriendFragment : BaseFragment(), IUserViewCallback, FriendAdapter.OnUserItemClickListener {
     override fun onFriendIsNull() {
@@ -69,6 +70,7 @@ class FriendFragment : BaseFragment(), IUserViewCallback, FriendAdapter.OnUserIt
         friendAdapter = FriendAdapter(activity!!)
         friendList.adapter = friendAdapter
         friendAdapter?.setOnUserItemClickListener(this)
+        friendAdapter?.clearData()
         userPresenter.queryFriendList()
         swipeRefreshLayout?.setColorSchemeColors(ContextCompat.getColor(container!!.context, R.color.colorPrimary))
         swipeRefreshLayout?.setOnRefreshListener {
@@ -93,7 +95,6 @@ class FriendFragment : BaseFragment(), IUserViewCallback, FriendAdapter.OnUserIt
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-
         if (hidden) {
 
         } else {
@@ -101,4 +102,6 @@ class FriendFragment : BaseFragment(), IUserViewCallback, FriendAdapter.OnUserIt
             userPresenter.queryFriendList()
         }
     }
+
+
 }
