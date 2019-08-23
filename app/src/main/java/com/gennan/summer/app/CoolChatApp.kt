@@ -53,6 +53,7 @@ class CoolChatApp : Application() {
         AVOSCloud.setDebugLogEnabled(false)
         AVIMMessageManager.registerDefaultMessageHandler(CoolChatMessageEventHandler())
         AVIMMessageManager.setConversationEventHandler(CoolChatConversationEventHandler())
+        AVIMClient.setUnreadNotificationEnabled(true)//设置未读消息的数目
         //=====================================================================
         LogUtil.init(this.packageName, false)//初始化LogUtil 设置为true后关闭Log
     }

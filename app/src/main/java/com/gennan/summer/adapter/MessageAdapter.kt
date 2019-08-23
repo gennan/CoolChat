@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.avos.avoscloud.AVException
@@ -109,6 +110,15 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
             }
         })
 
+        if (conversation?.unreadMessagesCount == 0) {
+            holder.unreadMessageRl.visibility = View.GONE
+        } else if (conversation?.unreadMessagesCount == null) {
+            holder.unreadMessageRl.visibility = View.GONE
+        } else {
+            holder.unreadMessageRl.visibility = View.VISIBLE
+            holder.unreadMessageCount.text = conversation.unreadMessagesCount.toString()
+        }
+
         holder.itemView.setOnClickListener {
             if (!ClickUtil.isFastClick()) {
                 return@setOnClickListener
@@ -142,7 +152,9 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
         val titleTv: TextView = itemView.findViewById(R.id.tv_chat_title_recycle_item)
         val lastMsgTv: TextView = itemView.findViewById(R.id.tv_chat_last_msg_recycle_item)//通过查询消息来获得最新的消息
         val lastTimeTv: TextView = itemView.findViewById(R.id.tv_chat_last_time_recycle_item)
-//        val msgType: TextView = itemView.findViewById(R.id.tv_msg_type_recycle_item)
+        //val msgType: TextView = itemView.findViewById(R.id.tv_msg_type_recycle_item)
+        val unreadMessageRl: RelativeLayout = itemView.findViewById(R.id.rl_unread_message_count)
+        val unreadMessageCount: TextView = itemView.findViewById(R.id.tv_unread_message_count)
     }
 
 

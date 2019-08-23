@@ -6,7 +6,9 @@ import com.avos.avoscloud.im.v2.AVIMMessage
 import com.avos.avoscloud.im.v2.AVIMMessageHandler
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.event.NewMessageEvent
+import com.gennan.summer.util.Constants.Companion.NOTIFICATION_NEW_MESSAGE
 import com.gennan.summer.util.LogUtil
+import com.gennan.summer.util.NotificationUtil
 
 /**
  *Created by Gennan on 2019/8/18.

@@ -21,6 +21,8 @@ import com.gennan.summer.util.LogUtil
  */
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
 
+
+    val TAG = "ChatAdapter"
     private lateinit var imageItemClickListener: OnImageItemClickListener
     private lateinit var voiceItemClickListener: OnVoiceItemClickListener
     private var context: Context
@@ -103,7 +105,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
             //自己发送的消息
             holder.leftLayout.visibility = View.GONE
             holder.rightLayout.visibility = View.VISIBLE
-            LogUtil.d("zz", "msgBeanType ----> ${msgBean?._lctype}")
+            LogUtil.d(TAG, "msgBeanType ----> ${msgBean?._lctype}")
             if (msgBean?._lctype == -1) {
                 holder.rightTextMessage.visibility = View.VISIBLE
                 holder.rightImgMessage.visibility = View.GONE
@@ -157,5 +159,12 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
 
     interface OnImageItemClickListener {
         fun onImgItemClicked(url: String)
+    }
+
+    /**
+     * 解决RecyclerView的item复用导致显示错乱的问题
+     */
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 }

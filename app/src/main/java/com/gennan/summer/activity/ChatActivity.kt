@@ -1,6 +1,7 @@
 package com.gennan.summer.activity
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -23,6 +24,7 @@ import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.bean.AVIMMessageBean
 import com.gennan.summer.event.*
+import com.gennan.summer.fragment.MessageFragment
 import com.gennan.summer.mvp.contract.IChatViewCallback
 import com.gennan.summer.mvp.presenter.ChatPresenter
 import com.gennan.summer.util.ClickUtil
@@ -39,6 +41,7 @@ import org.greenrobot.eventbus.ThreadMode
 
 class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemClickListener,
     ChatAdapter.OnImageItemClickListener {
+
     override fun onImgItemClicked(url: String) {
         CoolChatApp.getAppEventBus().postSticky(ImageItemClickEvent(url))
         val intent = Intent(this, PhotoActivity::class.java)
@@ -61,10 +64,12 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
         CoolChatApp.getAppEventBus().register(this)
         chatPresenter.attachViewCallback(this)
         initView()
-        chatPresenter.getFirstTenMsg(
-            10, conversation
-        )
         initEvent()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        chatPresenter.getFirstTenMsg(10, conversation)
     }
 
     private fun initView() {
@@ -190,6 +195,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
             if (!ClickUtil.isFastClick()) {
                 return@setOnClickListener
             }
+            conversation.read()//设置已读
             finish()
         }
     }
@@ -211,6 +217,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onFriendItemClickEvent(event: FriendItemClickEvent) {
         conversation = event.conversation!!
+        conversation.read()//设置已读
         CoolChatApp.getAppEventBus().removeStickyEvent(FriendItemClickEvent::class.java)
     }
 
@@ -226,6 +233,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
     fun onConversationObjectEvent(event: ConversationObjectEvent) {
         if (event.conversation != null) {
             conversation = event.conversation
+            conversation.read()//设置已读
             CoolChatApp.getAppEventBus().removeStickyEvent(ConversationObjectEvent::class.java)
             LogUtil.d(TAG, "ConversationId ----> ${conversation.conversationId}")
         }
@@ -249,6 +257,8 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
             rl_press_to_say_voice.visibility = GONE
         } else {
             super.onBackPressed()
+            conversation.read()//设置已读
+            CoolChatApp.getAppEventBus().postSticky(BackFromChatToMessageEvent())
         }
     }
 
@@ -370,4 +380,11 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
     override fun onVoiceItemPlayStart(msgBean: AVIMMessageBean) {
         chatPresenter.playReceivedAudioMessage(msgBean)
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onMusicPlayFinishedEvent(event: MusicPlayFinishedEvent) {
+        //todo:这是语音播放完成的事件 想下要怎么处理
+        CoolChatApp.getAppEventBus().removeStickyEvent(MusicPlayFinishedEvent::class.java)
+    }
+
 }

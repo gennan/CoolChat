@@ -14,6 +14,7 @@ import com.avos.avoscloud.im.v2.messages.AVIMTextMessage
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
 import com.gennan.summer.bean.AVIMMessageBean
+import com.gennan.summer.event.MusicPlayFinishedEvent
 import com.gennan.summer.mvp.contract.IChatPresenter
 import com.gennan.summer.mvp.contract.IChatViewCallback
 import com.gennan.summer.util.LogUtil
@@ -205,7 +206,7 @@ class ChatPresenter : IChatPresenter {
         mediaPlayer?.prepare()
         mediaPlayer?.start()
         mediaPlayer?.setOnCompletionListener {
-            LogUtil.d("zz", "文件播放结束！")
+            CoolChatApp.getAppEventBus().postSticky(MusicPlayFinishedEvent())
         }
 
     }

@@ -21,12 +21,12 @@ import com.gennan.summer.activity.ChatActivity
 import com.gennan.summer.adapter.MessageAdapter
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseFragment
+import com.gennan.summer.event.BackFromChatToMessageEvent
 import com.gennan.summer.event.ClientOpenEvent
 import com.gennan.summer.event.ConversationObjectEvent
 import com.gennan.summer.mvp.contract.IMessageViewCallback
 import com.gennan.summer.mvp.presenter.MessagePresenter
 import com.gennan.summer.util.LogUtil
-import com.gennan.summer.widget.SlideRecyclerView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -71,7 +71,6 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         messagePresenter.unAttachViewCallback(this)
         CoolChatApp.getAppEventBus().unregister(this)
     }
-
 
     /**
      * 找到MessageFragment里的一些控件实例
@@ -165,6 +164,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (hidden) {
+            progressDialog.dismiss()
             LogUtil.d(TAG, "被隐藏了")
         } else {
             messagePresenter.queryConversationList()
@@ -182,5 +182,11 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onClientOpenEvent(event: ClientOpenEvent) {
         messagePresenter.queryConversationList()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onBackFromChatToMessageEventHandle(event: BackFromChatToMessageEvent) {
+        messagePresenter.queryConversationList()
+        CoolChatApp.getAppEventBus().removeStickyEvent(BackFromChatToMessageEvent::class.java)
     }
 }
