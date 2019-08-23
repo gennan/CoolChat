@@ -21,7 +21,8 @@ import com.gennan.summer.util.LogUtil
  */
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
 
-    private lateinit var listener: OnVoiceItemClickListener
+    private lateinit var imageItemClickListener: OnImageItemClickListener
+    private lateinit var voiceItemClickListener: OnVoiceItemClickListener
     private var context: Context
     private var list: MutableList<AVIMMessage>
     var isVoicePlaying = false
@@ -72,6 +73,12 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                 holder.leftImgMessage.visibility = View.VISIBLE
                 holder.leftVoiceMessage.visibility = View.GONE
                 GlideApp.with(context).load(msgBean._lcfile.url).into(holder.leftImgMessage)
+                holder.itemView.setOnClickListener {
+                    if (!ClickUtil.isFastClick()) {
+                        return@setOnClickListener
+                    }
+                    imageItemClickListener.onImgItemClicked(msgBean._lcfile.url)
+                }
             } else if (msgBean?._lctype == -3) {
                 holder.leftTextMessage.visibility = View.GONE
                 holder.leftImgMessage.visibility = View.GONE
@@ -82,10 +89,10 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                     }
                     if (isVoicePlaying) {
 //                        holder.leftVoiceMessage.text = "语音"
-                        listener.onVoiceItemPlayStop()
+                        voiceItemClickListener.onVoiceItemPlayStop()
                     } else {
 //                        holder.leftVoiceMessage.text = "正在播放"
-                        listener.onVoiceItemPlayStart(msgBean)
+                        voiceItemClickListener.onVoiceItemPlayStart(msgBean)
                     }
                     isVoicePlaying = !isVoicePlaying
                 }
@@ -107,6 +114,12 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                 holder.rightImgMessage.visibility = View.VISIBLE
                 holder.rightVoiceMessage.visibility = View.GONE
                 GlideApp.with(context).load(msgBean._lcfile.url).into(holder.rightImgMessage)
+                holder.itemView.setOnClickListener {
+                    if (!ClickUtil.isFastClick()) {
+                        return@setOnClickListener
+                    }
+                    imageItemClickListener.onImgItemClicked(msgBean._lcfile.url)
+                }
             } else if (msgBean?._lctype == -3) {
                 holder.rightTextMessage.visibility = View.GONE
                 holder.rightImgMessage.visibility = View.GONE
@@ -117,10 +130,10 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                     }
                     if (isVoicePlaying) {
 //                        holder.rightVoiceMessage.text = "语音"
-                        listener.onVoiceItemPlayStop()
+                        voiceItemClickListener.onVoiceItemPlayStop()
                     } else {
 //                        holder.rightVoiceMessage.text = "正在播放"
-                        listener.onVoiceItemPlayStart(msgBean)
+                        voiceItemClickListener.onVoiceItemPlayStart(msgBean)
                     }
                     isVoicePlaying = !isVoicePlaying
                 }
@@ -130,11 +143,19 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
 
 
     fun setOnVoiceItemClickListener(listener: OnVoiceItemClickListener) {
-        this.listener = listener
+        this.voiceItemClickListener = listener
     }
 
     interface OnVoiceItemClickListener {
         fun onVoiceItemPlayStart(msgBean: AVIMMessageBean)
         fun onVoiceItemPlayStop()
+    }
+
+    fun setOnImageItemClickListener(listener: OnImageItemClickListener) {
+        this.imageItemClickListener = listener
+    }
+
+    interface OnImageItemClickListener {
+        fun onImgItemClicked(url: String)
     }
 }

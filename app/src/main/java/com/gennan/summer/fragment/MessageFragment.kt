@@ -26,6 +26,7 @@ import com.gennan.summer.event.ConversationObjectEvent
 import com.gennan.summer.mvp.contract.IMessageViewCallback
 import com.gennan.summer.mvp.presenter.MessagePresenter
 import com.gennan.summer.util.LogUtil
+import com.gennan.summer.widget.SlideRecyclerView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -59,7 +60,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
         messagePresenter.queryConversationList()
         progressDialog = ProgressDialog(activity, R.style.AppTheme_Dark_Dialog)
         progressDialog.isIndeterminate = true
-        progressDialog.setMessage("采坑中...")
+        progressDialog.setMessage("加载中...")
         progressDialog.setCanceledOnTouchOutside(false)
         progressDialog.show()
         return view.rootView
@@ -169,7 +170,7 @@ class MessageFragment : BaseFragment(), MessageAdapter.OnItemClickListener, IMes
             messagePresenter.queryConversationList()
             progressDialog = ProgressDialog(activity, R.style.AppTheme_Dark_Dialog)
             progressDialog.isIndeterminate = true
-            progressDialog.setMessage("采坑中...")
+            progressDialog.setMessage("加载中...")
             progressDialog.setCanceledOnTouchOutside(false)
             progressDialog.show()
         }

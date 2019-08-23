@@ -37,7 +37,14 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 
-class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemClickListener {
+class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemClickListener,
+    ChatAdapter.OnImageItemClickListener {
+    override fun onImgItemClicked(url: String) {
+        CoolChatApp.getAppEventBus().postSticky(ImageItemClickEvent(url))
+        val intent = Intent(this, PhotoActivity::class.java)
+        startActivity(intent)
+    }
+
     var objectId: String? = null
     var oldestMsg: AVIMMessage = AVIMMessage()
     var messageList = mutableListOf<AVIMMessage>()
@@ -46,7 +53,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
     lateinit var chatAdapter: ChatAdapter
     private val IMG_REQUEST_CODE = 0
     var sendVoiceLongClick = false
-    lateinit var conversation: AVIMConversation//todo：这里使用lateinit 快速点击时会没有赋值 可以通过添加dialog来解决这个快速点击没有赋值的情况
+    lateinit var conversation: AVIMConversation//这里使用lateinit 刚进入页面时若数据还没加载会报错 通过添加dialog来解决这个快速点击没有赋值的情况
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +73,7 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
         chatAdapter = ChatAdapter(messageList, this)
         rv_chat.adapter = chatAdapter
         chatAdapter.setOnVoiceItemClickListener(this)
+        chatAdapter.setOnImageItemClickListener(this)
     }
 
     private fun initEvent() {
@@ -278,7 +286,8 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
             for (x in 0 until messages.size - 1) {
                 chatAdapter.notifyItemInserted(x)
             }
-            rv_chat.scrollToPosition(chatAdapter.itemCount)
+            //修改了前面直接移动到itemCount导致没有移动到最后一条消息的情况
+            rv_chat.scrollToPosition(chatAdapter.itemCount - 1)
             LogUtil.d(TAG, "onFirstTenMsgLoadedSucceeded ----> 1")
         }
     }
