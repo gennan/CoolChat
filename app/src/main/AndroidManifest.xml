@@ -46,7 +46,8 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/file_paths_public">
             </meta-data>
-        </provider> <!-- 即时通讯模块、推送（均需要加入以下声明）START -->
+        </provider>
+        <!-- 即时通讯模块、推送（均需要加入以下声明）START -->
         <!-- 即时通讯模块、推送都要使用 PushService -->
         <service android:name="com.avos.avoscloud.PushService"/>
 
@@ -59,7 +60,8 @@
         </receiver> <!-- 即时通讯模块、推送 END -->
         <!-- 反馈组件（需要加入以下声明）START -->
         <activity android:name="com.avos.avoscloud.feedback.ThreadActivity">
-        </activity> <!-- 反馈组件 END -->
+        </activity>
+        <!-- 反馈组件 END -->
         <activity android:name=".activity.ChatActivity">
         </activity>
         <activity android:name=".activity.MainActivity">

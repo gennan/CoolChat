@@ -19,7 +19,6 @@ import com.gennan.summer.GlideApp
 import com.gennan.summer.MyGlideEngine
 import com.gennan.summer.R
 import com.gennan.summer.activity.AboutActivity
-import com.gennan.summer.activity.FeedbackActivity
 import com.gennan.summer.activity.LoginActivity
 import com.gennan.summer.activity.SquareActivity
 import com.gennan.summer.app.CoolChatApp
@@ -38,7 +37,7 @@ class SettingFragment : BaseFragment() {
     var avatarIv: ImageView? = null
     var changeAvatarTv: TextView? = null
     var enterSquareTv: TextView? = null
-    var provideFeedbackTv: TextView? = null
+
     var aboutTv: TextView? = null
     var changeAccountTv: TextView? = null
     private val IMG_REQUEST_CODE = 1
@@ -97,13 +96,6 @@ class SettingFragment : BaseFragment() {
             val intent = Intent(activity, SquareActivity::class.java)
             startActivity(intent)
         }
-        provideFeedbackTv?.setOnClickListener {
-            if (!ClickUtil.isFastClick()) {
-                return@setOnClickListener
-            }
-            val intent = Intent(activity, FeedbackActivity::class.java)
-            startActivity(intent)
-        }
         aboutTv?.setOnClickListener {
             if (!ClickUtil.isFastClick()) {
                 return@setOnClickListener
@@ -152,7 +144,6 @@ class SettingFragment : BaseFragment() {
         avatarIv = view?.findViewById(R.id.iv_avatar_setting)
         changeAvatarTv = view?.findViewById(R.id.tv_change_avatar_setting)
         enterSquareTv = view?.findViewById(R.id.tv_enter_square_setting)
-        provideFeedbackTv = view?.findViewById(R.id.tv_provide_feedback_setting)
         aboutTv = view?.findViewById(R.id.tv_about_setting)
         changeAccountTv = view?.findViewById(R.id.tv_change_account_setting)
         GlideApp.with(activity!!)
