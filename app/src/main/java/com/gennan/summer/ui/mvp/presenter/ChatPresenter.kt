@@ -13,10 +13,10 @@ import com.avos.avoscloud.im.v2.messages.AVIMImageMessage
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage
 import com.gennan.summer.app.CoolChatApp
 import com.gennan.summer.base.BaseActivity
-import com.gennan.summer.ui.mvp.model.bean.AVIMMessageBean
 import com.gennan.summer.event.MusicPlayFinishedEvent
 import com.gennan.summer.ui.mvp.contract.IChatPresenter
 import com.gennan.summer.ui.mvp.contract.IChatViewCallback
+import com.gennan.summer.ui.mvp.model.bean.AVIMMessageBean
 import com.gennan.summer.util.LogUtil
 import java.io.File
 
@@ -27,7 +27,7 @@ import java.io.File
  */
 class ChatPresenter : IChatPresenter {
 
-    var mediaPlayer: MediaPlayer? = null
+    var mediaPlayer: MediaPlayer = MediaPlayer()
     private val TAG = "ChatPresenter"
     var oldestMessage: AVIMMessage = AVIMMessage()
     val callbacks = mutableListOf<IChatViewCallback>()
@@ -217,10 +217,11 @@ class ChatPresenter : IChatPresenter {
      * 开始播放语音消息
      */
     override fun playReceivedAudioMessage(msgBean: AVIMMessageBean) {
-        mediaPlayer = MediaPlayer()
+        mediaPlayer.reset()
         mediaPlayer?.setDataSource(msgBean._lcfile.url)
         mediaPlayer?.prepare()
         mediaPlayer?.start()
+        //播放完毕的监听
         mediaPlayer?.setOnCompletionListener {
             CoolChatApp.getAppEventBus().postSticky(MusicPlayFinishedEvent())
         }
@@ -232,8 +233,9 @@ class ChatPresenter : IChatPresenter {
      */
     override fun stopReceivedAudioMessage() {
         if (mediaPlayer != null) {
-            mediaPlayer?.stop()
-            mediaPlayer?.release()
+            mediaPlayer?.pause()
+//            mediaPlayer?.release()
+//            mediaPlayer.stop()
         }
     }
 

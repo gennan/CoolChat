@@ -90,10 +90,8 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                         return@setOnClickListener
                     }
                     if (isVoicePlaying) {
-//                        holder.leftVoiceMessage.text = "语音"
                         voiceItemClickListener.onVoiceItemPlayStop()
                     } else {
-//                        holder.leftVoiceMessage.text = "正在播放"
                         voiceItemClickListener.onVoiceItemPlayStart(msgBean)
                     }
                     isVoicePlaying = !isVoicePlaying
@@ -131,10 +129,8 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                         return@setOnClickListener
                     }
                     if (isVoicePlaying) {
-//                        holder.rightVoiceMessage.text = "语音"
                         voiceItemClickListener.onVoiceItemPlayStop()
                     } else {
-//                        holder.rightVoiceMessage.text = "正在播放"
                         voiceItemClickListener.onVoiceItemPlayStart(msgBean)
                     }
                     isVoicePlaying = !isVoicePlaying
@@ -142,7 +138,6 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
             }
         }
     }
-
 
     //给外部暴露接口
     fun setOnVoiceItemClickListener(listener: OnVoiceItemClickListener) {
