@@ -218,9 +218,9 @@ class ChatPresenter : IChatPresenter {
      */
     override fun playReceivedAudioMessage(msgBean: AVIMMessageBean) {
         mediaPlayer.reset()
-        mediaPlayer?.setDataSource(msgBean._lcfile.url)
-        mediaPlayer?.prepare()
-        mediaPlayer?.start()
+        mediaPlayer.setDataSource(msgBean._lcfile.url)
+        mediaPlayer.prepare()
+        mediaPlayer.start()
         //播放完毕的监听
         mediaPlayer?.setOnCompletionListener {
             CoolChatApp.getAppEventBus().postSticky(MusicPlayFinishedEvent())
@@ -233,9 +233,7 @@ class ChatPresenter : IChatPresenter {
      */
     override fun stopReceivedAudioMessage() {
         if (mediaPlayer != null) {
-            mediaPlayer?.pause()
-//            mediaPlayer?.release()
-//            mediaPlayer.stop()
+            mediaPlayer.pause()
         }
     }
 

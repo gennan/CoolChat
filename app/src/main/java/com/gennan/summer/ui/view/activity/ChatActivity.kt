@@ -251,7 +251,6 @@ class ChatActivity : BaseActivity(), IChatViewCallback, ChatAdapter.OnVoiceItemC
      */
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onMusicPlayFinishedEvent(event: MusicPlayFinishedEvent) {
-        //todo:这是语音播放完成的事件 想下要怎么处理
         chatAdapter.isVoicePlaying = false
         CoolChatApp.getAppEventBus().removeStickyEvent(MusicPlayFinishedEvent::class.java)
     }
