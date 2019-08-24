@@ -21,11 +21,10 @@ import java.text.SimpleDateFormat
  */
 class StatusAdapter : RecyclerView.Adapter<StatusAdapter.InnerHolder> {
 
-
     private lateinit var onStatusImageClickListener: OnStatusImageClickListener
     private var activity: BaseActivity
     private var list: MutableList<AVStatus>? = null
-    val TAG = "StatusAdapter"
+    val tag = "StatusAdapter"
 
     constructor(activity: BaseActivity) {
         this.activity = activity
@@ -54,7 +53,7 @@ class StatusAdapter : RecyclerView.Adapter<StatusAdapter.InnerHolder> {
 
     @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: InnerHolder, position: Int) {
-        LogUtil.d(TAG, "AVStatus ----> ${list!![position]}")
+        LogUtil.d(tag, "从列表中得到的AVStatus ----> ${list!![position]}")
         GlideApp.with(activity)
             .load(list!![position].get("iconUrl"))
             .apply(RequestOptions.bitmapTransform(CircleCrop()))
@@ -85,7 +84,7 @@ class StatusAdapter : RecyclerView.Adapter<StatusAdapter.InnerHolder> {
         this.list = list
     }
 
-
+    //暴露点击事件
     fun setOnStatusImageClickListener(onStatusImageClickListener: OnStatusImageClickListener) {
         this.onStatusImageClickListener = onStatusImageClickListener
     }

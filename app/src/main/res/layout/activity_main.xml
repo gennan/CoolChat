@@ -13,8 +13,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
-            app:itemIconTint="@drawable/main_selector_bottom_navigation"
-            app:itemTextColor="@drawable/main_selector_bottom_navigation"
+            app:itemIconTint="@drawable/selector_main_selector_bottom_navigation"
+            app:itemTextColor="@drawable/selector_main_selector_bottom_navigation"
             app:menu="@menu/navigation"/>
 
     <FrameLayout

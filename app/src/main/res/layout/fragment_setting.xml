@@ -32,8 +32,7 @@
                     android:textSize="18sp"
                     android:visibility="visible"/>
 
-            <ImageView
-                    android:src="@drawable/message_add"
+            <View
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="right"

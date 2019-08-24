@@ -15,7 +15,7 @@
 
         <ImageView
                 android:id="@+id/iv_user_avatar_status_item"
-                android:src="@drawable/place_holder_user_icon"
+                android:src="@drawable/ic_place_holder_user_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"/>
 
@@ -55,6 +55,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="15dp"
                 android:layout_height="200dp"
-                tools:src="@drawable/place_holder_user_icon"/>
+                tools:src="@drawable/ic_place_holder_user_icon"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

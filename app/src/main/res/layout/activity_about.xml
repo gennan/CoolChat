@@ -28,7 +28,7 @@
                     android:layout_marginBottom="14dp"
                     android:singleLine="true"
                     android:gravity="center"
-                    android:src="@drawable/add_new_back"
+                    android:src="@drawable/ic_add_new_back"
                     android:visibility="visible"/>
 
             <TextView
@@ -43,10 +43,8 @@
                     android:textSize="18sp"
                     android:visibility="visible"/>
 
-            <ImageView
+            <View
                     android:visibility="invisible"
-                    android:id="@+id/iv_add_status_about"
-                    android:src="@drawable/square_add_status"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="right"

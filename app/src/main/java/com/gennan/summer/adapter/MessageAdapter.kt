@@ -22,9 +22,10 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
-import com.gennan.summer.bean.AVIMMessageBean
+import com.gennan.summer.ui.mvp.model.bean.AVIMMessageBean
 import com.gennan.summer.event.ConversationTitleEvent
 import com.gennan.summer.util.ClickUtil
+import com.gennan.summer.util.Constants.Companion.BLANK_STRING
 import com.gennan.summer.util.LogUtil
 import java.text.SimpleDateFormat
 
@@ -36,27 +37,33 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
 
 
     private lateinit var onLastMessageLoadedListener: OnLastMessageLoadedListener
-    val lastMsgList: MutableList<AVIMMessage> = mutableListOf()
-    //    private var msg: AVIMMessage = AVIMMessage()
-    private var url: String = ""
+    private var url: String = BLANK_STRING
     private lateinit var listener: OnItemClickListener
     var conversationList = mutableListOf<AVObject>()
 
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        //这个要通过名称来找User的iconUrl
+        val iconIv: ImageView =
+            itemView.findViewById(R.id.circle_image_view_recycle_item_message)
+        val titleTv: TextView = itemView.findViewById(R.id.tv_chat_title_recycle_item)
+        val lastMsgTv: TextView = itemView.findViewById(R.id.tv_chat_last_msg_recycle_item)
+        val lastTimeTv: TextView = itemView.findViewById(R.id.tv_chat_last_time_recycle_item)
+        val unreadMessageRl: RelativeLayout = itemView.findViewById(R.id.rl_unread_message_count)
+        val unreadMessageCount: TextView = itemView.findViewById(R.id.tv_unread_message_count)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycle_item_message, parent, false)
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return conversationList.size
-    }
 
     @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        //SDK的逻辑太乱了 只能先这样魔改了 想不出啥办法了
 
         if (conversationList[position].getList("m").size == 2) {
-//            holder.msgType.text = "单聊"
             var conversationName = ""
             if (conversationList[position].getString("name") != null) {
                 conversationName =
@@ -138,27 +145,25 @@ class MessageAdapter(private var context: Context) : RecyclerView.Adapter<Messag
         }
     }
 
+    override fun getItemCount(): Int {
+        return conversationList.size
+    }
+
+    /**
+     * 把消息列表传进来
+     */
     fun setData(conversationList: MutableList<AVObject>) {
         this.conversationList = conversationList
     }
 
+    /**
+     * 把用户的iconUrl传进来
+     */
     fun setConversationIconUrl(url: String) {
         this.url = url
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        //这个要通过名称来找User的iconUrl
-        val iconIv: ImageView =
-            itemView.findViewById(R.id.circle_image_view_recycle_item_message)
-        val titleTv: TextView = itemView.findViewById(R.id.tv_chat_title_recycle_item)
-        //通过查询消息来获得最新的消息
-        val lastMsgTv: TextView = itemView.findViewById(R.id.tv_chat_last_msg_recycle_item)
-        val lastTimeTv: TextView = itemView.findViewById(R.id.tv_chat_last_time_recycle_item)
-        //val msgType: TextView = itemView.findViewById(R.id.tv_msg_type_recycle_item)
-        val unreadMessageRl: RelativeLayout = itemView.findViewById(R.id.rl_unread_message_count)
-        val unreadMessageCount: TextView = itemView.findViewById(R.id.tv_unread_message_count)
-    }
-
+    //暴露点击事件给外部
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener

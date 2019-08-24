@@ -12,8 +12,11 @@ import com.avos.avoscloud.im.v2.AVIMMessage
 import com.gennan.summer.GlideApp
 import com.gennan.summer.R
 import com.gennan.summer.app.CoolChatApp
-import com.gennan.summer.bean.AVIMMessageBean
+import com.gennan.summer.ui.mvp.model.bean.AVIMMessageBean
 import com.gennan.summer.util.ClickUtil
+import com.gennan.summer.util.Constants.Companion.AUDIO_MSG_TYPE
+import com.gennan.summer.util.Constants.Companion.IMG_MSG_TYPE
+import com.gennan.summer.util.Constants.Companion.TEXT_MSG_TYPE
 import com.gennan.summer.util.LogUtil
 
 /**
@@ -22,12 +25,12 @@ import com.gennan.summer.util.LogUtil
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
 
 
-    val TAG = "ChatAdapter"
+    val tag = "ChatAdapter"
     private lateinit var imageItemClickListener: OnImageItemClickListener
     private lateinit var voiceItemClickListener: OnVoiceItemClickListener
     private var context: Context
     private var list: MutableList<AVIMMessage>
-    var isVoicePlaying = false
+    var isVoicePlaying = false//语音消息的播放状态
 
     constructor(list: MutableList<AVIMMessage>, context: Context) {
         this.context = context
@@ -43,9 +46,6 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
         val rightImgMessage: ImageView = itemView.findViewById(R.id.iv_right_img_item_chat)
         val leftVoiceMessage: TextView = itemView.findViewById(R.id.tv_left_voice_item_chat)
         val rightVoiceMessage: TextView = itemView.findViewById(R.id.tv_right_voice_item_chat)
-        //先被省略的视频部分
-//        val leftVideoView: VideoView = itemView.findViewById(R.id.video_view_left_chat)
-//        val rightVideoView: VideoView = itemView.findViewById(R.id.video_view_right_chat)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InnerHolder {
@@ -65,12 +65,12 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
             //别人发送的消息
             holder.leftLayout.visibility = View.VISIBLE
             holder.rightLayout.visibility = View.GONE
-            if (msgBean?._lctype == -1) {
+            if (msgBean?._lctype == TEXT_MSG_TYPE) {
                 holder.leftTextMessage.visibility = View.VISIBLE
                 holder.leftImgMessage.visibility = View.GONE
                 holder.leftVoiceMessage.visibility = View.GONE
                 holder.leftTextMessage.text = msgBean._lctext
-            } else if (msgBean?._lctype == -2) {
+            } else if (msgBean?._lctype == IMG_MSG_TYPE) {
                 holder.leftTextMessage.visibility = View.GONE
                 holder.leftImgMessage.visibility = View.VISIBLE
                 holder.leftVoiceMessage.visibility = View.GONE
@@ -81,7 +81,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                     }
                     imageItemClickListener.onImgItemClicked(msgBean._lcfile.url)
                 }
-            } else if (msgBean?._lctype == -3) {
+            } else if (msgBean?._lctype == AUDIO_MSG_TYPE) {
                 holder.leftTextMessage.visibility = View.GONE
                 holder.leftImgMessage.visibility = View.GONE
                 holder.leftVoiceMessage.visibility = View.VISIBLE
@@ -105,13 +105,13 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
             //自己发送的消息
             holder.leftLayout.visibility = View.GONE
             holder.rightLayout.visibility = View.VISIBLE
-            LogUtil.d(TAG, "msgBeanType ----> ${msgBean?._lctype}")
-            if (msgBean?._lctype == -1) {
+            LogUtil.d(tag, "转换换的msgBeanType ----> ${msgBean?._lctype}")
+            if (msgBean?._lctype == TEXT_MSG_TYPE) {
                 holder.rightTextMessage.visibility = View.VISIBLE
                 holder.rightImgMessage.visibility = View.GONE
                 holder.rightVoiceMessage.visibility = View.GONE
                 holder.rightTextMessage.text = msgBean._lctext
-            } else if (msgBean?._lctype == -2) {
+            } else if (msgBean?._lctype == IMG_MSG_TYPE) {
                 holder.rightTextMessage.visibility = View.GONE
                 holder.rightImgMessage.visibility = View.VISIBLE
                 holder.rightVoiceMessage.visibility = View.GONE
@@ -122,7 +122,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
                     }
                     imageItemClickListener.onImgItemClicked(msgBean._lcfile.url)
                 }
-            } else if (msgBean?._lctype == -3) {
+            } else if (msgBean?._lctype == AUDIO_MSG_TYPE) {
                 holder.rightTextMessage.visibility = View.GONE
                 holder.rightImgMessage.visibility = View.GONE
                 holder.rightVoiceMessage.visibility = View.VISIBLE
@@ -144,6 +144,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
     }
 
 
+    //给外部暴露接口
     fun setOnVoiceItemClickListener(listener: OnVoiceItemClickListener) {
         this.voiceItemClickListener = listener
     }
@@ -162,7 +163,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.InnerHolder> {
     }
 
     /**
-     * 解决RecyclerView的item复用导致显示错乱的问题
+     * 重新获取position解决RecyclerView的item复用导致显示错乱的问题
      */
     override fun getItemViewType(position: Int): Int {
         return position

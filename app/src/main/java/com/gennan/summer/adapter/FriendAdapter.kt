@@ -26,8 +26,8 @@ import java.util.*
  */
 class FriendAdapter(private var context: Context) : RecyclerView.Adapter<FriendAdapter.InnerHolder>() {
     var listener: OnUserItemClickListener? = null
-    var avUserList: MutableList<AVObject> = mutableListOf()
-    val TAG = "FriendAdapter"
+    private var avUserList: MutableList<AVObject> = mutableListOf()
+    val tag = "FriendAdapter"
 
     class InnerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val userIcon: ImageView = itemView.findViewById(R.id.iv_user_icon_recycle_item_user)
@@ -44,46 +44,51 @@ class FriendAdapter(private var context: Context) : RecyclerView.Adapter<FriendA
     }
 
     override fun onBindViewHolder(holder: InnerHolder, position: Int) {
-        LogUtil.d(TAG, "avUser ----> ${avUserList[position].objectId}")
+        LogUtil.d(tag, "avUser的ObjectId ----> ${avUserList[position].objectId}")
         val username = avUserList[position].getString("username")
         holder.userName.text = username
-        GlideApp.with(context)
-            .load(
-                avUserList[position]
-                    .getString("iconUrl")
-            )
+
+        GlideApp
+            .with(context)
+            .load(avUserList[position].getString("iconUrl"))
             .apply(RequestOptions.bitmapTransform(CircleCrop()))
             .into(holder.userIcon)
+
         holder.itemView.setOnClickListener {
             if (!ClickUtil.isFastClick()) {
                 return@setOnClickListener
             }
             CoolChatApp.getAppEventBus().postSticky(ConversationTitleEvent(username))
             CoolChatApp.openedClient?.createConversation(
-                Arrays.asList(username),
-                CoolChatApp.avUser?.username + username,
-                null,
+                Arrays.asList(username), CoolChatApp.avUser?.username + username, null,
                 object : AVIMConversationCreatedCallback() {
                     override fun done(conversation: AVIMConversation?, e: AVIMException?) {
                         if (e == null) {
-                            LogUtil.d(TAG, "conversation ----> $conversation")
+                            LogUtil.d(tag, "获取conversation成功 ----> $conversation")
                             listener?.onUserItemClick(conversation)
                         } else {
-                            LogUtil.d(TAG, "avimconversation ----> $e")
+                            LogUtil.d(tag, "获取conversation失败 ----> $e")
                         }
                     }
                 })
         }
     }
 
+    /**
+     * 往好友列表里添加好友
+     */
     fun addData(avObject: AVObject) {
         avUserList.add(avObject)
     }
 
+    /**
+     * 清除列表数据
+     */
     fun clearData() {
         avUserList.clear()
     }
 
+    //向外暴露接口
     fun setOnUserItemClickListener(listener: OnUserItemClickListener) {
         this.listener = listener
     }
@@ -92,6 +97,9 @@ class FriendAdapter(private var context: Context) : RecyclerView.Adapter<FriendA
         fun onUserItemClick(conversation: AVIMConversation?)
     }
 
+    /**
+     * 解决item复用
+     */
     override fun getItemViewType(position: Int): Int {
         return position
     }

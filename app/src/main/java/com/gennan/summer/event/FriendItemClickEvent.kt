@@ -8,3 +8,4 @@ import com.avos.avoscloud.im.v2.AVIMConversation
 class FriendItemClickEvent(
     val conversation: AVIMConversation?
 )
+//从FriendMessageFragment点击进入ChatActivity的event

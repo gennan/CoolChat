@@ -29,7 +29,7 @@
                         android:layout_marginBottom="14dp"
                         android:singleLine="true"
                         android:gravity="center"
-                        android:src="@drawable/add_new_back"
+                        android:src="@drawable/ic_add_new_back"
                         android:visibility="visible"/>
 
                 <TextView
@@ -44,8 +44,7 @@
                         android:textSize="18sp"
                         android:visibility="visible"/>
 
-                <ImageView
-                        android:src="@drawable/message_add"
+                <View
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="right"
@@ -83,7 +82,7 @@
                     android:layout_toLeftOf="@id/tv_add_new_friend"
                     android:id="@+id/et_add_new_friend"
                     android:theme="@style/CoolChatInnerEditText"
-                    android:textCursorDrawable="@drawable/add_new_et_cursor_color"
+                    android:textCursorDrawable="@drawable/shape_add_new_et_cursor_color"
                     android:hint="输入好友的名称"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
@@ -91,72 +90,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
         </RelativeLayout>
-
-        <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_add_conversation"-->
-        <!--android:layout_below="@id/rl_add_new_friend"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/tv_add_conversation"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:layout_marginBottom="10dp"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_marginRight="15dp"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:text="加入群聊"-->
-        <!--android:gravity="center"-->
-        <!--android:textSize="18sp"-->
-        <!--android:maxLines="1"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"/>-->
-
-        <!--<EditText-->
-        <!--android:layout_toLeftOf="@id/tv_add_conversation"-->
-        <!--android:id="@+id/et_add_conversation"-->
-        <!--android:theme="@style/CoolChatInnerEditText"-->
-        <!--android:textCursorDrawable="@drawable/add_new_et_cursor_color"-->
-        <!--android:hint="输入群聊的名称"-->
-        <!--android:layout_marginLeft="20dp"-->
-        <!--android:layout_marginRight="20dp"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-        <!--</RelativeLayout>-->
-
-        <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_create_new_conversation"-->
-        <!--android:layout_below="@id/rl_add_conversation"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/tv_create_new_conversation"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:layout_marginBottom="10dp"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_marginRight="15dp"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:text="创建群聊"-->
-        <!--android:gravity="center"-->
-        <!--android:textSize="18sp"-->
-        <!--android:maxLines="1"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"/>-->
-
-        <!--<EditText-->
-        <!--android:layout_toLeftOf="@id/tv_create_new_conversation"-->
-        <!--android:id="@+id/et_create_new_conversation"-->
-        <!--android:theme="@style/CoolChatInnerEditText"-->
-        <!--android:textCursorDrawable="@drawable/add_new_et_cursor_color"-->
-        <!--android:hint="输入成员名称 例如：A B C"-->
-        <!--android:layout_marginLeft="20dp"-->
-        <!--android:layout_marginRight="20dp"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-        <!--</RelativeLayout>-->
 
     </RelativeLayout>
 </layout>

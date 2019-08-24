@@ -3,36 +3,32 @@ package com.gennan.summer.app
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.os.Handler
 import com.avos.avoscloud.AVOSCloud
 import com.avos.avoscloud.AVUser
 import com.avos.avoscloud.im.v2.AVIMClient
 import com.avos.avoscloud.im.v2.AVIMMessageManager
-import com.gennan.summer.CoolChatConversationEventHandler
-import com.gennan.summer.CoolChatMessageEventHandler
 import com.gennan.summer.util.LogUtil
 import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 
+/**
+ *Created by Gennan.
+ */
 class CoolChatApp : Application() {
 
     companion object {
-        private var sHandler: Handler? = null
         @SuppressLint("StaticFieldLeak")
         private var sContext: Context? = null
         private var sGson: Gson? = null
         var avUser: AVUser? = null
         var avImClient: AVIMClient? = null
         var openedClient: AVIMClient? = null
-        var isAutoLogin = true
+        var isAutoLogin = true//是否自动登录
 
         fun getAppContext(): Context? {
             return sContext
         }
 
-        fun getAppHandler(): Handler? {
-            return sHandler
-        }
 
         fun getAppGson(): Gson? {
             return sGson
@@ -45,7 +41,6 @@ class CoolChatApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        sHandler = Handler()//创建全局Handler
         sContext = baseContext//获取全局Context
         sGson = Gson()
         //初始化Leancloud=======================================================

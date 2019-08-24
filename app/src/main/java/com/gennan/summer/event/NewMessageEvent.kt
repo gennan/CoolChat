@@ -10,3 +10,4 @@ import com.avos.avoscloud.im.v2.AVIMMessage
 class NewMessageEvent(val message: AVIMMessage,
                       val conversation: AVIMConversation,
                       val client: AVIMClient)
+//收到新消息的event

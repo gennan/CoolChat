@@ -6,3 +6,4 @@ package com.gennan.summer.event
 class ImageItemClickEvent(
     val imageUrl: String
 )
+//点击图片进入PhotoActivity的事件

@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.gennan.summer.activity.SquareActivity">
+        tools:context=".ui.view.activity.SquareActivity">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout_square"
@@ -29,7 +29,7 @@
                     android:layout_marginBottom="14dp"
                     android:singleLine="true"
                     android:gravity="center"
-                    android:src="@drawable/add_new_back"
+                    android:src="@drawable/ic_add_new_back"
                     android:visibility="visible"/>
 
             <TextView
@@ -46,7 +46,7 @@
 
             <ImageView
                     android:id="@+id/iv_add_status_square"
-                    android:src="@drawable/square_add_status"
+                    android:src="@drawable/ic_square_add_status"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="right"

@@ -28,7 +28,7 @@
                     android:layout_marginBottom="14dp"
                     android:singleLine="true"
                     android:gravity="center"
-                    android:src="@drawable/add_new_back"
+                    android:src="@drawable/ic_add_new_back"
                     android:visibility="visible"/>
 
             <TextView
@@ -67,7 +67,7 @@
             android:layout_below="@id/app_bar_layout_send_status"
             android:hint="填写你想要发布的动态消息"
             android:theme="@style/CoolChatInnerEditText"
-            android:textCursorDrawable="@drawable/chat_et_cursor_color"
+            android:textCursorDrawable="@drawable/shape_chat_et_cursor_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -75,7 +75,7 @@
             android:id="@+id/iv_send_status"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:src="@drawable/status_send_img"
+            android:src="@drawable/ic_status_send_img"
             android:layout_below="@id/et_text_msg_will_send_status"
             android:layout_width="100dp"
             android:scaleType="center"

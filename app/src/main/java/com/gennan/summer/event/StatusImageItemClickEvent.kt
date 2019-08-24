@@ -6,3 +6,4 @@ package com.gennan.summer.event
 class StatusImageItemClickEvent(
     val url: String
 )
+//广场里点击图片的event

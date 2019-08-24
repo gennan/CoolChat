@@ -12,6 +12,7 @@ import java.io.File
 
 /**
  *Created by Gennan on 2019/8/19.
+ * Uri转换成真实路径的工具类
  */
 object UriToRealPathUtil {
     fun getRealFilePath(context: Context, uri: Uri?): String? {
