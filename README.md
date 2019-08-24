@@ -31,7 +31,7 @@
 - 通过MediaRecorder来录制语音 MediaPlayer来播放语音
 - 使用了一些Material Design的控件 
 - 选用Leancloud作为后端支持
-- 借助TestIn来检测软件的兼容性（[测试数据]()）
+- 借助TestIn来检测软件的兼容性（[测试数据](https://github.com/Gennan/CoolChat/blob/master/awesome-res/TestInData.md)）
 
 ##### 感想：
 
