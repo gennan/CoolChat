@@ -17,9 +17,9 @@
 
 |聊天|广场|
 |:---:|:---:|
-| <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/chat.gif?token=AKVH7RHLROAXTJMDI6JL7WS5NJ5CU" width="220"> | <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/square.gif?token=AKVH7RAQRAYS5MNM7CRFD7S5NJ46G" width="220"> |
+| <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/chat.gif?token=AKVH7RHLROAXTJMDI6JL7WS5NJ5CU" width="400"> | <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/square.gif?token=AKVH7RAQRAYS5MNM7CRFD7S5NJ46G" width="400"> |
 |登录|关于|
-| <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/login.jpg?token=AKVH7RFLGVKL6L67BB2MKK25NJ5AU" width="220"> | <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/about.jpg?token=AKVH7RERZEHQTOG4OJNJGSC5NJ44K" width="220"> |
+| <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/login.jpg?token=AKVH7RFLGVKL6L67BB2MKK25NJ5AU" width="400"> | <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/about.jpg?token=AKVH7RERZEHQTOG4OJNJGSC5NJ44K" width="400"> |
 
 ##### 使用到的技术:
 
