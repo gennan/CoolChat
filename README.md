@@ -15,10 +15,10 @@
 
 
 
-| 聊天                                                         | 广场                                                         |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
+|聊天|广场|
+|:---:|:---:|
 | <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/chat.gif?token=AKVH7RHLROAXTJMDI6JL7WS5NJ5CU" width="220"> | <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/square.gif?token=AKVH7RAQRAYS5MNM7CRFD7S5NJ46G" width="220"> |
-| 登录                                                         | 关于                                                         |
+|登录|关于|
 | <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/login.jpg?token=AKVH7RFLGVKL6L67BB2MKK25NJ5AU" width="220"> | <img src="https://raw.githubusercontent.com/Gennan/CoolChat/master/awesome-res/gif/about.jpg?token=AKVH7RERZEHQTOG4OJNJGSC5NJ44K" width="220"> |
 
 ##### 使用到的技术:
@@ -42,3 +42,7 @@
 :two: 感受
 
 >这次考核有点难受的地方就在Leancloud好像正好在进行版本迭代的时候 用起来有点难受  然后就是有的功能找不到相对应的方法了 就只能自己去魔改 然后就有的地方的交互就没办法很好的实现 UI也就写的有点很简单 不过还是有一点自己当初自己想实现的样子的 还是自己太菜了 东西写的太慢了
+
+##### 上架：
+
+apk打算到酷安 已提交 不过还在审核
